@@ -4,10 +4,11 @@ import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
 import { getAuth , signInWithRedirect , GoogleAuthProvider ,onAuthStateChanged ,signOut} from "firebase/auth";
 
-import styles from './css/App.module.css';
+import { css , keyframes } from "solid-styled-components";
 
-import googleIcon from "./assets/google.svg";
-import { style } from "solid-js/web";
+import LoginButton from "./components/LoginButton";
+import Loading from "./components/Loading";
+import ToolBer from "./components/ToolBer";
 
 const firebaseConfig = {
   apiKey: "AIzaSyBi7mIihd_MmBn-l63RnjYtjDlOjdLmeBQ",
@@ -25,19 +26,13 @@ const analytics = getAnalytics(app);
 const auth = getAuth();
 const provider = new GoogleAuthProvider();
 
-function NowLoading(){
-  return (
-    <div class = {styles.loadingContainer}>
-      <div class = {styles.loadingAnimation}></div>
-      <p class = {styles.loadingText}>NowLoading</p>
-    </div>
-  );
-}
-
-function WhenNoLogin(props:any) {
+function Top(props:any){
+  const titleText = css`
+    font-size: 8vh;
+  `;
   return (
     <div>
-      <h1 class = {styles.titleText}>
+      <h1 class = {titleText}>
         聖光祭<br/>
         統一シフト<br/>
         ログイン
@@ -46,49 +41,19 @@ function WhenNoLogin(props:any) {
         統一シフトの使用にはログインが必要です。<br/>
         ※聖光学院のメールアドレス限定
       </p>
-      <LoginButton/>
+      <LoginButton loginMethod = {() => signInWithRedirect(auth,provider)}/>
     </div>
   );
 }
 
-function LoginButton(porps :any){
-  const login = () => signInWithRedirect(auth,provider);
-  return (
-    <div>
-      <button class = {styles.loginButton} onClick = {login}>
-        <div class = {styles.loginButtonContainer}>
-          <img src = {googleIcon} alt = "Googleのアイコン"/>
-          <p>Googleでログイン</p>
-        </div>
-      </button>
-    </div>
-  );
-}
-
-function WhenLogin(){
+function Editer(){
   const logout = () => signOut(auth);
   return(
     <>
       <h1>統一シフト</h1>
-      {/*<button onClick = {logout}>ログアウト</button>*/}
+      <button onClick = {logout}>ログアウト</button>
       <ToolBer/>
     </>
-  );
-}
-
-function ToolBer(){
-  return (
-    <>
-      <ToolButton image = {"./assets/print.svg"}/>
-    </>
-  );
-}
-
-function ToolButton(props:any){
-  return (
-    <div>
-      <span class = {styles.toolButtonImage}></span>
-    </div>
   );
 }
 
@@ -104,15 +69,16 @@ const App: Component = () => {
   });
 
   return(
-    <Switch fallback = {<NowLoading/>}>
-      <Match when = {loginStatus() == "nonLogined"}>
-        <WhenNoLogin/>
-      </Match>
-      <Match when = {loginStatus() == "logined"}>
-        <WhenLogin/>
-      </Match>
-    </Switch>
-    /*<NowLoading/>*/
+    <>
+      <Switch fallback = {<Loading/>}>
+        <Match when = {loginStatus() == "nonLogined"}>
+          <Top/>
+        </Match>
+        <Match when = {loginStatus() == "logined"}>
+          <Editer/>
+        </Match>
+      </Switch>
+    </>
   );
 };
 
