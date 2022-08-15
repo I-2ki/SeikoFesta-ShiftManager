@@ -1,4 +1,4 @@
-import { Component, createSignal, Switch , Match, For} from "solid-js";
+import { Component, createSignal, Switch , Match, For, createEffect} from "solid-js";
 
 import { initializeApp } from "firebase/app";
 import { getDatabase } from "firebase/database";
@@ -97,73 +97,56 @@ function TimeTable(){
     overflow: scroll;
     border: black 1px solid;
   `;
+  const table = css`
+    width: 100%;
+    border-collapse:collapse;
+    table-layout: fixed;
+  `;
   return(
     <div class = {container}>
-      <TimeNumbers start = "9:00" end = "17:00"/>
-      <TimeLine/>
-    </div>
-  );
-}
-
-function TimeNumbers(props :any){
-  const timeCharactor = css`
-    font-size: 40px;
-  `;
-  const timeStyle = css`
-    background-color: skyblue;
-    display: block;
-    width: 100px;
-  `;
-  const minuteStyle = css`
-    font-size: 25px;
-    color: #424242;
-  `;
-  const container = css`
-    display: flex;
-    gap: 30px;
-    align-items:flex-end;
-  `;
-
-  return (
-    <div class = {container}>
-      <For each = {["9:00","10:00","11:00","12:00","13:00","14:00","15:00","16:00","17:00"]}>{(time) => { 
-        return (
-          <>
-            <div class = {timeStyle}>
-              <span class = {timeCharactor}>{time}</span>
-            </div>
-            <For each = {["10","20","30","40","50"]}>{(minute) => {
-              return <span class = {minuteStyle}>{minute}</span>;
-            }}</For>
-          </>
-        );
-      }}</For>
+      <table class = {table}>
+        <thead>
+          <tr>
+            <th>9:00</th>
+          </tr>
+        </thead>
+        <tbody>
+          <TimeLine/>
+        </tbody>
+      </table>
     </div>
   );
 }
 
 function TimeLine(){
+  const container = css`
+    margin-top: 20px;
+    margin-bottom: 20px;
+  `;
   return(
-    <div>
-      <Cell/>
-    </div>
+    <tr class = {container}>
+      <For each = {["","","","","","","","社畜","","","","","","","","","","","",]}>{(job) => {
+        return <Cell/>
+      }}</For>
+    </tr>
   );
 }
 
 function Cell(){
   const cell = css`
     background-color: #D1D1D1;
-    width: 50px;
-    height: 100px;
+    width: 100px;
+    height: 200px;
     border-left: black 1px solid;
     border-right: black 1px solid;
     &:hover{
       cursor: pointer;
     }
   `;
+
   return(
-    <div class = {cell}>
-    </div>
+    <td class = {cell} onClick = {() => console.log("OK")}>
+    </td>
   );
 }
 
