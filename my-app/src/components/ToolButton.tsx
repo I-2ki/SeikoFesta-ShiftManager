@@ -19,7 +19,7 @@ function ToolButton(prpos: any){
       }
     `;
     return (
-      <button class = {button} onClick = {prpos.onclick}>
+      <button class = {button} onClick = {prpos.onClick}>
         <SVGImage src = {prpos.src}/>
       </button>
     );

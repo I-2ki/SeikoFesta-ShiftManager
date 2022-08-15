@@ -1,6 +1,7 @@
-import { Component, createSignal, Switch , Match} from "solid-js";
+import { Component, createSignal, Switch , Match, For} from "solid-js";
 
 import { initializeApp } from "firebase/app";
+import { getDatabase } from "firebase/database";
 import { getAnalytics } from "firebase/analytics";
 import { getAuth , signInWithRedirect , GoogleAuthProvider ,onAuthStateChanged ,signOut} from "firebase/auth";
 
@@ -17,7 +18,8 @@ const firebaseConfig = {
   storageBucket: "seiko-shift-tool.appspot.com",
   messagingSenderId: "568500639529",
   appId: "1:568500639529:web:421467d993063107c14938",
-  measurementId: "G-XYH9KL989Q"
+  measurementId: "G-XYH9KL989Q",
+  databaseURL:"https://seiko-shift-tool-default-rtdb.asia-southeast1.firebasedatabase.app",
 };
 
 const app = initializeApp(firebaseConfig);
@@ -26,9 +28,12 @@ const analytics = getAnalytics(app);
 const auth = getAuth();
 const provider = new GoogleAuthProvider();
 
+const database = getDatabase(app);
+
 function Top(props:any){
   const titleText = css`
     font-size: 8vh;
+    font-weight: 300;
   `;
   return (
     <div>
@@ -48,12 +53,117 @@ function Top(props:any){
 
 function Editer(){
   const logout = () => signOut(auth);
+  const header = css`
+    width: 100%;
+    display : flex;
+    align-items: center;
+  `;
+  const title = css`
+    font-size : max(50px,3vw);
+    font-weight: 300;
+  `;
+  const logoutButton = css`
+    background-color: white;
+    padding-left: 4vw;
+    padding-right: 4vw;
+    padding-top: 1vw;
+    padding-bottom: 1vw;
+    margin-left: auto;
+    margin-right: 5%;
+    font-size: 2vw;
+    border: #4150BF 2px solid;
+    border-radius: 10px;
+    &:hover{
+      cursor: pointer;
+    }
+  `;
+
   return(
     <>
-      <h1>統一シフト</h1>
-      <button onClick = {logout}>ログアウト</button>
+      <header class = {header}>
+        <h1 class = {title}>統一シフト</h1>
+        <button class = {logoutButton} onClick = {logout}>ログアウト</button>
+      </header>
       <ToolBer/>
+      <TimeTable/>
     </>
+  );
+}
+
+function TimeTable(){
+  const container = css`
+    width: max(200px,90vw);
+    height: max(200px,90vh);
+    overflow: scroll;
+    border: black 1px solid;
+  `;
+  return(
+    <div class = {container}>
+      <TimeNumbers start = "9:00" end = "17:00"/>
+      <TimeLine/>
+    </div>
+  );
+}
+
+function TimeNumbers(props :any){
+  const timeCharactor = css`
+    font-size: 40px;
+  `;
+  const timeStyle = css`
+    background-color: skyblue;
+    display: block;
+    width: 100px;
+  `;
+  const minuteStyle = css`
+    font-size: 25px;
+    color: #424242;
+  `;
+  const container = css`
+    display: flex;
+    gap: 30px;
+    align-items:flex-end;
+  `;
+
+  return (
+    <div class = {container}>
+      <For each = {["9:00","10:00","11:00","12:00","13:00","14:00","15:00","16:00","17:00"]}>{(time) => { 
+        return (
+          <>
+            <div class = {timeStyle}>
+              <span class = {timeCharactor}>{time}</span>
+            </div>
+            <For each = {["10","20","30","40","50"]}>{(minute) => {
+              return <span class = {minuteStyle}>{minute}</span>;
+            }}</For>
+          </>
+        );
+      }}</For>
+    </div>
+  );
+}
+
+function TimeLine(){
+  return(
+    <div>
+      <Cell/>
+    </div>
+  );
+}
+
+function Cell(){
+  const cell = css`
+    background-color: #D1D1D1;
+    width: 50px;
+    height: 100px;
+    border-left: black 1px solid;
+    border-right: black 1px solid;
+    &:hover{
+      cursor: pointer;
+    }
+  `;
+  return(
+    <div class = {cell}>
+    </div>
   );
 }
 
@@ -61,6 +171,7 @@ const App: Component = () => {
   const [loginStatus , setLoginStatus] = createSignal("loading");
 
   onAuthStateChanged(auth,(user) => {
+    console.log(user);
     if(user){
       setLoginStatus("logined");
     }else{
