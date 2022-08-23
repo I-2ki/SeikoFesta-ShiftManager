@@ -3,7 +3,7 @@ import { css } from "solid-styled-components";
 function SVGImage(props :any){
     const mask = css`
         width:100%;
-        height: 100%;   //ここを親要素適当な時に小さい値にすると画像が潰れるぞい
+        height: 100%;
     `;
   
     const maskImage = css`
