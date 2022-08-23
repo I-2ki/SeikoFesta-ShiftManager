@@ -10,7 +10,6 @@ import { css , keyframes } from "solid-styled-components";
 import LoginButton from "./components/LoginButton";
 import Loading from "./components/Loading";
 import ToolBer from "./components/ToolBer";
-import { loadEnv } from "vite";
 
 const firebaseConfig = {
   apiKey: "AIzaSyBi7mIihd_MmBn-l63RnjYtjDlOjdLmeBQ",
