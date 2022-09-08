@@ -4,6 +4,7 @@ import { ToolButton , RadioButton , RadioButtonContainer} from "./ToolButton";
 function ToolBer(){
   const toolBerStyle = css`
     display: flex;
+    gap: 1vw;
   `;
   return (
     <div class = {toolBerStyle}>
