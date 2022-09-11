@@ -54,9 +54,9 @@ export function RadioButtonContainer(props: any){
     });
   
     return (
-      <div>
+      <span style="vertical-align: center;">
         {child}
-      </div>
+      </span>
     );
   }
   

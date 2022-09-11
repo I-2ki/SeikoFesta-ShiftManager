@@ -65,13 +65,14 @@ function Editer(){
 
   const logoutButton = css`
     background-color: white;
-    padding-left: 4vw;
-    padding-right: 4vw;
+    --width-padding:clamp(30px,4vw,300px);
+    padding-left: var(--width-padding);
+    padding-right: var(--width-padding);
     padding-top: 1vw;
     padding-bottom: 1vw;
     margin-left: auto;
     margin-right: 5%;
-    font-size: 2vw;
+    font-size: clamp(10px,1vw,40px);
     border: #4150BF 2px solid;
     border-radius: 10px;
     &:hover{

@@ -1,12 +1,18 @@
 import { css } from "solid-styled-components";
 import { ToolButton } from "./ToolButtons";
-import { RadioButtonContainer , RadioButton} from "./RadioButton";
+import { RadioButtonContainer , RadioButton } from "./RadioButton";
+import { Pulldown } from "./Pulldown";
 
 function ToolBer(){
 
   const toolBerStyle = css`
     display: flex;
+    align-items: center;
     gap: 1vw;
+  `;
+
+  const textStyle = css`
+    font-size:calc(clamp(50px,3vw,150px)/3);
   `;
 
   return (
@@ -14,10 +20,11 @@ function ToolBer(){
       <RadioButtonContainer>
         <RadioButton src = "src/assets/add.svg" />
         <RadioButton src = "src/assets/remove.svg"/>
-        <RadioButton src = "src/assets/add.svg" />
-        <RadioButton src = "src/assets/remove.svg"/>
       </RadioButtonContainer>
       <ToolButton src = "src/assets/print.svg" onClick = {() => {window.print();}}/>
+      <div class = {textStyle}>閲覧中：</div>
+      <Pulldown></Pulldown>
+      <div class = {textStyle}>のシフト</div>
     </div>
   );
 }
