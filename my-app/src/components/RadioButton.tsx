@@ -30,6 +30,11 @@ export function RadioButtonContainer(props: any){
         background-color: white;
       }
     `;
+
+    const container = css`
+      display: flex;
+      align-items: center;
+    `;
   
     const child :any = children(() => props.children);
     child()[0].classList.add(firstButtonStyle);
@@ -44,19 +49,17 @@ export function RadioButtonContainer(props: any){
     createEffect(() => {
       for(let i = 0;i < child().length;i++){
         if(i == selectedNumber()){
-          console.log(child()[i]);
           child()[i].classList.add(checked);
         }else{
-          console.log(child()[i]);
           child()[i].classList.remove(checked);
         }
       }
     });
   
     return (
-      <span style="vertical-align: center;">
+      <div class = { container }>
         {child}
-      </span>
+      </div>
     );
   }
   

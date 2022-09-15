@@ -7,8 +7,8 @@ function ToolBer(){
 
   const toolBerStyle = css`
     display: flex;
-    align-items: center;
     gap: 1vw;
+    align-items: center;
   `;
 
   const textStyle = css`

@@ -192,7 +192,6 @@ function TimeLine(props: any){
 }
 
 function Cell(){
-  const [state,setState] = createSignal();
   const cell = css`
     background-color: #D1D1D1;
     min-width: 100px;
@@ -215,7 +214,6 @@ const App: Component = () => {
   const [loginStatus , setLoginStatus] = createSignal("loading");
 
   onAuthStateChanged(auth,(user) => {
-    console.log(user);
     if(user){
       setLoginStatus("logined");
     }else{
