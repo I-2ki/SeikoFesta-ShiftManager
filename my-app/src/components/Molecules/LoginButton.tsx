@@ -1,5 +1,5 @@
 import { css } from "solid-styled-components";
-import googleIcon from "../assets/google.svg";
+import googleIcon from "../../assets/google.svg";
 
 function LoginButton(props :any){
     const button = css`

@@ -1,10 +1,11 @@
 import { createSignal, For } from "solid-js";
 import { css } from "solid-styled-components";
 
-export function Pulldown(){
+function Pulldown(){
     const [values,setValues] = createSignal(["コンピュータ部",""]);
 
     const pulldownStyle = css`
+        appearance: none;
         --size : clamp(50px,3vw,150px);
         height: var(--size);
         background-color: white;
@@ -27,3 +28,5 @@ export function Pulldown(){
         </select>
     );
 }
+
+export default Pulldown;

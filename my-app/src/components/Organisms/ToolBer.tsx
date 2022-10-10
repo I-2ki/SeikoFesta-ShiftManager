@@ -1,7 +1,7 @@
 import { css } from "solid-styled-components";
-import { ToolButton } from "./ToolButtons";
-import { RadioButtonContainer , RadioButton } from "./RadioButton";
-import { Pulldown } from "./Pulldown";
+import ToolButton from "../Molecules/ToolButtons";
+import { RadioButtonContainer , RadioButton } from "../Molecules/RadioButton";
+import Pulldown from "../Atoms/Pulldown";
 
 function ToolBer(){
 
@@ -9,6 +9,8 @@ function ToolBer(){
     display: flex;
     gap: 1vw;
     align-items: center;
+    padding-top: 20px;
+    padding-bottom: 20px;
   `;
 
   const textStyle = css`

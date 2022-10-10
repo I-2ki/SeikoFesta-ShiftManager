@@ -1,8 +1,7 @@
-import { children , createSignal , createEffect, For, Show} from "solid-js";
 import { css } from "solid-styled-components";
-import SVGImage from "./SVGImage";
+import SVGImage from "../Atoms/SVGImage";
 
-export function ToolButton(props: any){
+function ToolButton(props: any){
   const buttonStyle = css`
     --size : clamp(50px,3vw,150px);
     width: var(--size);
@@ -25,3 +24,5 @@ export function ToolButton(props: any){
       </button>
     );
 }
+
+export default ToolButton;
