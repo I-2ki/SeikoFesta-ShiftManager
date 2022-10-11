@@ -31,6 +31,7 @@ function TimeLabel(){
   
     return (
       <tr class = {labelLine}>
+        <th></th>
         <For each = {sequenceArray(9,17)}>{(time) => {
           return (
             <>

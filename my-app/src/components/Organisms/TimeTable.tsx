@@ -5,8 +5,8 @@ import TimeLine from "../Molecules/TimeLine";
 function TimeTable(){
   const container = css`
     margin : auto;
-    width: max(200px,90vw);
-    height: max(200px,90vh);
+    width: max(200px,98vw);
+    height: max(200px,89vh);
     margin-bottom: 2vh;
     border: black 1px solid;
     overflow: scroll;

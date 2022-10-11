@@ -3,6 +3,10 @@ import ToolButton from "../Molecules/ToolButtons";
 import { RadioButtonContainer , RadioButton } from "../Molecules/RadioButton";
 import Pulldown from "../Atoms/Pulldown";
 
+import add from "../../assets/add.svg";
+import remove from "../../assets/remove.svg";
+import print from "../../assets/print.svg";
+
 function ToolBer(){
 
   const toolBerStyle = css`
@@ -20,10 +24,10 @@ function ToolBer(){
   return (
     <div class = {toolBerStyle}>
       <RadioButtonContainer>
-        <RadioButton src = "src/assets/add.svg" />
-        <RadioButton src = "src/assets/remove.svg"/>
+        <RadioButton src = {add} />
+        <RadioButton src = {remove}/>
       </RadioButtonContainer>
-      <ToolButton src = "src/assets/print.svg" onClick = {() => {window.print();}}/>
+      <ToolButton src = {print} onClick = {() => {window.print();}}/>
       <div class = {textStyle}>閲覧中：</div>
       <Pulldown></Pulldown>
       <div class = {textStyle}>のシフト</div>
