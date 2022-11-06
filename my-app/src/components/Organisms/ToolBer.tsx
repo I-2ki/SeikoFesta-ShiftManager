@@ -1,3 +1,5 @@
+import { createEffect, createSignal } from "solid-js";
+
 import { css } from "solid-styled-components";
 import ToolButton from "../Molecules/ToolButtons";
 import { RadioButtonContainer , RadioButton } from "../Molecules/RadioButton";
@@ -8,6 +10,12 @@ import remove from "../../assets/remove.svg";
 import print from "../../assets/print.svg";
 
 function ToolBer(){
+  const groups = ["コンピュータ部","ぶいえいす","総合技術研究所"];
+  const [whatShift , setWhatShift] = createSignal<string>(groups[0]);
+
+  createEffect(() => {
+    console.log(whatShift());
+  });
 
   const toolBerStyle = css`
     display: flex;
@@ -29,7 +37,7 @@ function ToolBer(){
       </RadioButtonContainer>
       <ToolButton src = {print} onClick = {() => {window.print();}}/>
       <div class = {textStyle}>閲覧中：</div>
-      <Pulldown></Pulldown>
+      <Pulldown setValue = {setWhatShift} values = {groups}></Pulldown>
       <div class = {textStyle}>のシフト</div>
     </div>
   );

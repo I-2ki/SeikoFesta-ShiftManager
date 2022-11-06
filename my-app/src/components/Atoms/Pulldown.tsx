@@ -1,8 +1,11 @@
-import { createSignal, For } from "solid-js";
+import { createEffect, createSignal, For, onMount } from "solid-js";
 import { css } from "solid-styled-components";
+import { PulldownProps } from "../../type";
 
-function Pulldown(){
-    const [values,setValues] = createSignal(["コンピュータ部",""]);
+function Pulldown(props :PulldownProps){
+    let select :HTMLSelectElement;
+    const values :Array<string> = props.values;
+    const [nowValue,setNowValue] = createSignal<string>(values[0]);
 
     const pulldownStyle = css`
         appearance: none;
@@ -20,9 +23,19 @@ function Pulldown(){
         }
     `;
 
+    createEffect(() => {
+        props.setValue(nowValue());
+    });
+
+    onMount(() => {
+        select.addEventListener("change",() => {
+            setNowValue(select.value);
+        });
+    });
+
     return(
-        <select class = {pulldownStyle}>
-            <For each = {values()}>{(value :string) => {
+        <select ref = {select} class = {pulldownStyle}>
+            <For each = {values}>{(value :string) => {
                 return <option>{value}</option>
             }}</For>
         </select>

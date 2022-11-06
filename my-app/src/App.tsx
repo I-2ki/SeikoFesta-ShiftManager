@@ -10,7 +10,6 @@ import Editer from "./components/Pages/Editer";
 import Firebase from "./Firebase";
 
 const App: Component = () => {
-  Firebase.init();
 
   const [loginStatus , setLoginStatus] = createSignal("loading");
 

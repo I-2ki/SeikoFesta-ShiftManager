@@ -1,13 +1,17 @@
-import { initializeApp } from "firebase/app";
+import { FirebaseApp, getApp, initializeApp } from "firebase/app";
 import { Firestore, getFirestore } from "firebase/firestore";
 import { Auth, getAuth } from "firebase/auth";
 
 class Firebase{
-    private static _instance :Firebase;
     private static _db :Firestore;
     private static _auth :Auth;
-    
-    static init(){
+    private static _app :FirebaseApp;
+    constructor(){
+    }
+    static getApp() :FirebaseApp{
+        if(Firebase._app){
+            return Firebase._app;
+        }
         const firebaseConfig = {
             apiKey: "AIzaSyBi7mIihd_MmBn-l63RnjYtjDlOjdLmeBQ",
             authDomain: "seiko-shift-tool.firebaseapp.com",
@@ -18,26 +22,18 @@ class Firebase{
             measurementId: "G-XYH9KL989Q",
             databaseURL:"https://seiko-shift-tool-default-rtdb.asia-southeast1.firebasedatabase.app",
         };
-        initializeApp(firebaseConfig);
+        const app = initializeApp(firebaseConfig);
+        return app;
     }
-
-    static get instance() :Firebase{
-        if(!this._instance){
-            this._instance = new Firebase();
-        }
-        return this._instance;
-    }
-
     static get db() :Firestore{
         if(!this._db){
-            this._db = getFirestore();
+            this._db = getFirestore(Firebase.getApp());
         }
         return this._db;
     }
-
     static get auth() :Auth{
         if(!this._auth){
-            this._auth = getAuth();
+            this._auth = getAuth(Firebase.getApp());
         }
         return this._auth;
     }

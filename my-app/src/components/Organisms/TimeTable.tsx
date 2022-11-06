@@ -1,14 +1,17 @@
 import { css } from "solid-styled-components";
 import TimeLabel from "../Molecules/TimeLabel";
 import TimeLine from "../Molecules/TimeLine";
-
 import Firebase from "../../Firebase";
-import { addDoc , collection} from "firebase/firestore";
+
+import { doc, getDoc } from "firebase/firestore";
+
+const db = Firebase.db;
+const docRef = doc(db , "cities" , "SF");
+const docSnap = await getDoc(docRef);
+
+//console.log(docSnap.data());
 
 function TimeTable(){
-  const db = Firebase.db;
-  addDoc();
-
   const container = css`
     margin : auto;
     width: max(200px,98vw);
@@ -41,7 +44,7 @@ function TimeTable(){
           <TimeLabel/>
         </thead>
         <tbody>
-          <TimeLine number = "114514" name = "邪神ちゃんですの" jobData = {["","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","",""]}/>
+          <TimeLine user = {{name : "伊藤 秀平", studentNumber : 62019,shiftData : ["",""]}}/>
         </tbody>
       </table>
     </div>
