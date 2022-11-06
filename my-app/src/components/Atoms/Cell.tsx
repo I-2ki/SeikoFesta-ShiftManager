@@ -1,6 +1,10 @@
 import { css } from "solid-styled-components";
 
-function Cell(){
+function Cell(props :any){
+
+    const onClick = () => {
+    }
+
     const cell = css`
         background-color: #D1D1D1;
         min-width: 100px;
@@ -15,7 +19,7 @@ function Cell(){
     `;
   
     return(
-      <td class = {cell} onClick = {() => console.log("OK")}></td>
+      <td class = {cell} onClick = {onClick}></td>
     );
 }
 

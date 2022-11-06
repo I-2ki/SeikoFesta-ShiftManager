@@ -1,8 +1,14 @@
 import { css } from "solid-styled-components";
-import TimeLabel from "../Atoms/TimeLabel";
+import TimeLabel from "../Molecules/TimeLabel";
 import TimeLine from "../Molecules/TimeLine";
 
+import Firebase from "../../Firebase";
+import { addDoc , collection} from "firebase/firestore";
+
 function TimeTable(){
+  const db = Firebase.db;
+  addDoc();
+
   const container = css`
     margin : auto;
     width: max(200px,98vw);
@@ -35,7 +41,7 @@ function TimeTable(){
           <TimeLabel/>
         </thead>
         <tbody>
-          <TimeLine jobData = {["","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","",""]}/>
+          <TimeLine number = "114514" name = "邪神ちゃんですの" jobData = {["","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","",""]}/>
         </tbody>
       </table>
     </div>

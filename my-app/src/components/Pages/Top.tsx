@@ -1,10 +1,10 @@
 import { css } from "solid-styled-components";
-import { getAuth , GoogleAuthProvider , signInWithRedirect} from "firebase/auth";
+import { GoogleAuthProvider , signInWithRedirect} from "firebase/auth";
 import LoginButton from "../Molecules/LoginButton";
-
+import Firebase from "../../Firebase";
 
 function Top(){
-    const auth = getAuth();
+    const auth = Firebase.auth;
     const provider = new GoogleAuthProvider();
     const container = css`
         position: relative;

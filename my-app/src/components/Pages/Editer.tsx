@@ -1,11 +1,12 @@
 import { css } from "solid-styled-components";
-import { getAuth , signOut } from "firebase/auth";
+import { signOut } from "firebase/auth";
+
 import ToolBer from "../Organisms/ToolBer";
 import TimeTable from "../Organisms/TimeTable";
 
-function Editer(){
-    const auth = getAuth();
+import Firebase from "../../Firebase";
 
+function Editer(){
     const header = css`
       width: 100%;
       display : flex;
@@ -38,7 +39,7 @@ function Editer(){
       <>
         <header class = {header}>
           <h1 class = {title}>統一シフト</h1>
-          <button class = {logoutButton} onClick = {() => signOut(auth)}>ログアウト</button>
+          <button class = {logoutButton} onClick = {() => signOut(Firebase.auth)}>ログアウト</button>
         </header>
         <ToolBer/>
         <TimeTable/>

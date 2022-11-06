@@ -6,7 +6,7 @@ import NameCard from "../Atoms/NameCard";
 function TimeLine(props: any){
   return(
     <tr>
-      <NameCard number = "62019" name = "伊藤 秀平"/>
+      <NameCard number = {props.number} name = {props.name}/>
       <For each = {props.jobData}>{(job) => {
         return <Cell/>
       }}</For>

@@ -24,7 +24,7 @@ function ToolBer(){
   return (
     <div class = {toolBerStyle}>
       <RadioButtonContainer>
-        <RadioButton src = {add} />
+        <RadioButton src = {add}/>
         <RadioButton src = {remove}/>
       </RadioButtonContainer>
       <ToolButton src = {print} onClick = {() => {window.print();}}/>
