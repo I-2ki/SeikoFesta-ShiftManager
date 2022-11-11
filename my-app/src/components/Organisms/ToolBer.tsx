@@ -9,12 +9,15 @@ import add from "../../assets/add.svg";
 import remove from "../../assets/remove.svg";
 import print from "../../assets/print.svg";
 
+import { InputMode } from "../../type";
+
 function ToolBer(){
   const groups = ["コンピュータ部","ぶいえいす","総合技術研究所"];
+  const [inputMode , setInputMode] = createSignal<number>();
   const [whatShift , setWhatShift] = createSignal<string>(groups[0]);
 
   createEffect(() => {
-    console.log(whatShift());
+    console.log(inputMode());
   });
 
   const toolBerStyle = css`
@@ -31,7 +34,7 @@ function ToolBer(){
 
   return (
     <div class = {toolBerStyle}>
-      <RadioButtonContainer>
+      <RadioButtonContainer setValue = {setInputMode}>
         <RadioButton src = {add}/>
         <RadioButton src = {remove}/>
       </RadioButtonContainer>

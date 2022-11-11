@@ -1,4 +1,4 @@
-import { Setter } from "solid-js"
+import { JSX, Setter } from "solid-js"
 
 //データ関係
 export type User = {
@@ -15,10 +15,17 @@ export type Group = {
     name : string,
 }
 
+export type InputMode = "add" | "remove";
+
 //Atoms Props
 export type PulldownProps = {
     setValue : Setter<string>,
     values : Array<string>
+}
+
+export type RadioButtonContainerProps = {
+    setValue : Setter<number>
+    children : JSX.Element
 }
 
 //Molecules Props

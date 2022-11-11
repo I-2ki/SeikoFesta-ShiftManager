@@ -1,9 +1,10 @@
-import { createSignal , children , createEffect} from "solid-js";
+import { createSignal , children , createEffect, JSX} from "solid-js";
 import { css } from "solid-styled-components";
+import { RadioButtonContainerProps } from "../../type";
 import SVGImage from "../Atoms/SVGImage";
 
-export function RadioButtonContainer(props: any){
-  const [selectedNumber, setSelectedNumber] = createSignal(0);
+export function RadioButtonContainer(props :RadioButtonContainerProps){
+  const [selectedNumber, setSelectedNumber] = createSignal<number>(0);
 
   const firstButtonStyle = css`
     border-top-left-radius: 25%;
@@ -40,13 +41,14 @@ export function RadioButtonContainer(props: any){
   child()[0].classList.add(firstButtonStyle);
   child()[child().length - 1].classList.add(endButtonStyle);
 
-  child().forEach((radioButton :any,index :number) => {
+  child().forEach((radioButton :Element,index :number) => {
     radioButton.addEventListener("click",() => {
       setSelectedNumber(index);
     });
   });
 
   createEffect(() => {
+    props.setValue(selectedNumber());
     for(let i = 0;i < child().length;i++){
       if(i == selectedNumber()){
         child()[i].classList.add(checked);
