@@ -15,8 +15,6 @@ export type Group = {
     name : string,
 }
 
-export type InputMode = "add" | "remove";
-
 //Atoms Props
 export type PulldownProps = {
     setValue : Setter<string>,
@@ -31,4 +29,11 @@ export type RadioButtonContainerProps = {
 //Molecules Props
 export type TimeLineProps = {
     user : User,
+}
+
+export type InputMode = "add" | "remove";
+//Organisms
+export type ToolBerState = {
+    inputMode :InputMode,
+    group :Group,
 }
