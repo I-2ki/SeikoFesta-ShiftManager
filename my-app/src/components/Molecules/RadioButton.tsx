@@ -10,16 +10,16 @@ export function RadioButtonContainer(props :RadioButtonContainerProps){
     border-top-left-radius: 25%;
     border-bottom-left-radius: 25%;
     div{
-      border-top-left-radius: 15%;
-      border-bottom-left-radius: 15%;
+      border-top-left-radius: 20%;
+      border-bottom-left-radius: 20%;
     }
   `;
   const endButtonStyle = css`
     border-top-right-radius: 25%;
     border-bottom-right-radius: 25%;
     div{
-      border-top-right-radius: 15%;
-      border-bottom-right-radius: 15%;
+      border-top-right-radius: 20%;
+      border-bottom-right-radius: 20%;
     }
   `;
 

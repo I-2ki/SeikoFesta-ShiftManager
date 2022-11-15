@@ -4,6 +4,7 @@ import TimeLine from "../Molecules/TimeLine";
 import Firebase from "../../Firebase";
 
 import { doc, getDoc } from "firebase/firestore";
+import { TimeTableProps } from "../../type";
 
 const db = Firebase.db;
 const docRef = doc(db , "cities" , "SF");
@@ -11,7 +12,7 @@ const docSnap = await getDoc(docRef);
 
 //console.log(docSnap.data());
 
-function TimeTable(){
+function TimeTable(props :TimeTableProps){
   const container = css`
     margin : auto;
     width: max(200px,98vw);
@@ -44,7 +45,10 @@ function TimeTable(){
           <TimeLabel/>
         </thead>
         <tbody>
-          <TimeLine user = {{name : "伊藤 秀平", studentNumber : 62019,shiftData : ["",""]}}/>
+          <TimeLine user = {{name : "伊藤 秀平", studentNumber : 62019, shiftData : ["社畜","社畜","社畜","社畜","豪遊","豪遊","","","","","豪遊","","","","ティーダ","ティーダ","ティーダ","ワッカ","ワッカ","","","","","","","","","","","","","","","","","","","",""]}}/>
+          <TimeLine user = {{name : "伊藤 秀平", studentNumber : 62019, shiftData : ["","豪遊",""]}}/>
+          <TimeLine user = {{name : "伊藤 秀平", studentNumber : 62019, shiftData : ["",""]}}/>
+          <TimeLine user = {{name : "伊藤 秀平", studentNumber : 62019, shiftData : ["",""]}}/>
         </tbody>
       </table>
     </div>

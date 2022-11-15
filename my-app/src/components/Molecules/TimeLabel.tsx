@@ -32,7 +32,7 @@ function TimeLabel(){
     return (
       <tr class = {labelLine}>
         <th></th>
-        <For each = {sequenceArray(9,17)}>{(time) => {
+        <For each = {sequenceArray(9,18)}>{(time) => {
           return (
             <>
               <th class = {`${label} ${timeStyle}`}>{time}:00</th>

@@ -4,11 +4,7 @@ import { JSX, Setter } from "solid-js"
 export type User = {
     studentNumber : number,
     name : string,
-    shiftData : Array<Job>
-}
-
-export type Job = {
-
+    shiftData : Array<string>
 }
 
 export type Group = {
@@ -16,6 +12,7 @@ export type Group = {
 }
 
 //Atoms Props
+
 export type PulldownProps = {
     setValue : Setter<string>,
     values : Array<string>
@@ -32,8 +29,18 @@ export type TimeLineProps = {
 }
 
 export type InputMode = "add" | "remove";
+
 //Organisms
+export type ToolBerProps = {
+    setValue : Setter<ToolBerState>
+}
+
 export type ToolBerState = {
     inputMode :InputMode,
-    group :Group,
+    group :string,
+    day :string,
+}
+
+export type TimeTableProps = {
+    toolBerState : ToolBerState,
 }
