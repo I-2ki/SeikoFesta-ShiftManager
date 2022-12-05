@@ -18,6 +18,7 @@ function Pulldown(props :PulldownProps){
         font-size: calc(var(--size)/3);
         padding-left: 1vw;
         padding-right: 1vw;
+        text-align: center;
         &:hover{
             cursor: pointer;
         }

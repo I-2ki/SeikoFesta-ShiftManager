@@ -8,73 +8,86 @@ import Pulldown from "../Atoms/Pulldown";
 import add from "../../assets/add.svg";
 import remove from "../../assets/remove.svg";
 import edit from "../../assets/edit.svg"
+import auto from "../../assets/auto.svg";
 import print from "../../assets/print.svg";
+import help from "../../assets/help.svg";
 
 import { InputMode, ToolBerProps, ToolBerState } from "../../type";
 
 function ToolBer(props :ToolBerProps){
-  const [getInputMode , setInputMode] = createSignal<number>(0);
+	const [getInputMode , setInputMode] = createSignal<number>(0);
 
-  const openEditWindow = () => {
-    console.log("編集中なのだ");
-  }
+	const openEditWindow = () => {
+		console.log("編集中なのだ");
+	}
 
-  const actions = ["閲覧中","編集中"];
-  const [getAction,setAction] = createSignal<string>(actions[0]);
+	const actions = ["閲覧中","編集中"];
+	const [getAction,setAction] = createSignal<string>(actions[0]);
 
-  const groups = ["コンピュータ部","ぶいえいす","総合技術研究所"];
-  const [getExplaingGroup , setExplaingGroup] = createSignal<string>(groups[0]);
+	const groups = ["コンピュータ部","ぶいえいす","総合技術研究所"];
+	const [getExplaingGroup , setExplaingGroup] = createSignal<string>(groups[0]);
 
-  const days = ["1日目","2日目"];
-  const [getExplaingDay , setExplaingDay] = createSignal<string>(days[0]);
+	const days = ["1日目","2日目"];
+	const [getExplaingDay , setExplaingDay] = createSignal<string>(days[0]);
 
-  const printShift = () => {
-    window.print();
-  }
+	const autoShiftSet = () => {
+		console.log("自動でシフトがセットされたよ");
+	}
 
-  createEffect(() => {
-    const toolBerState : ToolBerState = {
-      inputMode : (getInputMode() == 0) ? "add" : "remove",
-      group : getExplaingGroup(),
-      day : getExplaingDay(),
-    }
-    props.setValue(toolBerState);
-  });
+	const printShift = () => {
+		window.print();
+	}
 
-  const toolBerStyle = css`
-    display: flex;
-    gap: 1vw;
-    align-items: center;
-    padding-top: 20px;
-    padding-bottom: 20px;
-    @media print{
-        display : none;
-    }
-  `;
+	const displayHelp = () => {
+		console.log("ヘルプ画面が表示されたよ");
+	}
 
-  const emptyStyle = css`
-    margin-left: auto;
-  `;
+	createEffect(() => {
+		const toolBerState : ToolBerState = {
+		inputMode : (getInputMode() == 0) ? "add" : "remove",
+		group : getExplaingGroup(),
+		day : getExplaingDay(),
+		}
+		props.setValue(toolBerState);
+	});
 
-  const textStyle = css`
-    font-size:calc(clamp(50px,3vw,150px)/3);
-  `;
+	const toolBerStyle = css`
+		display: flex;
+		gap: 1vw;
+		align-items: center;
+		padding-top: 20px;
+		padding-bottom: 20px;
+		@media print{
+			display : none;
+		}
+	`;
 
-  return (
-    <div class = {toolBerStyle}>
-        <RadioButtonContainer setValue = {setInputMode}>
-          <RadioButton src = {add}/>
-          <RadioButton src = {remove}/>
-        </RadioButtonContainer>
-        <ToolButton src = {edit} onClick = {openEditWindow}/>
-        <ToolButton src = {print} onClick = {printShift}/>
-        <div class = {emptyStyle}></div>
-        <Pulldown setValue = {setAction} values = {actions}></Pulldown>
-        <Pulldown setValue = {setExplaingGroup} values = {groups}></Pulldown>
-        <Pulldown setValue = {setExplaingDay} values = {days}></Pulldown>
-        <div class = {textStyle}>のシフト</div>
-    </div>
-  );
+	const emptyStyle = css`
+		margin-left: auto;
+	`;
+
+	const textStyle = css`
+		font-size:calc(clamp(50px,3vw,150px)/3);
+		flex-shrink: 0;
+	`;
+
+	return (
+		<div class = {toolBerStyle}>
+			<RadioButtonContainer setValue = {setInputMode}>
+				<RadioButton src = {add}/>
+				<RadioButton src = {remove}/>
+			</RadioButtonContainer>
+			<ToolButton src = {edit} onClick = {openEditWindow}/>
+			<ToolButton src = {auto} onClick = {autoShiftSet}/>
+			<ToolButton src = {print} onClick = {printShift}/>
+			<ToolButton src = {help} onClick = {displayHelp}/>
+			<div class = {emptyStyle}></div>
+			<Pulldown setValue = {setAction} values = {actions}></Pulldown>
+			<Pulldown setValue = {setExplaingGroup} values = {groups}></Pulldown>
+			<Pulldown setValue = {setExplaingDay} values = {days}></Pulldown>
+			<div class = {textStyle}>のシフト</div>
+		</div>
+	);
 }
 
 export default ToolBer;

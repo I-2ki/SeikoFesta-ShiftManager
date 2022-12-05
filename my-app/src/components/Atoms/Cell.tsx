@@ -1,4 +1,4 @@
-import { createSignal, onMount } from "solid-js";
+import { createSignal, onMount , For , Ref} from "solid-js";
 import { css } from "solid-styled-components";
 
 export type EmptyCellProps = {
@@ -18,7 +18,7 @@ export function EmptyCell(props :EmptyCellProps){
             cursor: pointer;
         }
     `;
-    let Cell :HTMLTableCellElement;
+    let Cell:HTMLTableCellElement;
 
     onMount(() => {
         Cell.addEventListener("mouseover",()=> {
@@ -28,36 +28,57 @@ export function EmptyCell(props :EmptyCellProps){
     return <td ref = {Cell} class = {style}></td>;
 }
 
-export type FilledCellPosition = "left" | "center" | "right" | "alone";
-
 export type FilledCell = {
     index : number,
-    maxIndex : number,
-    position : FilledCellPosition,
+    times : number,
     jobName :string,
 }
 
 export function FilledCell(props :FilledCell){
-    function right(){
-        let scale = 1;
-        if (props.index == props.maxIndex) scale = 2;
-        return scale*((props.position == "right" || props.position == "alone")?1:0);
-    }
-    function left(){
-        let scale = 1;
-        if (props.index == 0) scale = 2;
-        return scale*((props.position == "left" || props.position == "alone")?1:0);
-    }
-    const style = css`
+    const aloneStyle = css`
         background-color: #4150BF;
         min-width: 100px;
         height: 200px;
         &:hover{
             cursor: pointer;
         }
-        border-right: black ${right()}px solid;
-        border-left: black ${left()}px solid;
+        border-left: black 1px solid;
+        border-right: black 1px solid; 
     `;
 
-    return <td class = {style}>{props.jobName}</td>
+    const rightStyle = css`
+        background-color: #4150BF;
+        min-width: 100px;
+        height: 200px;
+        &:hover{
+            cursor: pointer;
+        }
+        border-right: black 1px solid; 
+    `;
+
+    const leftStyle = css`
+        background-color: #4150BF;
+        min-width: 100px;
+        height: 200px;
+        &:hover{
+            cursor: pointer;
+        }
+        border-left: black 1px solid; 
+    `;
+
+    const middleStyle = css`
+        background-color: #4150BF;
+        min-width: 100px;
+        height: 200px;
+        &:hover{
+            cursor: pointer;
+        }
+    `;
+
+    return (
+        <For each = {new Array(props.times)}>{(dammy,index) => {
+            return <td class = {rightStyle} data-index = {props.index + index()}>{props.index + index()}</td> 
+        }
+        }</For>
+    );
 }

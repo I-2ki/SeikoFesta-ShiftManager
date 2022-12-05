@@ -10,29 +10,28 @@ import Editer from "./components/Pages/Editer";
 import Firebase from "./Firebase";
 
 const App: Component = () => {
+	const [loginStatus , setLoginStatus] = createSignal("loading");
 
-  const [loginStatus , setLoginStatus] = createSignal("loading");
+	onAuthStateChanged(Firebase.auth,(user) => {
+		if(user){
+			setLoginStatus("logined");
+		}else{
+			setLoginStatus("nonLogined");
+		}
+	});
 
-  onAuthStateChanged(Firebase.auth,(user) => {
-    if(user){
-      setLoginStatus("logined");
-    }else{
-      setLoginStatus("nonLogined");
-    }
-  });
-
-  return(
-    <>
-      <Switch fallback = {<Loading/>}>
-        <Match when = {loginStatus() == "nonLogined"}>
-          <Top/>
-        </Match>
-        <Match when = {loginStatus() == "logined"}>
-          <Editer/>
-        </Match>
-      </Switch>
-    </>
-  );
+	return(
+		<>
+		<Switch fallback = {<Loading/>}>
+			<Match when = {loginStatus() == "nonLogined"}>
+				<Top/>
+			</Match>
+			<Match when = {loginStatus() == "logined"}>
+				<Editer/>
+			</Match>
+		</Switch>
+		</>
+	);
 };
 
 export default App;
