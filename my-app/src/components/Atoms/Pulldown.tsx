@@ -12,6 +12,7 @@ function Pulldown(props :PulldownProps){
         --size : clamp(50px,3vw,150px);
         height: var(--size);
         background-color: white;
+        color :black;
         border: #4150BF 2px solid;
         box-sizing: border-box;
         border-radius: 1rem;

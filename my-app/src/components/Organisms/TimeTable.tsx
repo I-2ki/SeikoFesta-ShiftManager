@@ -18,7 +18,6 @@ function TimeTable(props :TimeTableProps){
 		width: max(200px,98vw);
 		height: max(200px,89vh);
 		margin-bottom: 2vh;
-		border: black 1px solid;
 		overflow: scroll;
   	`;
 
@@ -28,25 +27,18 @@ function TimeTable(props :TimeTableProps){
 		min-width: 100%;
 		table-layout: fixed;
 		border-spacing: 0px 50px;
-		overflow: scroll;
-		white-space: nowrap;
 		-webkit-overflow-scrolling: touch;
-  	`;
-
-  	const label = css`
-		position : sticky;
-		top : 0;
   	`;
 
 	return(
 		<div class = {container}>
 			<table class = {table}>
-				<thead class = {label}>
+				<thead>
 					<TimeLabel/>
 				</thead>
 				<tbody>
-					<TimeLine user = {{name : "伊藤 秀平", studentNumber : 62019, shiftData : ["社畜","社畜","社畜","社畜","豪遊","豪遊","","","","","豪遊","","","","ティーダ","ティーダ","ティーダ","ワッカ","ワッカ","","","","","","","","","","","","","","","","","","","",""]}}/>
-					<TimeLine user = {{name : "伊藤 秀平", studentNumber : 62019, shiftData : ["","豪遊",""]}}/>
+					<TimeLine user = {{name : "伊藤 秀平", studentNumber : 62019, shiftData : ["焼きそばを食べる","焼きそばを食べる","焼きそばを食べる","焼きそばを食べる","焼きそばを食べる","焼きそばを食べる","焼きそばを食べる","焼きそばを食べる"]}}/>
+					<TimeLine user = {{name : "伊藤 秀平", studentNumber : 62019, shiftData : ["","コンピュータ部","コンピュータ部","HP局"]}}/>
 					<TimeLine user = {{name : "伊藤 秀平", studentNumber : 62019, shiftData : ["",""]}}/>
 					<TimeLine user = {{name : "伊藤 秀平", studentNumber : 62019, shiftData : ["",""]}}/>
 				</tbody>

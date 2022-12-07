@@ -3,22 +3,27 @@ import googleIcon from "../../assets/google.svg";
 
 function LoginButton(props :any){
     const button = css`
-        padding-left: 20px;
-        padding-right: 20px;
-        padding-top: 5px;
-        padding-bottom: 5px;
-        background: white;
-        border-radius: 5px;
-        border: none;
-        box-shadow: 0px 1px 2px 1px rgba(0, 0, 0, 0.2);
-        &:hover{
-            cursor: pointer;
-        }
+      padding-left: 1vw;
+      padding-right: 1vw;
+      padding-top: 0.5vw;
+      padding-bottom: 0.5vw;
+      background: white;
+      border-radius: 5px;
+      border: none;
+      box-shadow: 0px 1px 2px 1px rgba(0, 0, 0, 0.2);
+      &:hover{
+          cursor: pointer;
+      }
     `;
 
     const contentContainer = css`
-        display:flex;
-        gap: 10px;   
+      display:flex;
+      gap: 10px;   
+    `;
+
+    const labelText = css`
+      color : black;
+      font-size: max(1vw,15px);
     `;
 
     return (
@@ -26,7 +31,7 @@ function LoginButton(props :any){
         <button class = {button} onClick = {props.loginMethod}>
           <div class = {contentContainer}>
             <img src = {googleIcon} alt = "Googleのアイコン"/>
-            <p>Googleでログイン</p>
+            <p class = {labelText}>Googleでログイン</p>
           </div>
         </button>
       </div>

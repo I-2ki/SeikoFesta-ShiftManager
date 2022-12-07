@@ -35,8 +35,9 @@ function Editer(){
 		border: #4150BF 2px solid;
 		border-radius: 1rem;
 		flex-shrink: 0;
+		color : black;
 		&:hover{
-		cursor: pointer;
+			cursor: pointer;
 		}
 	`;
 

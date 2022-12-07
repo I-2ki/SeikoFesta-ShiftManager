@@ -1,9 +1,11 @@
 import { css } from "solid-styled-components";
+import { tableCSS } from "../../css/view_profile";
 
 function NameCard(props :any){
     const cellStyle = css`
         position: sticky;
         left: 0;
+        z-index: 0;
     `;
 
     const cardStyle = css`
@@ -11,9 +13,10 @@ function NameCard(props :any){
         border: 1px black solid;
         background-color: white;
         margin-right: 150px;
-        padding: 10px;
-        width: 150px;
-        height: 200px;
+        padding-left: 1vw;
+        padding-right: 1vw;
+        min-width: max(1vw,150px);
+        height: ${tableCSS.cellHeight};
     `;
 
     const textPosition = css`
@@ -24,8 +27,10 @@ function NameCard(props :any){
     `;
 
     const textStyle = css`
-        font-size: 25px;
+        font-size: max(1vw,20px);
         text-align: center;
+        user-select: none;
+        white-space: nowrap;
     `;
 
     return (

@@ -1,4 +1,4 @@
-import { createSignal , children , createEffect, JSX} from "solid-js";
+import { createSignal , children , createEffect, JSX, Accessor} from "solid-js";
 import { css } from "solid-styled-components";
 import { RadioButtonContainerProps } from "../../type";
 import SVGImage from "../Atoms/SVGImage";
@@ -37,33 +37,41 @@ export function RadioButtonContainer(props :RadioButtonContainerProps){
     	align-items: center;
   	`;
 
-  	const child :any = children(() => props.children);
-  	child()[0].classList.add(firstButtonStyle);
-  	child()[child().length - 1].classList.add(endButtonStyle);
+	const resolved = children(() => props.children);
+	const buttons :any = resolved();
+	const firstButton = buttons[0];
+	const endButton = buttons[buttons.length - 1];
 
-  	child().forEach((radioButton :Element,index :number) => {
+  	firstButton.classList.add(firstButtonStyle);
+  	endButton.classList.add(endButtonStyle);
+
+  	buttons.forEach((radioButton :Element,index :number) => {
     	radioButton.addEventListener("click",() => {
-     	 setSelectedNumber(index);
+     		setSelectedNumber(index);
    		});
   	});
 
 	createEffect(() => {
     	props.setValue(selectedNumber());
-    	for(let i = 0;i < child().length;i++){
+    	for(let i = 0;i < buttons.length;i++){
       		if(i == selectedNumber()){
-        		child()[i].classList.add(checked);
+        		buttons[i].classList.add(checked);
       		}else{
-        		child()[i].classList.remove(checked);
+        		buttons[i].classList.remove(checked);
       		}
     	}
   	});
 
   	return (
-    	<div class = { container }>{child}</div>
+    	<div class = { container }>{resolved}</div>
   	);
 }
-  
-export function RadioButton(props :any){
+
+type RadioButtonProps = {
+	src :string
+}
+
+export function RadioButton(props :RadioButtonProps){
   	const buttonStyle = css`
 		div {
 			--size : clamp(50px,3vw,150px);
@@ -82,7 +90,7 @@ export function RadioButton(props :any){
   	`;
 
 	return (
-		<label class = {buttonStyle} data-value = {props.value}>
+		<label class = {buttonStyle}>
 			<SVGImage src = {props.src}/>
 		</label>
 	);

@@ -1,7 +1,7 @@
-import { Accessor, For , JSX, Show } from "solid-js";
+import { For , JSX, Show } from "solid-js";
 import { css } from "solid-styled-components";
 import { TimeLineProps } from "../../type";
-import { EmptyCell , FilledCell } from "../Atoms/Cell";
+import { EditingGroupCell, EmptyCell } from "../Atoms/Cell";
 import NameCard from "../Atoms/NameCard";
 
 export type JobTimes = {
@@ -41,11 +41,24 @@ function TimeLine(props: TimeLineProps){
 
 	return(
 		<tr>
-			<NameCard number = {props.user.studentNumber} name = {props.user.name}/>
-			<For each = {shifts}>{(shift , index) => {
-				return <EmptyCell index = {index()} maxIndex = {maxIndex}></EmptyCell>;
-			}
-			}</For>
+			<NameCard number = {props.user.studentNumber} name = {props.user.name}/>{() => {
+				let index = 0;
+				return <For each = {shifts}>{(shift) => {
+					if(shift.jobName == ""){
+						return(
+							<For each = {new Array(shift.times)}>{() =>{
+								const cell = <EmptyCell index = {index} maxIndex = {maxIndex}></EmptyCell>;
+								index++;
+								return cell;
+							}}</For>
+						);
+					}else{
+						const cell = <EditingGroupCell index = {index} maxIndex = {maxIndex} times = {shift.times} jobName = {shift.jobName}/>;
+						index += shift.times;
+						return cell;
+					}
+				}}</For>
+			}}
 		</tr>
   );
 }
