@@ -3,7 +3,7 @@ import { css } from "solid-styled-components";
 import { tableCSS } from "../../css/view_profile";
 
 function TimeLabel(){
-    function sequenceArray(firstNumber :number, endNumber :number):Array<number> {
+    function generateSerialNumber(firstNumber :number, endNumber :number):Array<number> {
     	return [...Array(endNumber - firstNumber + 1).keys()].map(i => i + firstNumber);
     }
   
@@ -35,11 +35,11 @@ function TimeLabel(){
     return (
       	<tr class = {labelLine}>
         	<th class = {label}></th>
-        	<For each = {sequenceArray(9,18)}>{(time) => {
+        	<For each = {generateSerialNumber(9,17)}>{(time) => {
           	return (
             	<>
               		<th class = {`${label} ${timeStyle}`}>{time}:00</th>
-              		<For each = {sequenceArray(1,5).map(i => i * 10)}>{(minute) => {
+              		<For each = {generateSerialNumber(1,5).map(i => i * 10)}>{(minute) => {
                 		return <th class = {`${label} ${minuteStyle}`}>{minute}</th>;
               		}}</For>
             	</>

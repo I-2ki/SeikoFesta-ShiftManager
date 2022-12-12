@@ -5,14 +5,19 @@ import Firebase from "../../Firebase";
 
 import { doc, getDoc } from "firebase/firestore";
 import { TimeTableProps } from "../../type";
-
-const db = Firebase.db;
-const docRef = doc(db , "cities" , "SF");
-const docSnap = await getDoc(docRef);
-
-//console.log(docSnap.data());
+import { Auth, User } from "firebase/auth";
 
 function TimeTable(props :TimeTableProps){
+	const auth :Auth = Firebase.auth;
+	const db = Firebase.db;
+
+	//ログイン時しかこのコンポーネントは使わないのでnullは無視する
+	const studentNumber :string = auth.currentUser!.email!.slice(0,5);
+	const docRef = doc(db , "users" , studentNumber);
+	getDoc(docRef).then((response) => {
+		//console.log(response.data());
+	});
+
   	const container = css`
 		margin : auto;
 		width: max(200px,98vw);
@@ -37,10 +42,7 @@ function TimeTable(props :TimeTableProps){
 					<TimeLabel/>
 				</thead>
 				<tbody>
-					<TimeLine user = {{name : "伊藤 秀平", studentNumber : 62019, shiftData : ["焼きそばを食べる","焼きそばを食べる","焼きそばを食べる","焼きそばを食べる","焼きそばを食べる","焼きそばを食べる","焼きそばを食べる","焼きそばを食べる"]}}/>
-					<TimeLine user = {{name : "伊藤 秀平", studentNumber : 62019, shiftData : ["","コンピュータ部","コンピュータ部","HP局"]}}/>
-					<TimeLine user = {{name : "伊藤 秀平", studentNumber : 62019, shiftData : ["",""]}}/>
-					<TimeLine user = {{name : "伊藤 秀平", studentNumber : 62019, shiftData : ["",""]}}/>
+					<TimeLine student = {{name : "伊藤 秀平", number : 62019, shifts : new Array(53).fill("")}}/>
 				</tbody>
 			</table>
 		</div>

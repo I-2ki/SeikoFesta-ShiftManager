@@ -1,8 +1,8 @@
 import { For , JSX, Show } from "solid-js";
 import { css } from "solid-styled-components";
-import { TimeLineProps } from "../../type";
 import { EditingGroupCell, EmptyCell } from "../Atoms/Cell";
 import NameCard from "../Atoms/NameCard";
+import { Student } from "../../type";
 
 export type JobTimes = {
 	jobName : string,
@@ -35,13 +35,17 @@ function convertConnectedNameToTimes(jobNames : Array<string>):Array<JobTimes>{
 	return converted;
 }
 
+type TimeLineProps = {
+    student : Student,
+}
+
 function TimeLine(props: TimeLineProps){
-	const shifts :Array<JobTimes> = convertConnectedNameToTimes(props.user.shiftData);
-	const maxIndex :number = props.user.shiftData.length - 1;
+	const shifts :Array<JobTimes> = convertConnectedNameToTimes(props.student.shifts);
+	const maxIndex :number = props.student.shifts.length - 1;
 
 	return(
 		<tr>
-			<NameCard number = {props.user.studentNumber} name = {props.user.name}/>{() => {
+			<NameCard number = {props.student.number} name = {props.student.name}/>{() => {
 				let index = 0;
 				return <For each = {shifts}>{(shift) => {
 					if(shift.jobName == ""){

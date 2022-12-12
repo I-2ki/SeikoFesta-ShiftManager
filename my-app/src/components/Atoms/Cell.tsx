@@ -1,4 +1,4 @@
-import { createSignal, onMount , For, Switch, Match } from "solid-js";
+import { createSignal, onMount , For, Switch, Match, createEffect } from "solid-js";
 import { css } from "solid-styled-components";
 import { tableCSS } from "../../css/view_profile";
 import { themeColor } from "../../css/view_profile";
@@ -9,6 +9,15 @@ export type EmptyCellProps = {
 }
 
 export function EmptyCell(props :EmptyCellProps){
+    const [isMouseDown,setIsMouseDown] = createSignal(true);
+
+    addEventListener("mousedown",() => {
+        setIsMouseDown(true);
+    });
+
+    addEventListener("mouseup",() => {
+        setIsMouseDown(false);
+    });
     const style = css`
         background-color: #D1D1D1;
         min-width: ${tableCSS.cellWidth};
@@ -23,14 +32,8 @@ export function EmptyCell(props :EmptyCellProps){
     `;
     let Cell:HTMLTableCellElement;
 
-    onMount(() => {
-        Cell.addEventListener("mouseover",()=> {
-        });
-    });
-
     return (
-        <td ref = {Cell} class = {style}>
-        </td>
+        <td ref = {Cell} class = {style}></td>
     );
 }
 

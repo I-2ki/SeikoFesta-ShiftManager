@@ -1,5 +1,5 @@
 import { css } from "solid-styled-components";
-import { GoogleAuthProvider , signInWithRedirect} from "firebase/auth";
+import { GoogleAuthProvider , signInWithRedirect } from "firebase/auth";
 import LoginButton from "../Molecules/LoginButton";
 import Firebase from "../../Firebase";
 
@@ -38,7 +38,6 @@ function Top(){
 
     return (
         <div>
-            <div id="particles-js"></div>
             <h1 class = {titleText}>
                 聖光祭　統一シフト
             </h1>

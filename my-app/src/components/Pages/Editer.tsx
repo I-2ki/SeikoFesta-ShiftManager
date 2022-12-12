@@ -5,10 +5,20 @@ import ToolBer from "../Organisms/ToolBer";
 import TimeTable from "../Organisms/TimeTable";
 
 import Firebase from "../../Firebase";
-import { ToolBerState } from "../../type";
+import { doc , getDoc} from "firebase/firestore";
+import { Student, ToolBerState } from "../../type";
 import { createSignal } from "solid-js";
 
+const auth = Firebase.auth;
+const db = Firebase.db;
+//const studentNumber :string = auth.currentUser!.email!.slice(0,5);
+const studentNumber = "62001";
+const docRef = doc(db , "users" , studentNumber);
+
+const docSnap = await getDoc(docRef);
+
 function Editer(){
+
 	const [getToolBerState,setToolBerState] = createSignal<ToolBerState>();
 	const header = css`
 		width: 100%;

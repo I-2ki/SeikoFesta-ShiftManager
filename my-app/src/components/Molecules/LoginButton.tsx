@@ -18,7 +18,7 @@ function LoginButton(props :any){
 
     const contentContainer = css`
       display:flex;
-      gap: 10px;   
+      gap: 10px;
     `;
 
     const labelText = css`

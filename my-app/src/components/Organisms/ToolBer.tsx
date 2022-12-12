@@ -1,4 +1,4 @@
-import { createEffect, createSignal, onMount } from "solid-js";
+import { createEffect, createSignal, onMount, Show } from "solid-js";
 
 import { css } from "solid-styled-components";
 import ToolButton from "../Molecules/ToolButtons";
@@ -73,12 +73,12 @@ function ToolBer(props :ToolBerProps){
 
 	return (
 		<div class = {toolBerStyle}>
-			<RadioButtonContainer setValue = {setInputMode}>
-				<RadioButton src = {add}/>
-				<RadioButton src = {remove}/>
-			</RadioButtonContainer>
-			<ToolButton src = {edit} onClick = {openEditWindow}/>
-			<ToolButton src = {auto} onClick = {autoShiftSet}/>
+				<RadioButtonContainer setValue = {setInputMode}>
+					<RadioButton src = {add}/>
+					<RadioButton src = {remove}/>
+				</RadioButtonContainer>
+				<ToolButton src = {edit} onClick = {openEditWindow}/>
+				<ToolButton src = {auto} onClick = {autoShiftSet}/>
 			<ToolButton src = {print} onClick = {printShift}/>
 			<ToolButton src = {help} onClick = {displayHelp}/>
 			<div class = {emptyStyle}></div>
