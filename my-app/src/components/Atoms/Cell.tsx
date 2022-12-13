@@ -1,7 +1,9 @@
+import { setDoc , doc } from "firebase/firestore";
 import { createSignal, onMount , For, Switch, Match, createEffect } from "solid-js";
 import { css } from "solid-styled-components";
 import { tableCSS } from "../../css/view_profile";
 import { themeColor } from "../../css/view_profile";
+import Firebase from "../../Firebase";
 
 export type EmptyCellProps = {
     maxIndex :number,
@@ -9,7 +11,7 @@ export type EmptyCellProps = {
 }
 
 export function EmptyCell(props :EmptyCellProps){
-    const [isMouseDown,setIsMouseDown] = createSignal(true);
+    const [isMouseDown,setIsMouseDown] = createSignal(false);
 
     addEventListener("mousedown",() => {
         setIsMouseDown(true);
@@ -18,6 +20,7 @@ export function EmptyCell(props :EmptyCellProps){
     addEventListener("mouseup",() => {
         setIsMouseDown(false);
     });
+
     const style = css`
         background-color: #D1D1D1;
         min-width: ${tableCSS.cellWidth};
@@ -31,6 +34,24 @@ export function EmptyCell(props :EmptyCellProps){
         }
     `;
     let Cell:HTMLTableCellElement;
+
+    const onClick = () => {
+        
+        setDoc(doc(Firebase.db,"users","62019"), {
+            
+        });
+    }
+
+    onMount(() => {
+        Cell.addEventListener("click",() => {
+            onClick();
+        });
+        Cell.addEventListener("mouseover",() => {
+            if(isMouseDown()){
+                onClick();
+            }
+        });
+    });
 
     return (
         <td ref = {Cell} class = {style}></td>

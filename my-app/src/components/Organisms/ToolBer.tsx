@@ -1,4 +1,4 @@
-import { createEffect, createSignal, onMount, Show } from "solid-js";
+import { createEffect, createSignal, Setter } from "solid-js";
 
 import { css } from "solid-styled-components";
 import ToolButton from "../Molecules/ToolButtons";
@@ -12,7 +12,17 @@ import auto from "../../assets/auto.svg";
 import print from "../../assets/print.svg";
 import help from "../../assets/help.svg";
 
-import { InputMode, ToolBerProps, ToolBerState } from "../../type";
+export type ToolBerProps = {
+    setValue : Setter<ToolBerState>
+}
+
+export type InputMode = "add" | "remove";
+
+export type ToolBerState = {
+    inputMode :InputMode,
+    group :string,
+    day :string,
+}
 
 function ToolBer(props :ToolBerProps){
 	const [getInputMode , setInputMode] = createSignal<number>(0);
@@ -44,9 +54,9 @@ function ToolBer(props :ToolBerProps){
 
 	createEffect(() => {
 		const toolBerState : ToolBerState = {
-		inputMode : (getInputMode() == 0) ? "add" : "remove",
-		group : getExplaingGroup(),
-		day : getExplaingDay(),
+			inputMode : (getInputMode() == 0) ? "add" : "remove",
+			group : getExplaingGroup(),
+			day : getExplaingDay(),
 		}
 		props.setValue(toolBerState);
 	});
@@ -73,12 +83,12 @@ function ToolBer(props :ToolBerProps){
 
 	return (
 		<div class = {toolBerStyle}>
-				<RadioButtonContainer setValue = {setInputMode}>
-					<RadioButton src = {add}/>
-					<RadioButton src = {remove}/>
-				</RadioButtonContainer>
-				<ToolButton src = {edit} onClick = {openEditWindow}/>
-				<ToolButton src = {auto} onClick = {autoShiftSet}/>
+			<RadioButtonContainer setValue = {setInputMode}>
+				<RadioButton src = {add}/>
+				<RadioButton src = {remove}/>
+			</RadioButtonContainer>
+			<ToolButton src = {edit} onClick = {openEditWindow}/>
+			<ToolButton src = {auto} onClick = {autoShiftSet}/>
 			<ToolButton src = {print} onClick = {printShift}/>
 			<ToolButton src = {help} onClick = {displayHelp}/>
 			<div class = {emptyStyle}></div>

@@ -1,7 +1,11 @@
-import { createSignal , children , createEffect, JSX, Accessor} from "solid-js";
+import { createSignal , children , createEffect, JSX, Setter} from "solid-js";
 import { css } from "solid-styled-components";
-import { RadioButtonContainerProps } from "../../type";
 import SVGImage from "../Atoms/SVGImage";
+
+export type RadioButtonContainerProps = {
+    setValue : Setter<number>
+    children : JSX.Element
+}
 
 export function RadioButtonContainer(props :RadioButtonContainerProps){
 	const [selectedNumber, setSelectedNumber] = createSignal<number>(0);

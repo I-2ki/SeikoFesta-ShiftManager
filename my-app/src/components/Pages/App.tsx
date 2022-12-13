@@ -2,11 +2,11 @@ import { Component, createSignal, Switch , Match, For, createEffect} from "solid
 
 import { onAuthStateChanged } from "firebase/auth";
 
-import Loading from "./components/Pages/Loading";
-import Top from "./components/Pages/Top";
-import Editer from "./components/Pages/Editer";
+import Loading from "../templates/Loading";
+import Top from "../templates/Top";
+import Editer from "../templates/Editer";
 
-import Firebase from "./Firebase";
+import Firebase from "../../Firebase";
 
 type loginState = "loading" | "noLogin" | "logined";
 
@@ -22,7 +22,6 @@ const App: Component = () => {
 	});
 
 	return(
-		<>
 		<Switch fallback = {<Loading/>}>
 			<Match when = {loginStatus() == "noLogin"}>
 				<Top/>
@@ -31,7 +30,6 @@ const App: Component = () => {
 				<Editer/>
 			</Match>
 		</Switch>
-		</>
 	);
 };
 

@@ -4,10 +4,15 @@ import TimeLine from "../Molecules/TimeLine";
 import Firebase from "../../Firebase";
 
 import { doc, getDoc } from "firebase/firestore";
-import { TimeTableProps } from "../../type";
+import { Student } from "../../type";
 import { Auth, User } from "firebase/auth";
 
+export type TimeTableProps = {
+    toolBerState : ToolBerState,
+}
+
 function TimeTable(props :TimeTableProps){
+	let student :Student;
 	const auth :Auth = Firebase.auth;
 	const db = Firebase.db;
 
@@ -15,7 +20,7 @@ function TimeTable(props :TimeTableProps){
 	const studentNumber :string = auth.currentUser!.email!.slice(0,5);
 	const docRef = doc(db , "users" , studentNumber);
 	getDoc(docRef).then((response) => {
-		//console.log(response.data());
+		console.log(response.data());
 	});
 
   	const container = css`
