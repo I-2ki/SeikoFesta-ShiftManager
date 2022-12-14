@@ -1,36 +1,42 @@
-import { createEffect, For, onMount } from "solid-js";
+import { createEffect, createSignal, For, onMount, Show } from "solid-js";
 import { css } from "solid-styled-components";
 import TimeLabel from "../Molecules/TimeLabel";
 import TimeLine from "../Molecules/TimeLine";
 import Firebase from "../../Firebase";
 
-import { doc, getDoc } from "firebase/firestore";
-import { Student } from "../../type";
+import { collection, doc, getDoc, getDocs, onSnapshot, query, where } from "firebase/firestore";
+import { Student, StudentRole } from "../../type";
 import { Auth, User } from "firebase/auth";
 
 import { ToolBerState } from "./ToolBer";
+import Loading from "../templates/Loading";
 
 export type TimeTableProps = {
     toolBerState : ToolBerState,
 }
-
 function TimeTable(props :TimeTableProps){
+	const [students,setStudents] = createSignal<Array<Student>>();
+
 	const auth :Auth = Firebase.auth;
 	const db = Firebase.db;
 
-	//ログイン時しかこのコンポーネントは使わないのでnullは無視する
-	async function getStudent() :Array<Student>{
-		const studentNumber :string = auth.currentUser!.email!.slice(0,5);
-		const studentRef = doc(db , "users" , studentNumber);
-		const studentDocSnap = await getDoc(studentRef);
-		const studentGroups = studentDocSnap.data()!.gruop;
+	/*const studentNumber :string = auth.currentUser!.email!.slice(0,5);
+	const studentRef = doc(db,"users",studentNumber);
+	const docSnap = await getDoc(studentRef);
+	const studentGroups :Array<string> = docSnap.data()!.groups;
+	*/
 
-		const groupRef = doc(db,"groups",studentGroups);
-		const groupDocSnap = await getDoc(groupRef);
-		const 
-
-		return docSnap.data();
-	}
+	const studentsRef = collection(db,"users");
+	const groupQuery = query(studentsRef,where("groups","array-contains-any",["computer_club"]));
+	
+	let array :Array<Student> = [];
+	onSnapshot(groupQuery,(querySnapshot) => {
+		array.splice(0);
+		querySnapshot.docs.forEach((doc) => {
+			array.push(doc.data() as Student);
+		});
+		setStudents(array);
+	});
 
   	const container = css`
 		margin : auto;
@@ -56,7 +62,8 @@ function TimeTable(props :TimeTableProps){
 					<TimeLabel/>
 				</thead>
 				<tbody>
-					<For each = {getStudent()}>{(student) => {
+					<For each = {students()}>{(student) => {
+						console.log(student);
 						return <TimeLine student = {student} toolBerState = {props.toolBerState}/>
 					}}</For>
 				</tbody>

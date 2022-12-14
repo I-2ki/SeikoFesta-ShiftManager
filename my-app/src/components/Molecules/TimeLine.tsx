@@ -1,4 +1,4 @@
-import { For , JSX, Show } from "solid-js";
+import { createEffect, For , JSX, Show } from "solid-js";
 import { css } from "solid-styled-components";
 import { CellProps, EditingGroupCell, EmptyCell } from "../Atoms/Cell";
 import NameCard from "../Atoms/NameCard";
@@ -54,13 +54,13 @@ function TimeLine(props: TimeLineProps){
 					if(shift.jobName == ""){
 						return(
 							<For each = {new Array(shift.times)}>{() =>{
-								const cell = <EmptyCell index = {index} times = {1} maxIndex = {maxIndex} jobName = "" toolBerState = {props.toolBerState} />;
+								const cell = <EmptyCell index = {index} times = {1} maxIndex = {maxIndex} jobName = "" toolBerState = {props.toolBerState} studentNumber = {props.student.number}/>;
 								index++;
 								return cell;
 							}}</For>
 						);
 					}else{
-						const cell = <EditingGroupCell index = {index} maxIndex = {maxIndex} times = {shift.times} jobName = {shift.jobName} toolBerState = {props.toolBerState}/>;
+						const cell = <EditingGroupCell index = {index} maxIndex = {maxIndex} times = {shift.times} jobName = {shift.jobName} toolBerState = {props.toolBerState} studentNumber = {props.student.number}/>;
 						index += shift.times;
 						return cell;
 					}

@@ -12,7 +12,8 @@ export type CellProps = {
     times : number,
     maxIndex :number,
     jobName :string,
-    toolBerState : ToolBerState
+    toolBerState : ToolBerState,
+    studentNumber : number,
 }
 
 export function EmptyCell(props :CellProps){
@@ -40,20 +41,16 @@ export function EmptyCell(props :CellProps){
     `;
     let Cell:HTMLTableCellElement;
 
-    const onClick = () => {
-        console.log("1");
-        const studentID = Firebase.auth.currentUser!.email!.slice(0,5) as string;
-        
+    async function onClick(){
+        const studentID = props.studentNumber.toString();
         const docRef = doc(Firebase.db,"users",studentID);
-        getDoc(docRef)
-        .then((response) => {
-            const shifts = response.data()!.shifts as Array<string>;
-            shifts[props.index] = "ワッキー";
-            setDoc(docRef, {
-                shifts : shifts,
-            },{
-                merge:true,
-            });
+        const docSnap = await getDoc(docRef);
+        const shifts = docSnap.data()!.shifts as Array<string>
+        shifts[props.index] = "ワッキー";
+        await setDoc(docRef, {
+            shifts : shifts,
+        },{
+            merge:true,
         });
     }
 

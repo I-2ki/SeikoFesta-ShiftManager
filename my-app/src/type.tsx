@@ -1,7 +1,7 @@
 import { JSX, Setter } from "solid-js"
 
 //データ関係
-export type StudentRole = "visitor" | "editor" | "admin";
+export type StudentRole = "reader" | "editor" | "admin";
 
 export type Student = {
     number : number,
