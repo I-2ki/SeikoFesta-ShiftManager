@@ -27,6 +27,7 @@ function TimeTable(props :TimeTableProps){
 
 		const groupRef = doc(db,"groups",studentGroups);
 		const groupDocSnap = await getDoc(groupRef);
+		const 
 
 		return docSnap.data();
 	}
