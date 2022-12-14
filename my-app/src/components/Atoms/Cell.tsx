@@ -1,16 +1,21 @@
-import { setDoc , doc } from "firebase/firestore";
+import { setDoc , doc, getDoc } from "firebase/firestore";
 import { createSignal, onMount , For, Switch, Match, createEffect } from "solid-js";
 import { css } from "solid-styled-components";
 import { tableCSS } from "../../css/view_profile";
 import { themeColor } from "../../css/view_profile";
 import Firebase from "../../Firebase";
+import { Student } from "../../type";
+import { ToolBerState } from "../Organisms/ToolBer";
 
-export type EmptyCellProps = {
-    maxIndex :number,
+export type CellProps = {
     index : number,
+    times : number,
+    maxIndex :number,
+    jobName :string,
+    toolBerState : ToolBerState
 }
 
-export function EmptyCell(props :EmptyCellProps){
+export function EmptyCell(props :CellProps){
     const [isMouseDown,setIsMouseDown] = createSignal(false);
 
     addEventListener("mousedown",() => {
@@ -36,9 +41,19 @@ export function EmptyCell(props :EmptyCellProps){
     let Cell:HTMLTableCellElement;
 
     const onClick = () => {
+        console.log("1");
+        const studentID = Firebase.auth.currentUser!.email!.slice(0,5) as string;
         
-        setDoc(doc(Firebase.db,"users","62019"), {
-            
+        const docRef = doc(Firebase.db,"users",studentID);
+        getDoc(docRef)
+        .then((response) => {
+            const shifts = response.data()!.shifts as Array<string>;
+            shifts[props.index] = "ワッキー";
+            setDoc(docRef, {
+                shifts : shifts,
+            },{
+                merge:true,
+            });
         });
     }
 
@@ -58,14 +73,7 @@ export function EmptyCell(props :EmptyCellProps){
     );
 }
 
-export type FilledCellProps = {
-    index : number,
-    times : number,
-    maxIndex :number,
-    jobName :string,
-}
-
-export function EditingGroupCell(props :FilledCellProps){
+export function EditingGroupCell(props :CellProps){
     let Cell :HTMLTableCellElement;
     const style = css`
         background-color: ${themeColor.mainColor};

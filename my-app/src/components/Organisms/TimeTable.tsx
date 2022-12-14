@@ -1,3 +1,4 @@
+import { createEffect, For, onMount } from "solid-js";
 import { css } from "solid-styled-components";
 import TimeLabel from "../Molecules/TimeLabel";
 import TimeLine from "../Molecules/TimeLine";
@@ -7,21 +8,28 @@ import { doc, getDoc } from "firebase/firestore";
 import { Student } from "../../type";
 import { Auth, User } from "firebase/auth";
 
+import { ToolBerState } from "./ToolBer";
+
 export type TimeTableProps = {
     toolBerState : ToolBerState,
 }
 
 function TimeTable(props :TimeTableProps){
-	let student :Student;
 	const auth :Auth = Firebase.auth;
 	const db = Firebase.db;
 
 	//ログイン時しかこのコンポーネントは使わないのでnullは無視する
-	const studentNumber :string = auth.currentUser!.email!.slice(0,5);
-	const docRef = doc(db , "users" , studentNumber);
-	getDoc(docRef).then((response) => {
-		console.log(response.data());
-	});
+	async function getStudent() :Array<Student>{
+		const studentNumber :string = auth.currentUser!.email!.slice(0,5);
+		const studentRef = doc(db , "users" , studentNumber);
+		const studentDocSnap = await getDoc(studentRef);
+		const studentGroups = studentDocSnap.data()!.gruop;
+
+		const groupRef = doc(db,"groups",studentGroups);
+		const groupDocSnap = await getDoc(groupRef);
+
+		return docSnap.data();
+	}
 
   	const container = css`
 		margin : auto;
@@ -47,7 +55,9 @@ function TimeTable(props :TimeTableProps){
 					<TimeLabel/>
 				</thead>
 				<tbody>
-					<TimeLine student = {{name : "伊藤 秀平", number : 62019, shifts : new Array(53).fill("")}}/>
+					<For each = {getStudent()}>{(student) => {
+						return <TimeLine student = {student} toolBerState = {props.toolBerState}/>
+					}}</For>
 				</tbody>
 			</table>
 		</div>

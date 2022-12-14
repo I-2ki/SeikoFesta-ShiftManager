@@ -6,8 +6,10 @@ import TimeTable from "../Organisms/TimeTable";
 
 import Firebase from "../../Firebase";
 import { doc , getDoc} from "firebase/firestore";
-import { Student, ToolBerState } from "../../type";
+import { Student } from "../../type";
 import { createSignal } from "solid-js";
+
+import { ToolBerState } from "../Organisms/ToolBer";
 
 function Editer(){
 	const [getToolBerState,setToolBerState] = createSignal<ToolBerState>();

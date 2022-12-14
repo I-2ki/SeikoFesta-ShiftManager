@@ -22,6 +22,7 @@ export type ToolBerState = {
     inputMode :InputMode,
     group :string,
     day :string,
+	inputJob : string,
 }
 
 function ToolBer(props :ToolBerProps){
@@ -57,6 +58,7 @@ function ToolBer(props :ToolBerProps){
 			inputMode : (getInputMode() == 0) ? "add" : "remove",
 			group : getExplaingGroup(),
 			day : getExplaingDay(),
+			inputJob : "001",
 		}
 		props.setValue(toolBerState);
 	});

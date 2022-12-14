@@ -1,8 +1,10 @@
 import { For , JSX, Show } from "solid-js";
 import { css } from "solid-styled-components";
-import { EditingGroupCell, EmptyCell } from "../Atoms/Cell";
+import { CellProps, EditingGroupCell, EmptyCell } from "../Atoms/Cell";
 import NameCard from "../Atoms/NameCard";
+
 import { Student } from "../../type";
+import { ToolBerState } from "../Organisms/ToolBer";
 
 export type JobTimes = {
 	jobName : string,
@@ -37,6 +39,7 @@ function convertConnectedNameToTimes(jobNames : Array<string>):Array<JobTimes>{
 
 type TimeLineProps = {
     student : Student,
+	toolBerState : ToolBerState
 }
 
 function TimeLine(props: TimeLineProps){
@@ -51,13 +54,13 @@ function TimeLine(props: TimeLineProps){
 					if(shift.jobName == ""){
 						return(
 							<For each = {new Array(shift.times)}>{() =>{
-								const cell = <EmptyCell index = {index} maxIndex = {maxIndex}></EmptyCell>;
+								const cell = <EmptyCell index = {index} times = {1} maxIndex = {maxIndex} jobName = "" toolBerState = {props.toolBerState} />;
 								index++;
 								return cell;
 							}}</For>
 						);
 					}else{
-						const cell = <EditingGroupCell index = {index} maxIndex = {maxIndex} times = {shift.times} jobName = {shift.jobName}/>;
+						const cell = <EditingGroupCell index = {index} maxIndex = {maxIndex} times = {shift.times} jobName = {shift.jobName} toolBerState = {props.toolBerState}/>;
 						index += shift.times;
 						return cell;
 					}
