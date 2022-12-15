@@ -9,7 +9,6 @@ import { Student, StudentRole } from "../../type";
 import { Auth, User } from "firebase/auth";
 
 import { ToolBerState } from "./ToolBer";
-import Loading from "../templates/Loading";
 
 export type TimeTableProps = {
     toolBerState : ToolBerState,
@@ -36,6 +35,21 @@ function TimeTable(props :TimeTableProps){
 		});
 		setStudents(array);
 	});
+
+	/*const studentID = props.studentNumber.toString();
+	const docRef = doc(Firebase.db,"users",studentID);
+	const docSnap = await getDoc(docRef);
+	const shifts = docSnap.data()!.shifts as Array<string>
+	if(props.toolBerState.inputMode == "add"){
+		shifts[props.index] = "ワッキー";
+	}else{
+		shifts[props.index] = "";
+	}
+	await setDoc(docRef, {
+		shifts : shifts,
+	},{
+		merge:true,
+	});*/
 	
   	const container = css`
 		margin : auto;
@@ -62,7 +76,6 @@ function TimeTable(props :TimeTableProps){
 				</thead>
 				<tbody>
 					<For each = {students()}>{(student) => {
-						console.log(students());
 						return <TimeLine student = {student} toolBerState = {props.toolBerState}/>
 					}}</For>
 				</tbody>

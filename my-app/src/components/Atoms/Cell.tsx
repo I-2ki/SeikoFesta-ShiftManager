@@ -1,22 +1,57 @@
-import { setDoc , doc, getDoc } from "firebase/firestore";
-import { createSignal, onMount , For, Switch, Match, createEffect } from "solid-js";
+import { createSignal, onMount , For, Switch, Match, createEffect, Setter, Accessor } from "solid-js";
 import { css } from "solid-styled-components";
 import { tableCSS } from "../../css/view_profile";
 import { themeColor } from "../../css/view_profile";
-import Firebase from "../../Firebase";
 import { Student } from "../../type";
 import { ToolBerState } from "../Organisms/ToolBer";
 
 export type CellProps = {
     index : number,
-    times : number,
-    maxIndex :number,
+    isTableFirst : boolean,
+    isTableEnd : boolean,
+    isShiftFirst : boolean,
+    isShiftEnd : boolean,
+    studentNumber : number,
     jobName :string,
     toolBerState : ToolBerState,
-    studentNumber : number,
+    getExisitCellsUpdate : Accessor<Array<boolean>>,
+    setExisitCellsUpdate : Setter<Array<boolean>>,
 }
 
-export function EmptyCell(props :CellProps){
+export function Cell(props :CellProps){
+    const baseCellstyle = css`
+        min-width: ${tableCSS.cellWidth};
+        max-width: 0;
+        height: ${tableCSS.cellHeight};
+        white-space: nowrap;
+        &:hover{
+            cursor: pointer;
+        }
+    `;
+
+    const emptyGroupStyle = css`
+        background-color: #D1D1D1;
+    `;
+
+    const editingGroupsStyle = css`
+        background-color: ${themeColor.mainColor};
+    `;
+    
+    const firstStyle = css`
+        border-left: ${(props.isTableFirst)?2:1}px black solid;
+    `;
+
+    const endStyle = css`
+        border-right: ${(props.isTableEnd)?2:1}px black solid;  
+    `;
+
+    const textStyle = css`
+        color: white;
+        font-size : max(1vw,20px);
+        margin-left: max(1vw,5px);
+        user-select: none;
+    `;
+
     const [isMouseDown,setIsMouseDown] = createSignal(false);
 
     addEventListener("mousedown",() => {
@@ -27,31 +62,19 @@ export function EmptyCell(props :CellProps){
         setIsMouseDown(false);
     });
 
-    const style = css`
-        background-color: #D1D1D1;
-        min-width: ${tableCSS.cellWidth};
-        max-width: 0;
-        height: ${tableCSS.cellHeight};
-        border-right: black ${(props.index == props.maxIndex)?2:1}px solid;
-        border-left: black ${(props.index == 0)?2:1}px solid;
-        white-space: nowrap;
-        &:hover{
-            cursor: pointer;
-        }
-    `;
+    const [explainText,setExplainText] = createSignal<string>();
+    if(props.isShiftFirst){
+        setExplainText(props.jobName);
+    }else{
+        setExplainText("");
+    }
+
     let Cell:HTMLTableCellElement;
 
-    async function onClick(){
-        const studentID = props.studentNumber.toString();
-        const docRef = doc(Firebase.db,"users",studentID);
-        const docSnap = await getDoc(docRef);
-        const shifts = docSnap.data()!.shifts as Array<string>
-        shifts[props.index] = "ワッキー";
-        await setDoc(docRef, {
-            shifts : shifts,
-        },{
-            merge:true,
-        });
+    function onClick(){
+        const array = props.getExisitCellsUpdate();
+        array[props.index] = true;
+        props.setExisitCellsUpdate(array);
     }
 
     onMount(() => {
@@ -66,54 +89,8 @@ export function EmptyCell(props :CellProps){
     });
 
     return (
-        <td ref = {Cell} class = {style}></td>
+        <td ref = {Cell} class = {`${baseCellstyle} ${(props.isShiftFirst)?firstStyle:""} ${(props.isShiftEnd)?endStyle:""} ${(props.jobName == "")?emptyGroupStyle:editingGroupsStyle}`}>
+            <p class = {textStyle}>{explainText()}</p>
+        </td>
     );
-}
-
-export function EditingGroupCell(props :CellProps){
-    let Cell :HTMLTableCellElement;
-    const style = css`
-        background-color: ${themeColor.mainColor};
-        min-width: ${tableCSS.cellWidth};
-        max-width: 0;
-        height: ${tableCSS.cellHeight};
-        white-space: nowrap;
-        &:hover{
-            cursor: pointer;
-        }
-    `;
-    const firstStyle = css`
-        border-left: ${(props.index == 0)?2:1}px black solid;
-        border-right: ${(props.times == 1)?((props.index == props.maxIndex)?2:1):0}px black solid;
-    `;
-    const endStyle = css`
-        border-right: ${(props.index == props.maxIndex - props.times + 1)?2:1}px black solid;  
-    `;
-    const textStyle = css`
-        color: white;
-        font-size : max(1vw,20px);
-        margin-left: max(1vw,5px);
-        user-select: none;
-    `;
-
-    return(
-        <For each = {new Array(props.times)}>{(item,index) => {
-            return (
-                <Switch fallback = {<td ref = {Cell} class = {style}></td>}>
-                    <Match when = {index() == 0}>
-                        <td ref = {Cell} class = {`${style} ${firstStyle}`}>
-                            <p class = {textStyle}>{props.jobName}</p>
-                        </td>
-                    </Match>
-                    <Match when = {index() == props.times - 1}>
-                        <td ref = {Cell} class = {`${style} ${endStyle}`}></td>
-                    </Match>
-                </Switch>
-            );
-        }}</For>
-    );
-}
-
-export function OtherGroupCell(){
-
 }
