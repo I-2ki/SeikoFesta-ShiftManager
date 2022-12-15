@@ -1,4 +1,4 @@
-import { createEffect, createSignal, For, onMount, Show } from "solid-js";
+import { createEffect, createMemo, createSignal, For, onMount, Show } from "solid-js";
 import { css } from "solid-styled-components";
 import TimeLabel from "../Molecules/TimeLabel";
 import TimeLine from "../Molecules/TimeLine";
@@ -15,11 +15,10 @@ export type TimeTableProps = {
     toolBerState : ToolBerState,
 }
 function TimeTable(props :TimeTableProps){
-	const [students,setStudents] = createSignal<Array<Student>>();
+	const [students,setStudents] = createSignal<Array<Student>>(new Array<Student>,{equals: false});
 
 	const auth :Auth = Firebase.auth;
 	const db = Firebase.db;
-
 	/*const studentNumber :string = auth.currentUser!.email!.slice(0,5);
 	const studentRef = doc(db,"users",studentNumber);
 	const docSnap = await getDoc(studentRef);
@@ -37,7 +36,7 @@ function TimeTable(props :TimeTableProps){
 		});
 		setStudents(array);
 	});
-
+	
   	const container = css`
 		margin : auto;
 		width: max(200px,98vw);
@@ -63,7 +62,7 @@ function TimeTable(props :TimeTableProps){
 				</thead>
 				<tbody>
 					<For each = {students()}>{(student) => {
-						console.log(student);
+						console.log(students());
 						return <TimeLine student = {student} toolBerState = {props.toolBerState}/>
 					}}</For>
 				</tbody>
@@ -71,5 +70,4 @@ function TimeTable(props :TimeTableProps){
 		</div>
 	);
 }
-
 export default TimeTable;
