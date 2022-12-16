@@ -8,9 +8,6 @@ import { ToolBerState } from "../Organisms/ToolBer";
 type TimeLineProps = {
     student : Student,
 	toolBerState : ToolBerState,
-	existCellsUpdate : Accessor<boolean[]>,
-	setExistCellsUpdate : Setter<boolean[]>,
-	setInputingStudentNumber : Setter<number>,
 }
 
 function TimeLine(props: TimeLineProps){
@@ -19,11 +16,10 @@ function TimeLine(props: TimeLineProps){
 	const name :string = props.student.name;
 	const toolBerState :ToolBerState = props.toolBerState;
 
-	const [existCellsUpdate,setExistCellsUpdate] = createSignal();
-
-	if(props.){
-
-	}
+	const [existCellsUpdate,setExistCellsUpdate] = createSignal<boolean[]>([],{equals:false});
+	createEffect(() => {
+		console.log(number.toString()+":"+existCellsUpdate());
+	});
 
 	return(
 		<tr>
@@ -44,8 +40,8 @@ function TimeLine(props: TimeLineProps){
 					jobName : jobName,
 					studentNumber : number,
 					toolBerState : toolBerState,
-					getExisitCellsUpdate : existCellsUpdate,
-					setExisitCellsUpdate : setExistCellsUpdate,
+					getExistCellsUpdate : existCellsUpdate,
+					setExistCellsUpdate : setExistCellsUpdate,
 				}
 
 				return <Cell {...cellProps}/>

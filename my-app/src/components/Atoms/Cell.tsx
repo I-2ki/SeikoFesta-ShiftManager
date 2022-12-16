@@ -13,11 +13,44 @@ export type CellProps = {
     studentNumber : number,
     jobName :string,
     toolBerState : ToolBerState,
-    getExisitCellsUpdate : Accessor<boolean[]>,
-    setExisitCellsUpdate : Setter<boolean[]>,
+    getExistCellsUpdate : Accessor<boolean[]>,
+    setExistCellsUpdate : Setter<boolean[]>,
 }
 
 export function Cell(props :CellProps){
+    const [isMouseDown,setIsMouseDown] = createSignal(false);
+    addEventListener("mousedown",() => {
+        setIsMouseDown(true);
+    });
+    addEventListener("mouseup",() => {
+        setIsMouseDown(false);
+    });
+
+    const [explainText,setExplainText] = createSignal<string>();
+    if(props.isShiftFirst){
+        setExplainText(props.jobName);
+    }else{
+        setExplainText("");
+    }
+
+    let Cell:HTMLTableCellElement;
+    function onClick(){
+        const array = props.getExistCellsUpdate();
+        array[props.index] = true;
+        props.setExistCellsUpdate(array);
+    }
+
+    onMount(() => {
+        Cell.addEventListener("mousedown",() => {
+            onClick();
+        });
+        Cell.addEventListener("mouseenter",() => {
+            if(isMouseDown()){
+                onClick();
+            }
+        });
+    });
+
     const baseCellstyle = css`
         min-width: ${tableCSS.cellWidth};
         max-width: 0;
@@ -50,43 +83,6 @@ export function Cell(props :CellProps){
         margin-left: max(1vw,5px);
         user-select: none;
     `;
-
-    const [isMouseDown,setIsMouseDown] = createSignal(false);
-
-    addEventListener("mousedown",() => {
-        setIsMouseDown(true);
-    });
-
-    addEventListener("mouseup",() => {
-        setIsMouseDown(false);
-    });
-
-    const [explainText,setExplainText] = createSignal<string>();
-    if(props.isShiftFirst){
-        setExplainText(props.jobName);
-    }else{
-        setExplainText("");
-    }
-
-    let Cell:HTMLTableCellElement;
-
-    function onClick(){
-        const array = props.getExisitCellsUpdate();
-        array[props.index] = true;
-        props.setExisitCellsUpdate(array);
-    }
-
-    onMount(() => {
-        Cell.addEventListener("mousedown",() => {
-            onClick();
-        });
-        Cell.addEventListener("mouseenter",() => {
-            if(isMouseDown()){
-                onClick();
-            }
-        });
-    });
-
     return (
         <td ref = {Cell} class = {`${baseCellstyle} ${(props.isShiftFirst)?firstStyle:""} ${(props.isShiftEnd)?endStyle:""} ${(props.jobName == "")?emptyGroupStyle:editingGroupsStyle}`}>
             <p class = {textStyle}>{explainText()}</p>

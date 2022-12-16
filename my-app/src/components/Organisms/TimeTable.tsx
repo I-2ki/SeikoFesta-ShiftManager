@@ -89,7 +89,7 @@ function TimeTable(props :TimeTableProps){
 				</thead>
 				<tbody>
 					<For each = {students()}>{(student,index) => {
-						return <TimeLine student = {student} toolBerState = {props.toolBerState} existCellsUpdate = {existCellsUpdate()} setExistCellsUpdate = {setExistCellsUpdate}/>
+						return <TimeLine student = {student} toolBerState = {props.toolBerState} /*existCellsUpdate = {existCellsUpdate()} setExistCellsUpdate = {setExistCellsUpdate}*//>
 					}}</For>
 				</tbody>
 			</table>
