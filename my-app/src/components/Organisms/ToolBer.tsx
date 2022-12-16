@@ -53,13 +53,14 @@ function ToolBer(props :ToolBerProps){
 		console.log("ヘルプ画面が表示されたよ");
 	}
 
-	const toolBerState : ToolBerState = {
-		inputMode : (getInputMode() == 0) ? "add" : "remove",
-		group : getExplaingGroup(),
-		day : getExplaingDay(),
-		inputJob : "001",
-	}
-	props.setValue(toolBerState);
+	createEffect(() => {
+		props.setValue({
+			inputMode : (getInputMode() == 0)?"add":"remove",
+			group : getExplaingGroup(),
+			day : getExplaingDay(),
+			inputJob : "001",
+		});
+	});
 
 	const toolBerStyle = css`
 		display: flex;

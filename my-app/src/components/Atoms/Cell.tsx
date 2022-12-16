@@ -13,8 +13,8 @@ export type CellProps = {
     studentNumber : number,
     jobName :string,
     toolBerState : ToolBerState,
-    getExisitCellsUpdate : Accessor<Array<boolean>>,
-    setExisitCellsUpdate : Setter<Array<boolean>>,
+    getExisitCellsUpdate : Accessor<boolean[]>,
+    setExisitCellsUpdate : Setter<boolean[]>,
 }
 
 export function Cell(props :CellProps){
@@ -77,10 +77,10 @@ export function Cell(props :CellProps){
     }
 
     onMount(() => {
-        Cell.addEventListener("click",() => {
+        Cell.addEventListener("mousedown",() => {
             onClick();
         });
-        Cell.addEventListener("mouseover",() => {
+        Cell.addEventListener("mouseenter",() => {
             if(isMouseDown()){
                 onClick();
             }

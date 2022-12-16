@@ -10,6 +10,7 @@ type TimeLineProps = {
 	toolBerState : ToolBerState,
 	existCellsUpdate : Accessor<boolean[]>,
 	setExistCellsUpdate : Setter<boolean[]>,
+	setInputingStudentNumber : Setter<number>,
 }
 
 function TimeLine(props: TimeLineProps){
@@ -17,6 +18,12 @@ function TimeLine(props: TimeLineProps){
 	const number :number = props.student.number;
 	const name :string = props.student.name;
 	const toolBerState :ToolBerState = props.toolBerState;
+
+	const [existCellsUpdate,setExistCellsUpdate] = createSignal();
+
+	if(props.){
+
+	}
 
 	return(
 		<tr>
@@ -37,8 +44,8 @@ function TimeLine(props: TimeLineProps){
 					jobName : jobName,
 					studentNumber : number,
 					toolBerState : toolBerState,
-					getExisitCellsUpdate : props.existCellsUpdate,
-					setExisitCellsUpdate : props.setExistCellsUpdate,
+					getExisitCellsUpdate : existCellsUpdate,
+					setExisitCellsUpdate : setExistCellsUpdate,
 				}
 
 				return <Cell {...cellProps}/>

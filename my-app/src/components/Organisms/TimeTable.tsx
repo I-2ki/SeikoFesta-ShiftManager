@@ -5,7 +5,7 @@ import TimeLine from "../Molecules/TimeLine";
 import Firebase from "../../Firebase";
 
 import { collection, doc, getDoc, getDocs, onSnapshot, query, setDoc, where } from "firebase/firestore";
-import { Student, StudentRole } from "../../type";
+import { Student } from "../../type";
 import { Auth, User } from "firebase/auth";
 
 import { ToolBerState } from "./ToolBer";
@@ -14,22 +14,21 @@ export type TimeTableProps = {
     toolBerState : ToolBerState,
 }
 function TimeTable(props :TimeTableProps){
-	const [existCellsUpdate,setExistCellsUpdate] = createSignal<Array<boolean>>([],{equals:false});
-
-	const [isMouseDown,setIsMouseDown] = createSignal(false);
+	const [existCellsUpdate,setExistCellsUpdate] = createSignal<boolean[]>([]);
+	const [inputingStudentNumber,setInputingStudentNumber] = createSignal<number>();
 
     addEventListener("mouseup",async () => {
         if(existCellsUpdate().length <= 0) return;
-		const studentID = Firebase.auth.currentUser!.email!.toString().slice(0,5);
+		const studentID = "62011";
 		const docRef = doc(Firebase.db,"users",studentID);
 		const docSnap = await getDoc(docRef);
 		const shifts = docSnap.data()!.shifts as Array<string>;
 		for(let i = 0;i < existCellsUpdate().length;i++){
 			if(existCellsUpdate()[i]){
-				if(){
+				if(props.toolBerState.inputMode == "add"){
 					shifts[i] = props.toolBerState.inputJob;
 				}else{
-					
+					shifts[i] = "";
 				}
 			}
 		}
@@ -41,12 +40,6 @@ function TimeTable(props :TimeTableProps){
 		setExistCellsUpdate([]);
     });
 
-	createEffect(() => {
-		/*
-		console.log(existCellsUpdate());
-		console.log(isMouseDown());
-		*/
-	});
 	const [students,setStudents] = createSignal<Array<Student>>(new Array<Student>,{equals: false});
 
 	const auth :Auth = Firebase.auth;
@@ -95,8 +88,8 @@ function TimeTable(props :TimeTableProps){
 					<TimeLabel/>
 				</thead>
 				<tbody>
-					<For each = {students()}>{(student) => {
-						return <TimeLine student = {student} toolBerState = {props.toolBerState} existCellsUpdate = {existCellsUpdate} setExistCellsUpdate = {setExistCellsUpdate}/>
+					<For each = {students()}>{(student,index) => {
+						return <TimeLine student = {student} toolBerState = {props.toolBerState} existCellsUpdate = {existCellsUpdate()} setExistCellsUpdate = {setExistCellsUpdate}/>
 					}}</For>
 				</tbody>
 			</table>
