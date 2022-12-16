@@ -1,4 +1,4 @@
-import { createEffect, createSignal, For } from "solid-js";
+import { Accessor, createEffect, createSignal, For, Setter } from "solid-js";
 import { CellProps, Cell } from "../Atoms/Cell";
 import NameCard from "../Atoms/NameCard";
 
@@ -7,21 +7,16 @@ import { ToolBerState } from "../Organisms/ToolBer";
 
 type TimeLineProps = {
     student : Student,
-	toolBerState : ToolBerState
+	toolBerState : ToolBerState,
+	existCellsUpdate : Accessor<boolean[]>,
+	setExistCellsUpdate : Setter<boolean[]>,
 }
 
 function TimeLine(props: TimeLineProps){
-	const [existCellsUpdate,setExistCellsUpdate] = createSignal<Array<boolean>>([],{equals:false});
-
 	const shifts :Array<string> = props.student.shifts;
 	const number :number = props.student.number;
 	const name :string = props.student.name;
 	const toolBerState :ToolBerState = props.toolBerState;
-
-	createEffect(() => {
-		console.log(existCellsUpdate());
-	});
-
 
 	return(
 		<tr>
@@ -42,8 +37,8 @@ function TimeLine(props: TimeLineProps){
 					jobName : jobName,
 					studentNumber : number,
 					toolBerState : toolBerState,
-					getExisitCellsUpdate : existCellsUpdate,
-					setExisitCellsUpdate : setExistCellsUpdate,
+					getExisitCellsUpdate : props.existCellsUpdate,
+					setExisitCellsUpdate : props.setExistCellsUpdate,
 				}
 
 				return <Cell {...cellProps}/>

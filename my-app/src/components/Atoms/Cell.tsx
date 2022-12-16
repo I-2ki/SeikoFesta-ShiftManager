@@ -2,7 +2,6 @@ import { createSignal, onMount , For, Switch, Match, createEffect, Setter, Acces
 import { css } from "solid-styled-components";
 import { tableCSS } from "../../css/view_profile";
 import { themeColor } from "../../css/view_profile";
-import { Student } from "../../type";
 import { ToolBerState } from "../Organisms/ToolBer";
 
 export type CellProps = {
