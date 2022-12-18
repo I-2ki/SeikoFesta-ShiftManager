@@ -83,8 +83,11 @@ export function Cell(props :CellProps){
         margin-left: max(1vw,5px);
         user-select: none;
     `;
+
+    const isEmptyCell = props.jobName === "";
+
     return (
-        <td ref = {Cell} class = {`${baseCellstyle} ${(props.isShiftFirst)?firstStyle:""} ${(props.isShiftEnd)?endStyle:""} ${(props.jobName == "")?emptyGroupStyle:editingGroupsStyle}`}>
+        <td ref = {Cell} class = {`${baseCellstyle} ${(props.isShiftFirst || isEmptyCell)?firstStyle:""} ${(props.isShiftEnd || isEmptyCell)?endStyle:""} ${(isEmptyCell)?emptyGroupStyle:editingGroupsStyle}`}>
             <p class = {textStyle}>{explainText()}</p>
         </td>
     );

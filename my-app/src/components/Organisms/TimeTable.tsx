@@ -19,7 +19,8 @@ function TimeTable(props :TimeTableProps){
 
     addEventListener("mouseup",async () => {
         if(existCellsUpdate().length <= 0) return;
-		const studentID = "62011";
+		const studentID = inputingStudentNumber()?.toString();
+		if(studentID == null) return;
 		const docRef = doc(Firebase.db,"users",studentID);
 		const docSnap = await getDoc(docRef);
 		const shifts = docSnap.data()!.shifts as Array<string>;
@@ -89,7 +90,7 @@ function TimeTable(props :TimeTableProps){
 				</thead>
 				<tbody>
 					<For each = {students()}>{(student,index) => {
-						return <TimeLine student = {student} toolBerState = {props.toolBerState} /*existCellsUpdate = {existCellsUpdate()} setExistCellsUpdate = {setExistCellsUpdate}*//>
+						return <TimeLine student = {student} toolBerState = {props.toolBerState} setExistCellsUpdate = {setExistCellsUpdate} setInputingStudentNumber = {setInputingStudentNumber}/>
 					}}</For>
 				</tbody>
 			</table>

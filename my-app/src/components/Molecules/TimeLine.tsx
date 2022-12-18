@@ -8,6 +8,8 @@ import { ToolBerState } from "../Organisms/ToolBer";
 type TimeLineProps = {
     student : Student,
 	toolBerState : ToolBerState,
+	setExistCellsUpdate : Setter<boolean[]>,
+	setInputingStudentNumber : Setter<number>,
 }
 
 function TimeLine(props: TimeLineProps){
@@ -17,8 +19,12 @@ function TimeLine(props: TimeLineProps){
 	const toolBerState :ToolBerState = props.toolBerState;
 
 	const [existCellsUpdate,setExistCellsUpdate] = createSignal<boolean[]>([],{equals:false});
+
 	createEffect(() => {
-		console.log(number.toString()+":"+existCellsUpdate());
+		if(existCellsUpdate().length != 0){
+			props.setExistCellsUpdate(existCellsUpdate);
+			props.setInputingStudentNumber(number);
+		}
 	});
 
 	return(
