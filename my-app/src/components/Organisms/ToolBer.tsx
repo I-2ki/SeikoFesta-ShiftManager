@@ -8,6 +8,7 @@ import Pulldown from "../Atoms/Pulldown";
 import add from "../../assets/add.svg";
 import remove from "../../assets/remove.svg";
 import edit from "../../assets/edit.svg"
+import auto from "../../assets/auto.svg";
 import print from "../../assets/print.svg";
 import help from "../../assets/help.svg";
 
@@ -20,7 +21,7 @@ export type InputMode = "add" | "remove";
 export type ToolBerState = {
     inputMode :InputMode,
     group :string,
-    day :number,
+    day :string,
 	inputJob : string,
 }
 
@@ -38,7 +39,7 @@ function ToolBer(props :ToolBerProps){
 	const [getExplaingGroup , setExplaingGroup] = createSignal<string>(groups[0]);
 
 	const days = ["1日目","2日目"];
-	const [getExplaingDay , setExplaingDay] = createSignal<number>(0);
+	const [getExplaingDay , setExplaingDay] = createSignal<string>(days[0]);
 
 	const autoShiftSet = () => {
 		console.log("自動でシフトがセットされたよ");
@@ -88,12 +89,13 @@ function ToolBer(props :ToolBerProps){
 				<RadioButton src = {remove}/>
 			</RadioButtonContainer>
 			<ToolButton src = {edit} onClick = {openEditWindow}/>
+			<ToolButton src = {auto} onClick = {autoShiftSet}/>
 			<ToolButton src = {print} onClick = {printShift}/>
 			<ToolButton src = {help} onClick = {displayHelp}/>
 			<div class = {emptyStyle}></div>
 			<Pulldown setValue = {setAction} values = {actions}></Pulldown>
 			<Pulldown setValue = {setExplaingGroup} values = {groups}></Pulldown>
-			<Pulldown setIndex = {setExplaingDay} values = {days}></Pulldown>
+			<Pulldown setValue = {setExplaingDay} values = {days}></Pulldown>
 			<div class = {textStyle}>のシフト</div>
 		</div>
 	);

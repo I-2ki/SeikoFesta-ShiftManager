@@ -1,18 +1,11 @@
-import { createEffect, createSignal, For, onMount ,Setter} from "solid-js";
+import { createEffect, createSignal, For, onMount } from "solid-js";
 import { css } from "solid-styled-components";
-
-export type PulldownProps = {
-    setValue? : Setter<string>,
-    setIndex? : Setter<number>,
-    values : Array<string>
-}
+import { PulldownProps } from "../../type";
 
 function Pulldown(props :PulldownProps){
     let select :HTMLSelectElement;
-    const values :string[] = props.values;
-
+    const values :Array<string> = props.values;
     const [nowValue,setNowValue] = createSignal<string>(values[0]);
-    const [nowIndex,setNowIndex] = createSignal<number>(0);
 
     const pulldownStyle = css`
         appearance: none;
@@ -33,14 +26,12 @@ function Pulldown(props :PulldownProps){
     `;
 
     createEffect(() => {
-        if(props.setValue) props.setValue(nowValue());
-        if(props.setIndex) props.setIndex(nowIndex);
+        props.setValue(nowValue());
     });
 
     onMount(() => {
         select.addEventListener("change",() => {
             setNowValue(select.value);
-            setNowIndex(select.selectedIndex);
         });
     });
 
