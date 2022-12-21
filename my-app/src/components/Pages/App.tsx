@@ -2,9 +2,9 @@ import { Component, createSignal, Switch , Match, For, createEffect} from "solid
 
 import { onAuthStateChanged } from "firebase/auth";
 
-import Loading from "../templates/Loading";
-import Top from "../templates/Top";
-import Editer from "../templates/Editer";
+import Loading from "../Templates/Loading";
+import Top from "../Templates/Top";
+import Editer from "../Templates/Editer";
 
 import Firebase from "../../Firebase";
 
