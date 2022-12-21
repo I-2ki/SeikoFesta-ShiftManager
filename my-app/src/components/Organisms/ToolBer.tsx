@@ -61,17 +61,6 @@ function ToolBer(props :ToolBerProps){
 		});
 	});
 
-	const toolBerStyle = css`
-		display: flex;
-		gap: 1vw;
-		align-items: center;
-		padding-top: 20px;
-		padding-bottom: 20px;
-		@media print{
-			display : none;
-		}
-	`;
-
 	const emptyStyle = css`
 		margin-left: auto;
 	`;
@@ -82,7 +71,16 @@ function ToolBer(props :ToolBerProps){
 	`;
 
 	return (
-		<div class = {toolBerStyle}>
+		<div class = {css`
+			display: flex;
+			gap: 1vw;
+			align-items: center;
+			padding-top: 20px;
+			padding-bottom: 20px;
+			@media print{
+				display : none;
+			}
+		`}>
 			<RadioButtonContainer setValue = {setInputMode}>
 				<RadioButton src = {add}/>
 				<RadioButton src = {remove}/>

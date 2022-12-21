@@ -1,6 +1,6 @@
 import { css } from "solid-styled-components";
 import { GoogleAuthProvider , signInWithRedirect } from "firebase/auth";
-import LoginButton from "../Molecules/LoginButton";
+import LoginButton from "../Atoms/LoginButton";
 import Firebase from "../../Firebase";
 
 function Top(){
