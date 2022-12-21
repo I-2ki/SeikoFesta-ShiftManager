@@ -4,7 +4,7 @@ import { css } from "solid-styled-components";
 export type PulldownProps = {
     setValue? : Setter<string>,
     setIndex? : Setter<number>,
-    values : Array<string>
+    values : string[]
 }
 
 function Pulldown(props :PulldownProps){

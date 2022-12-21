@@ -1,13 +1,16 @@
-import { JSX, Setter } from "solid-js"
-
 //データ関係
 export type StudentRole = "reader" | "editor" | "admin";
+
+export type Shifts = {
+    first : string[],
+    second : string[],
+}
 
 export type Student = {
     number : number,
     name : string,
     groups : Array<string>,
-    shifts : Array<string>,
+    shifts : Shifts,
     editableGroups : Array<string>,
     role : StudentRole,
 }
@@ -23,10 +26,4 @@ export type Group = {
     name : string,
     members : Array<number>,
     jobs : Array<string>
-}
-
-//Atoms Props
-export type PulldownProps = {
-    setValue : Setter<string>,
-    values : Array<string>
 }

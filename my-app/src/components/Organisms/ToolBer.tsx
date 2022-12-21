@@ -19,7 +19,7 @@ export type InputMode = "add" | "remove";
 
 export type ToolBerState = {
     inputMode :InputMode,
-    group :string,
+    groupIndex :number,
     day :number,
 	inputJob : string,
 }
@@ -35,7 +35,7 @@ function ToolBer(props :ToolBerProps){
 	const [getAction,setAction] = createSignal<string>(actions[0]);
 
 	const groups = ["コンピュータ部","ぶいえいす","総合技術研究所"];
-	const [getExplaingGroup , setExplaingGroup] = createSignal<string>(groups[0]);
+	const [getExplaingGroup , setExplaingGroup] = createSignal<number>(0);
 
 	const days = ["1日目","2日目"];
 	const [getExplaingDay , setExplaingDay] = createSignal<number>(0);
@@ -90,7 +90,7 @@ function ToolBer(props :ToolBerProps){
 			<ToolButton src = {help} onClick = {displayHelp}/>
 			<div class = {emptyStyle}></div>
 			<Pulldown setValue = {setAction} values = {actions}></Pulldown>
-			<Pulldown setValue = {setExplaingGroup} values = {groups}></Pulldown>
+			<Pulldown setIndex = {setExplaingGroup} values = {groups}></Pulldown>
 			<Pulldown setIndex = {setExplaingDay} values = {days}></Pulldown>
 			<div class = {textStyle}>のシフト</div>
 		</div>

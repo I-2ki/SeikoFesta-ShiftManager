@@ -5,7 +5,7 @@ import NameCard from "../Atoms/NameCard";
 import { Student } from "../../type";
 import { ToolBerState } from "../Organisms/ToolBer";
 
-type TimeLineProps = {
+export type TimeLineProps = {
     student : Student,
 	toolBerState : ToolBerState,
 	setExistCellsUpdate : Setter<boolean[]>,
@@ -13,7 +13,7 @@ type TimeLineProps = {
 }
 
 function TimeLine(props: TimeLineProps){
-	const shifts :Array<string> = props.student.shifts;
+	const shifts = props.student.shifts.first!;
 	const number :number = props.student.number;
 	const name :string = props.student.name;
 	const toolBerState :ToolBerState = props.toolBerState;
@@ -35,7 +35,7 @@ function TimeLine(props: TimeLineProps){
 				const isTableEnd :boolean = (index() == shifts.length - 1);
 				const isShiftFirst :boolean = (shifts[index() - 1] != shift);
 				const isShiftEnd :boolean = (shifts[index() + 1] != shift);
-				const jobName :string = props.student.shifts[index()];
+				const jobName :string = props.student.shifts.first[index()];
 
 				const cellProps :CellProps = {
 					index : index(),
