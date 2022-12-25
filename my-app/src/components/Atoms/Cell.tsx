@@ -12,7 +12,6 @@ export type CellProps = {
     isShiftEnd : boolean,
     studentNumber : number,
     jobName :string,
-    toolBerState : ToolBerState,
     getExistCellsUpdate : Accessor<boolean[]>,
     setExistCellsUpdate : Setter<boolean[]>,
 }

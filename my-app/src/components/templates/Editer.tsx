@@ -11,6 +11,7 @@ import { ToolBerState } from "../Organisms/ToolBer";
 
 function Editer(){
 	const [getToolBerState,setToolBerState] = createSignal<ToolBerState>();
+	
 	const header = css`
 		width: 100%;
 		display : flex;

@@ -55,7 +55,7 @@ function ToolBer(props :ToolBerProps){
 	createEffect(() => {
 		props.setValue({
 			inputMode : (getInputMode() == 0)?"add":"remove",
-			group : getExplaingGroup(),
+			groupIndex : getExplaingGroup(),
 			day : getExplaingDay(),
 			inputJob : "001",
 		});

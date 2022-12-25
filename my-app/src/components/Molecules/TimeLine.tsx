@@ -2,21 +2,18 @@ import { Accessor, createEffect, createSignal, For, Setter } from "solid-js";
 import { CellProps, Cell } from "../Atoms/Cell";
 import NameCard from "../Atoms/NameCard";
 
-import { Student } from "../../type";
-import { ToolBerState } from "../Organisms/ToolBer";
-
 export type TimeLineProps = {
-    student : Student,
-	toolBerState : ToolBerState,
+    studentNumber : number,
+	studentName : string,
+	displayShifts : string[]
 	setExistCellsUpdate : Setter<boolean[]>,
 	setInputingStudentNumber : Setter<number>,
 }
 
 function TimeLine(props: TimeLineProps){
-	const shifts = props.student.shifts.first!;
-	const number :number = props.student.number;
-	const name :string = props.student.name;
-	const toolBerState :ToolBerState = props.toolBerState;
+	const shifts = props.displayShifts;
+	const number :number = props.studentNumber;
+	const name :string = props.studentName;
 
 	const [existCellsUpdate,setExistCellsUpdate] = createSignal<boolean[]>([],{equals:false});
 
@@ -35,7 +32,7 @@ function TimeLine(props: TimeLineProps){
 				const isTableEnd :boolean = (index() == shifts.length - 1);
 				const isShiftFirst :boolean = (shifts[index() - 1] != shift);
 				const isShiftEnd :boolean = (shifts[index() + 1] != shift);
-				const jobName :string = props.student.shifts.first[index()];
+				const jobName :string = shifts[index()];
 
 				const cellProps :CellProps = {
 					index : index(),
@@ -45,7 +42,6 @@ function TimeLine(props: TimeLineProps){
 					isShiftEnd : isShiftEnd,
 					jobName : jobName,
 					studentNumber : number,
-					toolBerState : toolBerState,
 					getExistCellsUpdate : existCellsUpdate,
 					setExistCellsUpdate : setExistCellsUpdate,
 				}

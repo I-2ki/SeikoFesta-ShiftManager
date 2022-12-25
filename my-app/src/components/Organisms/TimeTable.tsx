@@ -1,4 +1,4 @@
-import { createSignal, For } from "solid-js";
+import { createEffect, createSignal, For } from "solid-js";
 import { css } from "solid-styled-components";
 import TimeLabel from "../Atoms/TimeLabel";
 import TimeLine, { TimeLineProps } from "../Molecules/TimeLine";
@@ -19,7 +19,14 @@ function TimeTable(props :TimeTableProps){
 	const [existCellsUpdate,setExistCellsUpdate] = createSignal<boolean[]>([]);
 	const [inputingStudentNumber,setInputingStudentNumber] = createSignal<number>();
 
-	async function fetchStudentGroups(){
+	function getDisplayShifts(shifts :Shifts) :string[]{
+		if(props.toolBerState.day == 0){
+			return shifts.first;
+		}
+		return shifts.second;
+	}
+
+	async function fetchStudentGroups() :Promise<string[]>{
 		const studentNumber :string = Firebase.auth.currentUser!.email!.slice(0,5);
 		const studentRef = doc(Firebase.db,"users",studentNumber);
 		const docSnap = await getDoc(studentRef);
@@ -28,7 +35,7 @@ function TimeTable(props :TimeTableProps){
 		return studentGroups;
 	}
 
-	async function fetchStudentsOf(groupID :string){
+	async function fetchStudents(){
 		const studentsRef = collection(Firebase.db,"users");
 		const groupQuery = query(studentsRef,where("groups","array-contains-any",["computer_club"]));
 	
@@ -52,9 +59,9 @@ function TimeTable(props :TimeTableProps){
 		for(let i = 0;i < existCellsUpdate().length;i++){
 			if(existCellsUpdate()[i]){
 				if(props.toolBerState.inputMode == "add"){
-					shifts.first[i] = props.toolBerState.inputJob;
+					getDisplayShifts(shifts)[i] = props.toolBerState.inputJob;
 				}else{
-					shifts.first[i] = "";
+					getDisplayShifts(shifts)[i] = "";
 				}
 			}
 		}
@@ -66,8 +73,9 @@ function TimeTable(props :TimeTableProps){
 		setExistCellsUpdate([]);
 	}
 
-	fetchStudentGroups().then((response) => {
-		fetchStudentsOf(response[props.toolBerState.groupIndex]);
+	createEffect(() => {
+		console.log(props.toolBerState);
+		fetchStudents();
 	});
     addEventListener("mouseup",updateShift);
 
@@ -92,9 +100,11 @@ function TimeTable(props :TimeTableProps){
 				</thead>
 				<tbody>
 					<For each = {students()}>{(student) => {
+						const displayShifts = getDisplayShifts(student.shifts);
 						const timeLineProps :TimeLineProps = {
-							student : student,
-							toolBerState : props.toolBerState,
+							studentName : student.name,
+							studentNumber : student.number,
+							displayShifts : displayShifts,
 							setExistCellsUpdate : setExistCellsUpdate,
 							setInputingStudentNumber : setInputingStudentNumber,
 						} 
