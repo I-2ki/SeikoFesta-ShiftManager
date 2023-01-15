@@ -4,6 +4,7 @@ import TimeLabel from "../Atoms/TimeLabel";
 import TimeLine, { TimeLineProps } from "../Molecules/TimeLine";
 import Firebase from "../../Firebase";
 
+import { onAuthStateChanged } from "firebase/auth";
 import { collection, doc, getDoc, onSnapshot, query, setDoc, where } from "firebase/firestore";
 import { Shifts, Student } from "../../type";
 
@@ -13,31 +14,33 @@ export type TimeTableProps = {
     toolBerState : ToolBerState,
 }
 
+async function fetchStudent() :Promise<Student>{
+	const studentNumber :string = Firebase.auth.currentUser!.email!.slice(0,5);
+	const studentRef = doc(Firebase.db,"users",studentNumber);
+	const docSnap = await getDoc(studentRef);
+	const student :Student = docSnap.data() as Student; 
+	return student;
+}
+
+class UsingStudent{
+	private static student :Student;
+	private constructor(){
+	}
+	static async get() :Promise<Student>{
+		if(!UsingStudent.student){
+			UsingStudent.student = await fetchStudent();
+		}
+		return UsingStudent.student;
+	}
+}
+
 function TimeTable(props :TimeTableProps){
 	const [students,setStudents] = createSignal<Student[]>([],{equals: false});
-
-	const [existCellsUpdate,setExistCellsUpdate] = createSignal<boolean[]>([]);
-	const [inputingStudentNumber,setInputingStudentNumber] = createSignal<number>();
-
-	function getDisplayShifts(shifts :Shifts) :string[]{
-		if(props.toolBerState.day == 0){
-			return shifts.first;
-		}
-		return shifts.second;
-	}
-
-	async function fetchStudentGroups() :Promise<string[]>{
-		const studentNumber :string = Firebase.auth.currentUser!.email!.slice(0,5);
-		const studentRef = doc(Firebase.db,"users",studentNumber);
-		const docSnap = await getDoc(studentRef);
-		const studentGroups :string[] = docSnap.data()!.groups;
-
-		return studentGroups;
-	}
-
 	async function fetchStudents(){
+		const studentGroups = (await UsingStudent.get()).groups;
+
 		const studentsRef = collection(Firebase.db,"users");
-		const groupQuery = query(studentsRef,where("groups","array-contains-any",["computer_club"]));
+		const groupQuery = query(studentsRef,where("groups","array-contains-any",studentGroups));
 	
 		let array :Student[] = [];
 		onSnapshot(groupQuery,(querySnapshot) => {
@@ -49,20 +52,32 @@ function TimeTable(props :TimeTableProps){
 		});
 	}
 
-	async function updateShift(){
-        if(existCellsUpdate().length <= 0) return;
-		const studentID = inputingStudentNumber()?.toString();
+	const [existCellsUpdate,setExistCellsUpdate] = createSignal<boolean[]>([]);
+	const [inputedStudentNumber,setInputedStudentNumber] = createSignal<number>();
+
+	function getDisplayShifts(shifts :Shifts) :string[]{
+		if(props.toolBerState.day == 0){
+			return shifts.first;
+		}
+		return shifts.second;
+	}
+	
+	async function updateShifts(){
+		if(existCellsUpdate().length <= 0) return;
+		const studentID = inputedStudentNumber()?.toString();
 		if(studentID == null) return;
+
 		const docRef = doc(Firebase.db,"users",studentID);
 		const docSnap = await getDoc(docRef);
 		const shifts = docSnap.data()!.shifts as Shifts;
 		for(let i = 0;i < existCellsUpdate().length;i++){
-			if(existCellsUpdate()[i]){
-				if(props.toolBerState.inputMode == "add"){
-					getDisplayShifts(shifts)[i] = props.toolBerState.inputJob;
-				}else{
-					getDisplayShifts(shifts)[i] = "";
-				}
+			if(existCellsUpdate()[i] === false){
+				continue;
+			}
+			if(props.toolBerState.inputMode == "add"){
+				getDisplayShifts(shifts)[i] = props.toolBerState.inputJob;
+			}else{
+				getDisplayShifts(shifts)[i] = "";
 			}
 		}
 		await setDoc(docRef,{
@@ -73,11 +88,8 @@ function TimeTable(props :TimeTableProps){
 		setExistCellsUpdate([]);
 	}
 
-	createEffect(() => {
-		console.log(props.toolBerState);
-		fetchStudents();
-	});
-    addEventListener("mouseup",updateShift);
+	fetchStudents();
+    addEventListener("mouseup",updateShifts);
 
 	return(
 		<div class = {css`
@@ -100,15 +112,14 @@ function TimeTable(props :TimeTableProps){
 				</thead>
 				<tbody>
 					<For each = {students()}>{(student) => {
-						const displayShifts = getDisplayShifts(student.shifts);
-						const timeLineProps :TimeLineProps = {
+						const [timeLineProps,setTimeLineProps] = createSignal<TimeLineProps>({
 							studentName : student.name,
 							studentNumber : student.number,
-							displayShifts : displayShifts,
+							displayShifts : props.toolBerState.day == 0?(student.shifts.first):(student.shifts.second),
 							setExistCellsUpdate : setExistCellsUpdate,
-							setInputingStudentNumber : setInputingStudentNumber,
-						} 
-						return <TimeLine {...timeLineProps}/>
+							setInputingStudentNumber : setInputedStudentNumber,
+						}); 
+						return <TimeLine {...timeLineProps()}/>
 					}}</For>
 				</tbody>
 			</table>

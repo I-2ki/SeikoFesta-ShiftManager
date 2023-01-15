@@ -6,7 +6,7 @@ class Firebase{
     private static _db :Firestore;
     private static _auth :Auth;
     private static _app :FirebaseApp;
-    constructor(){
+    private constructor(){
     }
     static getApp() :FirebaseApp{
         if(Firebase._app){

@@ -10,6 +10,8 @@ import remove from "../../assets/remove.svg";
 import edit from "../../assets/edit.svg"
 import print from "../../assets/print.svg";
 import help from "../../assets/help.svg";
+import { Portal } from "solid-js/web";
+import ModalWindow from "../Atoms/ModalWindow";
 
 export type ToolBerProps = {
     setValue : Setter<ToolBerState>
@@ -27,8 +29,9 @@ export type ToolBerState = {
 function ToolBer(props :ToolBerProps){
 	const [getInputMode , setInputMode] = createSignal<number>(0);
 
+	const [isOpenEditWindow , setIsOpenEditWindow] = createSignal<boolean>(false);
 	const openEditWindow = () => {
-		console.log("編集中なのだ");
+		setIsOpenEditWindow(true);
 	}
 
 	const actions = ["閲覧中","編集中"];
@@ -39,10 +42,6 @@ function ToolBer(props :ToolBerProps){
 
 	const days = ["1日目","2日目"];
 	const [getExplaingDay , setExplaingDay] = createSignal<number>(0);
-
-	const autoShiftSet = () => {
-		console.log("自動でシフトがセットされたよ");
-	}
 
 	const printShift = () => {
 		window.print();
@@ -71,29 +70,40 @@ function ToolBer(props :ToolBerProps){
 	`;
 
 	return (
-		<div class = {css`
-			display: flex;
-			gap: 1vw;
-			align-items: center;
-			padding-top: 20px;
-			padding-bottom: 20px;
-			@media print{
-				display : none;
-			}
-		`}>
-			<RadioButtonContainer setValue = {setInputMode}>
-				<RadioButton src = {add}/>
-				<RadioButton src = {remove}/>
-			</RadioButtonContainer>
-			<ToolButton src = {edit} onClick = {openEditWindow}/>
-			<ToolButton src = {print} onClick = {printShift}/>
-			<ToolButton src = {help} onClick = {displayHelp}/>
-			<div class = {emptyStyle}></div>
-			<Pulldown setValue = {setAction} values = {actions}></Pulldown>
-			<Pulldown setIndex = {setExplaingGroup} values = {groups}></Pulldown>
-			<Pulldown setIndex = {setExplaingDay} values = {days}></Pulldown>
-			<div class = {textStyle}>のシフト</div>
-		</div>
+		<>
+			<div class = {css`
+				display: flex;
+				gap: 1vw;
+				align-items: center;
+				padding-top: 20px;
+				padding-bottom: 20px;
+				@media print{
+					display : none;
+				}
+			`}>
+				<RadioButtonContainer setValue = {setInputMode}>
+					<RadioButton src = {add}/>
+					<RadioButton src = {remove}/>
+				</RadioButtonContainer>
+
+				<ToolButton src = {edit} onClick = {openEditWindow}/>
+				<ModalWindow isOpen={isOpenEditWindow}/>
+
+				<ToolButton src = {print} onClick = {printShift}/>
+
+				<ToolButton src = {help} onClick = {displayHelp}/>
+
+				<div class = {emptyStyle}></div>
+
+				<Pulldown setValue = {setAction} values = {actions}></Pulldown>
+
+				<Pulldown setIndex = {setExplaingGroup} values = {groups}></Pulldown>
+
+				<Pulldown setIndex = {setExplaingDay} values = {days}></Pulldown>
+				
+				<div class = {textStyle}>のシフト</div>
+			</div>
+		</>
 	);
 }
 

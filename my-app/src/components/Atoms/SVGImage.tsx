@@ -1,6 +1,10 @@
 import { css } from "solid-styled-components";
 
-function SVGImage(props :any){
+type SVGImageProps = {
+	src : string,
+}
+
+function SVGImage(props :SVGImageProps){
     const mask = css`
 		width:100%;
       	height: 100%;
