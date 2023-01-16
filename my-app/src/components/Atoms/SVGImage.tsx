@@ -2,6 +2,7 @@ import { css } from "solid-styled-components";
 
 type SVGImageProps = {
 	src : string,
+	color? : string,
 }
 
 function SVGImage(props :SVGImageProps){
@@ -14,7 +15,7 @@ function SVGImage(props :SVGImageProps){
     	display: block;
     	width: 100%;
     	height: 100%;
-    	background-color: #4150BF;
+    	background-color: ${(!props.color)?"#4150BF":props.color} ;
     	mask: url(${props.src}) no-repeat center center / contain;
     	-webkit-mask: url(${props.src}) no-repeat center center / contain;
     `;
