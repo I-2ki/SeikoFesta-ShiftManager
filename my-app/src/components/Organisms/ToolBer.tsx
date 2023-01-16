@@ -87,7 +87,13 @@ function ToolBer(props :ToolBerProps){
 				</RadioButtonContainer>
 
 				<ToolButton src = {edit} onClick = {openEditWindow}/>
-				<ModalWindow title = "仕事の編集" isOpen = {isOpenEditWindow} setIsOpen = {setIsOpenEditWindow}/>
+				<ModalWindow title = "仕事の編集" isOpen = {isOpenEditWindow} setIsOpen = {setIsOpenEditWindow}>
+					<div class = {
+						css`
+							background-color: red;
+						`
+					}></div>
+				</ModalWindow>
 
 				<ToolButton src = {print} onClick = {printShift}/>
 
