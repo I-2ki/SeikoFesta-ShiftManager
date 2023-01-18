@@ -1,4 +1,4 @@
-import { createEffect, createSignal, Setter } from "solid-js";
+import { createEffect, createSignal} from "solid-js";
 
 import { css } from "solid-styled-components";
 import ToolButton from "../Molecules/ToolButtons";
@@ -10,12 +10,7 @@ import remove from "../../assets/remove.svg";
 import edit from "../../assets/edit.svg"
 import print from "../../assets/print.svg";
 import help from "../../assets/help.svg";
-import { Portal } from "solid-js/web";
 import ModalWindow from "../Atoms/ModalWindow";
-
-export type ToolBerProps = {
-    setValue : Setter<ToolBerState>
-}
 
 export type InputMode = "add" | "remove";
 
@@ -26,8 +21,15 @@ export type ToolBerState = {
 	inputJob : string,
 }
 
-function ToolBer(props :ToolBerProps){
-	const [getInputMode , setInputMode] = createSignal<number>(0);
+export const [toolBerState,setToolBerState] = createSignal<ToolBerState>({
+	inputMode : "add",
+	groupIndex : 0,
+	day : 0,
+	inputJob : "001",
+},{equals : false}); 
+
+function ToolBer(){
+	const [getInputMode, setInputMode] = createSignal<number>(0);
 
 	const [isOpenEditWindow , setIsOpenEditWindow] = createSignal<boolean>(false);
 	const openEditWindow = () => {
@@ -52,7 +54,7 @@ function ToolBer(props :ToolBerProps){
 	}
 
 	createEffect(() => {
-		props.setValue({
+		setToolBerState({
 			inputMode : (getInputMode() == 0)?"add":"remove",
 			groupIndex : getExplaingGroup(),
 			day : getExplaingDay(),
@@ -88,11 +90,7 @@ function ToolBer(props :ToolBerProps){
 
 				<ToolButton src = {edit} onClick = {openEditWindow}/>
 				<ModalWindow title = "仕事の編集" isOpen = {isOpenEditWindow} setIsOpen = {setIsOpenEditWindow}>
-					<div class = {
-						css`
-							background-color: red;
-						`
-					}></div>
+					テスト
 				</ModalWindow>
 
 				<ToolButton src = {print} onClick = {printShift}/>

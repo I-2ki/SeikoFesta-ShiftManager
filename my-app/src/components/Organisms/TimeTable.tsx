@@ -4,23 +4,10 @@ import TimeLabel from "../Atoms/TimeLabel";
 import TimeLine, { TimeLineProps } from "../Molecules/TimeLine";
 import Firebase from "../../Firebase";
 
-import { onAuthStateChanged } from "firebase/auth";
 import { collection, doc, getDoc, onSnapshot, query, setDoc, where } from "firebase/firestore";
 import { Shifts, Student } from "../../type";
 
-import { ToolBerState } from "./ToolBer";
-
-export type TimeTableProps = {
-    toolBerState : ToolBerState,
-}
-
-async function fetchStudent() :Promise<Student>{
-	const studentNumber :string = Firebase.auth.currentUser!.email!.slice(0,5);
-	const studentRef = doc(Firebase.db,"users",studentNumber);
-	const docSnap = await getDoc(studentRef);
-	const student :Student = docSnap.data() as Student; 
-	return student;
-}
+import { toolBerState } from "./ToolBer";
 
 class UsingStudent{
 	private static student :Student;
@@ -34,29 +21,37 @@ class UsingStudent{
 	}
 }
 
-function TimeTable(props :TimeTableProps){
-	const [students,setStudents] = createSignal<Student[]>([],{equals: false});
-	async function fetchStudents(){
-		const studentGroups = (await UsingStudent.get()).groups;
+async function fetchStudent() :Promise<Student>{
+	const studentNumber :string = Firebase.auth.currentUser!.email!.slice(0,5);
+	const studentRef = doc(Firebase.db,"users",studentNumber);
+	const docSnap = await getDoc(studentRef);
+	const student :Student = docSnap.data() as Student; 
+	return student;
+}
 
-		const studentsRef = collection(Firebase.db,"users");
-		const groupQuery = query(studentsRef,where("groups","array-contains-any",studentGroups));
-	
-		let array :Student[] = [];
-		onSnapshot(groupQuery,(querySnapshot) => {
-			array.splice(0);
-			querySnapshot.docs.forEach((doc) => {
-				array.push(doc.data() as Student);
-			});
-			setStudents(array);
+const [students,setStudents] = createSignal<Student[]>([],{equals: false});
+async function fetchStudents(){
+	const studentGroups = (await UsingStudent.get()).groups;
+
+	const studentsRef = collection(Firebase.db,"users");
+	const groupQuery = query(studentsRef,where("groups","array-contains-any",studentGroups));
+
+	let array :Student[] = [];
+	onSnapshot(groupQuery,(querySnapshot) => {
+		array.splice(0);
+		querySnapshot.docs.forEach((doc) => {
+			array.push(doc.data() as Student);
 		});
-	}
+		setStudents(array);
+	});
+}
 
+function TimeTable(){
 	const [existCellsUpdate,setExistCellsUpdate] = createSignal<boolean[]>([]);
 	const [inputedStudentNumber,setInputedStudentNumber] = createSignal<number>();
 
 	function getDisplayShifts(shifts :Shifts) :string[]{
-		if(props.toolBerState.day == 0){
+		if(toolBerState().day == 0){
 			return shifts.first;
 		}
 		return shifts.second;
@@ -74,8 +69,8 @@ function TimeTable(props :TimeTableProps){
 			if(existCellsUpdate()[i] === false){
 				continue;
 			}
-			if(props.toolBerState.inputMode == "add"){
-				getDisplayShifts(shifts)[i] = props.toolBerState.inputJob;
+			if(toolBerState().inputMode == "add"){
+				getDisplayShifts(shifts)[i] = toolBerState().inputJob;
 			}else{
 				getDisplayShifts(shifts)[i] = "";
 			}
@@ -91,36 +86,42 @@ function TimeTable(props :TimeTableProps){
 	fetchStudents();
     addEventListener("mouseup",updateShifts);
 
+	const container = css`
+		margin : auto;
+		width: max(200px,98vw);
+		height: max(200px,89vh);
+		margin-bottom: 2vh;
+		overflow: scroll;
+	`;
+
+	const table = css`
+		position: relative;
+		left: 100px;
+		min-width: 100%;
+		table-layout: fixed;
+		border-spacing: 0px 50px;
+		-webkit-overflow-scrolling: touch;	
+	`;
+
 	return(
-		<div class = {css`
-			margin : auto;
-			width: max(200px,98vw);
-			height: max(200px,89vh);
-			margin-bottom: 2vh;
-			overflow: scroll;
-		`}>
-			<table class = {css`
-				position: relative;
-				left: 100px;
-				min-width: 100%;
-				table-layout: fixed;
-				border-spacing: 0px 50px;
-				-webkit-overflow-scrolling: touch;	
-			`}>
+		<div class = {container}>
+			<table class = {table}>
 				<thead>
 					<TimeLabel/>
 				</thead>
 				<tbody>
-					<For each = {students()}>{(student) => {
-						const [timeLineProps,setTimeLineProps] = createSignal<TimeLineProps>({
-							studentName : student.name,
-							studentNumber : student.number,
-							displayShifts : props.toolBerState.day == 0?(student.shifts.first):(student.shifts.second),
-							setExistCellsUpdate : setExistCellsUpdate,
-							setInputingStudentNumber : setInputedStudentNumber,
-						}); 
-						return <TimeLine {...timeLineProps()}/>
-					}}</For>
+					{
+						students().map((student) => {
+							const timeLineProps :TimeLineProps = {
+								studentName : student.name,
+								studentNumber : student.number,
+								displayShifts : (toolBerState().day)?student.shifts.first:student.shifts.second,
+								setExistCellsUpdate : setExistCellsUpdate,
+								setInputingStudentNumber : setInputedStudentNumber,
+							};
+							return <TimeLine {...timeLineProps}/>
+						})
+					}
 				</tbody>
 			</table>
 		</div>

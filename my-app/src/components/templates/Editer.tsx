@@ -5,13 +5,8 @@ import ToolBer from "../Organisms/ToolBer";
 import TimeTable from "../Organisms/TimeTable";
 
 import Firebase from "../../Firebase";
-import { createSignal } from "solid-js";
-
-import { ToolBerState } from "../Organisms/ToolBer";
 
 function Editer(){
-	const [getToolBerState,setToolBerState] = createSignal<ToolBerState>();
-	
 	const header = css`
 		width: 100%;
 		display : flex;
@@ -49,8 +44,8 @@ function Editer(){
 				<h1 class = {title}>統一シフト</h1>
 				<button class = {logoutButton} onClick = {() => signOut(Firebase.auth)}>ログアウト</button>
 			</header>
-			<ToolBer setValue = {setToolBerState}/>
-			<TimeTable toolBerState = {getToolBerState()}/>
+			<ToolBer/>
+			<TimeTable/>
 		</>
 	);
 }

@@ -41,7 +41,7 @@ function ModalWindow(props :ModalWindowProps){
 
     const title = css`
         margin-left: 1vw;
-        font-size: max(1vw,20px);
+        font-size: max(1.5vw,50px);
     `;
 
     const emptyStyle = css`
@@ -49,13 +49,17 @@ function ModalWindow(props :ModalWindowProps){
     `;
 
     const closeIconContainer = css`
-        --size : max(2vw,40px);
+        --size : max(3vw,100px);
         width : var(--size);
         height : var(--size);
-        padding : 0.5vw;
+        padding : 1vw;
         &:hover{
             cursor: pointer;
         }
+    `;
+
+    const mainContent = css`
+        margin-left : 1vw;
     `;
 
     return (
@@ -70,7 +74,7 @@ function ModalWindow(props :ModalWindowProps){
                             <SVGImage src = {close}></SVGImage>
                         </div>
                     </div>
-                    <div>{props.children}</div>
+                    <div class = {mainContent}>{props.children}</div>
                 </div>
             </Portal>
         </Show>
