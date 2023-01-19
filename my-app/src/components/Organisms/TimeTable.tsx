@@ -1,15 +1,15 @@
-import { createEffect, createSignal, For } from "solid-js";
+import { createSignal } from "solid-js";
 import { css } from "solid-styled-components";
 import TimeLabel from "../Atoms/TimeLabel";
 import TimeLine, { TimeLineProps } from "../Molecules/TimeLine";
 import Firebase from "../../Firebase";
 
-import { collection, doc, getDoc, onSnapshot, query, setDoc, where } from "firebase/firestore";
-import { Shifts, Student } from "../../type";
+import { collection, doc, Firestore, getDoc, onSnapshot, query, setDoc, updateDoc, where, writeBatch } from "firebase/firestore";
+import { Student } from "../../type";
 
 import { toolBerState } from "./ToolBer";
 
-class UsingStudent{
+export class UsingStudent{
 	private static student :Student;
 	private constructor(){
 	}
@@ -34,57 +34,71 @@ async function fetchStudents(){
 	const studentGroups = (await UsingStudent.get()).groups;
 
 	const studentsRef = collection(Firebase.db,"users");
-	const groupQuery = query(studentsRef,where("groups","array-contains-any",studentGroups));
+	const groupQuery = query(studentsRef,where("groups","array-contains-any",[studentGroups[toolBerState().groupIndex]]));
 
-	let array :Student[] = [];
+	const array :Student[] = [];
 	onSnapshot(groupQuery,(querySnapshot) => {
 		array.splice(0);
 		querySnapshot.docs.forEach((doc) => {
 			array.push(doc.data() as Student);
 		});
 		setStudents(array);
-	});
+	});	
 }
 
+function getStudentNumberFromIndex(index :number) :number{
+	return students()[index].number;
+}
+
+type cellAddress = {
+	index : number,
+	timeLineIndex : number,
+}
+
+export const [pressedCellAddress,setPressedCellAddress] = createSignal<cellAddress | null>(null);
+export const [releasedCellAddress,setReleasedCellAddress] = createSignal<cellAddress | null>(null);
+
 function TimeTable(){
-	const [existCellsUpdate,setExistCellsUpdate] = createSignal<boolean[]>([]);
-	const [inputedStudentNumber,setInputedStudentNumber] = createSignal<number>();
-
-	function getDisplayShifts(shifts :Shifts) :string[]{
-		if(toolBerState().day == 0){
-			return shifts.first;
-		}
-		return shifts.second;
-	}
-	
-	async function updateShifts(){
-		if(existCellsUpdate().length <= 0) return;
-		const studentID = inputedStudentNumber()?.toString();
-		if(studentID == null) return;
-
-		const docRef = doc(Firebase.db,"users",studentID);
-		const docSnap = await getDoc(docRef);
-		const shifts = docSnap.data()!.shifts as Shifts;
-		for(let i = 0;i < existCellsUpdate().length;i++){
-			if(existCellsUpdate()[i] === false){
-				continue;
-			}
-			if(toolBerState().inputMode == "add"){
-				getDisplayShifts(shifts)[i] = toolBerState().inputJob;
-			}else{
-				getDisplayShifts(shifts)[i] = "";
-			}
-		}
-		await setDoc(docRef,{
-			shifts : shifts
-		},{
-			merge : true
-		});
-		setExistCellsUpdate([]);
-	}
-
 	fetchStudents();
-    addEventListener("mouseup",updateShifts);
+	addEventListener("mouseup",async () => {
+		if((pressedCellAddress() == null) || (releasedCellAddress() == null)){
+			setPressedCellAddress(null);
+			setReleasedCellAddress(null);
+			return;
+		}
+
+		const topLeftXIndex = Math.min(pressedCellAddress()!.index,releasedCellAddress()!.index);
+		const topLeftYIndex = Math.min(pressedCellAddress()!.timeLineIndex,releasedCellAddress()!.timeLineIndex);
+
+		const bottomRightXIndex = Math.max(pressedCellAddress()!.index,releasedCellAddress()!.index);
+		const bottomRightYIndex = Math.max(pressedCellAddress()!.timeLineIndex,releasedCellAddress()!.timeLineIndex);
+	
+		const studetNumberList :number[] = [];
+		for(let yIndex = topLeftYIndex;yIndex <= bottomRightYIndex;yIndex++){
+			const studentNumber :number = getStudentNumberFromIndex(yIndex);
+			studetNumberList.push(studentNumber);
+		}
+
+		const batch = writeBatch(Firebase.db);
+
+		const studentsRef = collection(Firebase.db,"users");
+		const Query = query(studentsRef,where("number","in",studetNumberList));
+
+		for(let yIndex = topLeftYIndex;yIndex <= bottomRightYIndex;yIndex++){
+			const shifts = students()[yIndex].shifts;
+			for(let xIndex = topLeftXIndex;xIndex <= bottomRightXIndex;xIndex++){
+				const inputJob = (toolBerState().inputJob == "remove")?"":toolBerState().inputJob;
+				if(toolBerState().day == 0){
+					shifts.first[xIndex] = inputJob;
+				}else{
+					shifts.second[xIndex] = inputJob;
+				}
+			}
+		}
+
+		setPressedCellAddress(null);
+		setReleasedCellAddress(null);
+	});
 
 	const container = css`
 		margin : auto;
@@ -111,13 +125,12 @@ function TimeTable(){
 				</thead>
 				<tbody>
 					{
-						students().map((student) => {
+						students().map((student,index) => {
 							const timeLineProps :TimeLineProps = {
+								timeLineIndex : index,
 								studentName : student.name,
 								studentNumber : student.number,
 								displayShifts : (toolBerState().day)?student.shifts.first:student.shifts.second,
-								setExistCellsUpdate : setExistCellsUpdate,
-								setInputingStudentNumber : setInputedStudentNumber,
 							};
 							return <TimeLine {...timeLineProps}/>
 						})

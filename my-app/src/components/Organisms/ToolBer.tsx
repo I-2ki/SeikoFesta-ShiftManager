@@ -12,9 +12,13 @@ import print from "../../assets/print.svg";
 import help from "../../assets/help.svg";
 import ModalWindow from "../Atoms/ModalWindow";
 
-export type InputMode = "add" | "remove";
+import { UsingStudent } from "./TimeTable";
+
+type InputMode = "add" | "remove";
+type OperationMode = "view" | "edit";
 
 export type ToolBerState = {
+	operationMode : OperationMode,
     inputMode :InputMode,
     groupIndex :number,
     day :number,
@@ -23,6 +27,7 @@ export type ToolBerState = {
 
 export const [toolBerState,setToolBerState] = createSignal<ToolBerState>({
 	inputMode : "add",
+	operationMode : "view",
 	groupIndex : 0,
 	day : 0,
 	inputJob : "001",
@@ -36,10 +41,10 @@ function ToolBer(){
 		setIsOpenEditWindow(true);
 	}
 
-	const actions = ["閲覧中","編集中"];
-	const [getAction,setAction] = createSignal<string>(actions[0]);
+	const operations = ["閲覧中","編集中"];
+	const [getOperationMode,setOperationMode] = createSignal<number>(0);
 
-	const groups = ["コンピュータ部","ぶいえいす","総合技術研究所"];
+	const groups = ["コンピュータ部"];
 	const [getExplaingGroup , setExplaingGroup] = createSignal<number>(0);
 
 	const days = ["1日目","2日目"];
@@ -56,6 +61,7 @@ function ToolBer(){
 	createEffect(() => {
 		setToolBerState({
 			inputMode : (getInputMode() == 0)?"add":"remove",
+			operationMode : (getOperationMode() == 0)?"view":"edit",
 			groupIndex : getExplaingGroup(),
 			day : getExplaingDay(),
 			inputJob : "001",
@@ -90,7 +96,10 @@ function ToolBer(){
 
 				<ToolButton src = {edit} onClick = {openEditWindow}/>
 				<ModalWindow title = "仕事の編集" isOpen = {isOpenEditWindow} setIsOpen = {setIsOpenEditWindow}>
-					テスト
+					<span class = {textStyle}>入力する仕事：</span><Pulldown values = {["講堂楽器運び"]}/>
+					<div>
+						
+					</div>
 				</ModalWindow>
 
 				<ToolButton src = {print} onClick = {printShift}/>
@@ -99,7 +108,7 @@ function ToolBer(){
 
 				<div class = {emptyStyle}></div>
 
-				<Pulldown setValue = {setAction} values = {actions}></Pulldown>
+				<Pulldown setIndex = {setOperationMode} values = {operations}></Pulldown>
 
 				<Pulldown setIndex = {setExplaingGroup} values = {groups}></Pulldown>
 

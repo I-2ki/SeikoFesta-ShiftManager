@@ -1,30 +1,22 @@
-import { createSignal, onMount , For, Switch, Match, createEffect, Setter, Accessor } from "solid-js";
+import { createSignal, onMount } from "solid-js";
 import { css } from "solid-styled-components";
 import { tableCSS } from "../../css/view_profile";
 import { themeColor } from "../../css/view_profile";
-import { ToolBerState } from "../Organisms/ToolBer";
+
+import { setPressedCellAddress , setReleasedCellAddress } from "../Organisms/TimeTable";
 
 export type CellProps = {
     index : number,
+    timeLineIndex : number,
     isTableFirst : boolean,
     isTableEnd : boolean,
     isShiftFirst : boolean,
     isShiftEnd : boolean,
     studentNumber : number,
     jobName :string,
-    getExistCellsUpdate : Accessor<boolean[]>,
-    setExistCellsUpdate : Setter<boolean[]>,
 }
 
 export function Cell(props :CellProps){
-    const [isMouseDown,setIsMouseDown] = createSignal(false);
-    addEventListener("mousedown",() => {
-        setIsMouseDown(true);
-    });
-    addEventListener("mouseup",() => {
-        setIsMouseDown(false);
-    });
-
     const [explainText,setExplainText] = createSignal<string>();
     if(props.isShiftFirst){
         setExplainText(props.jobName);
@@ -32,21 +24,20 @@ export function Cell(props :CellProps){
         setExplainText("");
     }
 
-    let Cell:HTMLTableCellElement;
-    function onClick(){
-        const array = props.getExistCellsUpdate();
-        array[props.index] = true;
-        props.setExistCellsUpdate(array);
-    }
+    let cell:HTMLTableCellElement;
 
     onMount(() => {
-        Cell.addEventListener("mousedown",() => {
-            onClick();
+        cell.addEventListener("mousedown",() => {
+            setPressedCellAddress({
+                index : props.index,
+                timeLineIndex : props.timeLineIndex,
+            });
         });
-        Cell.addEventListener("mouseenter",() => {
-            if(isMouseDown()){
-                onClick();
-            }
+        cell.addEventListener("mouseup",() => {
+            setReleasedCellAddress({
+                index : props.index,
+                timeLineIndex : props.timeLineIndex,
+            });
         });
     });
 
@@ -86,7 +77,7 @@ export function Cell(props :CellProps){
     const isEmptyCell = props.jobName === "";
 
     return (
-        <td ref = {Cell} class = {`${baseCellstyle} ${(props.isShiftFirst || isEmptyCell)?firstStyle:""} ${(props.isShiftEnd || isEmptyCell)?endStyle:""} ${(isEmptyCell)?emptyGroupStyle:editingGroupsStyle}`}>
+        <td ref = {cell} class = {`${baseCellstyle} ${(props.isShiftFirst || isEmptyCell)?firstStyle:""} ${(props.isShiftEnd || isEmptyCell)?endStyle:""} ${(isEmptyCell)?emptyGroupStyle:editingGroupsStyle}`}>
             <p class = {textStyle}>{explainText()}</p>
         </td>
     );
