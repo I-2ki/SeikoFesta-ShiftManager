@@ -72,12 +72,15 @@ export function Cell(props :CellProps){
         font-size : max(1vw,20px);
         margin-left: max(1vw,5px);
         user-select: none;
+        overflow: hidden;
+        text-overflow: ellipsis;
     `;
 
     const isEmptyCell = props.jobName === "";
 
     return (
         <td ref = {cell} class = {`${baseCellstyle} ${(props.isShiftFirst || isEmptyCell)?firstStyle:""} ${(props.isShiftEnd || isEmptyCell)?endStyle:""} ${(isEmptyCell)?emptyGroupStyle:editingGroupsStyle}`}>
+            <p class = {textStyle}>{explainText()}</p><br/>
             <p class = {textStyle}>{explainText()}</p>
         </td>
     );

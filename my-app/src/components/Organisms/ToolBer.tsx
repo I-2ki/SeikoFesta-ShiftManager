@@ -64,7 +64,7 @@ function ToolBer(){
 			operationMode : (getOperationMode() == 0)?"view":"edit",
 			groupIndex : getExplaingGroup(),
 			day : getExplaingDay(),
-			inputJob : "001",
+			inputJob : "こちら葛飾区亀有公園まえ派出所",
 		});
 	});
 

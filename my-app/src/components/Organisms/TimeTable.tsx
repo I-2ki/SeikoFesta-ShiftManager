@@ -22,28 +22,65 @@ export class UsingStudent{
 }
 
 async function fetchStudent() :Promise<Student>{
-	const studentNumber :string = Firebase.auth.currentUser!.email!.slice(0,5);
-	const studentRef = doc(Firebase.db,"users",studentNumber);
-	const docSnap = await getDoc(studentRef);
-	const student :Student = docSnap.data() as Student; 
-	return student;
+	fetch("https://sheets.googleapis.com/v4/spreadsheets/1HYUUZHExbeG4qwOR_lTlGTZu5vtmWVnnXo4LDquNub8/values:batchGet?key=AIzaSyAdgIThHio85YhMTtLTJuJUbTnu1UzbVwM"
+	+"&ranges=生徒リスト!A2:D802"
+	+"&ranges=仕事リスト!A2:C3"
+	+"&ranges=1日目!A2:AU802"
+	+"&ranges=2日目!A2:AU802",{
+		method : "GET",
+		mode : "cors",
+		headers : {
+			"Content-Type":"application/json",
+		}
+
+	}).then((response) => {
+		return response.json();
+	}).then((data) => {
+		for(const student of data.valueRanges[0].values){
+			if(){
+
+			}
+		}
+
+	});
+}
+
+async function fetchShifts(){
+
 }
 
 const [students,setStudents] = createSignal<Student[]>([],{equals: false});
+
+/*
 async function fetchStudents(){
-	const studentGroups = (await UsingStudent.get()).groups;
+	fetch("https://sheets.googleapis.com/v4/spreadsheets/1HYUUZHExbeG4qwOR_lTlGTZu5vtmWVnnXo4LDquNub8/values/生徒リスト?key=AIzaSyAdgIThHio85YhMTtLTJuJUbTnu1UzbVwM&range=A2:AX802&majorDimension=ROWS",{
+		method : "GET",
+		mode : "cors",
+		headers : {
+			"Content-Type":"application/json",
+		}
 
-	const studentsRef = collection(Firebase.db,"users");
-	const groupQuery = query(studentsRef,where("groups","array-contains-any",[studentGroups[toolBerState().groupIndex]]));
-
-	const array :Student[] = [];
-	onSnapshot(groupQuery,(querySnapshot) => {
-		array.splice(0);
-		querySnapshot.docs.forEach((doc) => {
-			array.push(doc.data() as Student);
-		});
+	}).then((response) => {
+		return response.json();
+	}).then((data :string[]) => {
+		const array :Student[] = []
+		for(let studentString of data){
+			const student :string[] = studentString.split(",");
+			array.push({
+				number : parseInt(student[0]),
+				name : student[1],
+				groups : student[2].split(","),
+				editableGroups : student[3].split(","),
+				shifts : student.slice(4,student.length),
+			});
+		}
 		setStudents(array);
-	});	
+	});
+}*/
+
+console.log(await fetchStudent());
+async function fetchJobs(){
+	const studentGroups = (await UsingStudent.get()).groups;
 }
 
 function getStudentNumberFromIndex(index :number) :number{
@@ -59,7 +96,6 @@ export const [pressedCellAddress,setPressedCellAddress] = createSignal<cellAddre
 export const [releasedCellAddress,setReleasedCellAddress] = createSignal<cellAddress | null>(null);
 
 function TimeTable(){
-	fetchStudents();
 	addEventListener("mouseup",async () => {
 		if((pressedCellAddress() == null) || (releasedCellAddress() == null)){
 			setPressedCellAddress(null);
@@ -72,28 +108,23 @@ function TimeTable(){
 
 		const bottomRightXIndex = Math.max(pressedCellAddress()!.index,releasedCellAddress()!.index);
 		const bottomRightYIndex = Math.max(pressedCellAddress()!.timeLineIndex,releasedCellAddress()!.timeLineIndex);
-	
-		const studetNumberList :number[] = [];
-		for(let yIndex = topLeftYIndex;yIndex <= bottomRightYIndex;yIndex++){
-			const studentNumber :number = getStudentNumberFromIndex(yIndex);
-			studetNumberList.push(studentNumber);
-		}
-
-		const batch = writeBatch(Firebase.db);
-
-		const studentsRef = collection(Firebase.db,"users");
-		const Query = query(studentsRef,where("number","in",studetNumberList));
 
 		for(let yIndex = topLeftYIndex;yIndex <= bottomRightYIndex;yIndex++){
 			const shifts = students()[yIndex].shifts;
+			const studentNumber = getStudentNumberFromIndex(yIndex);
+
 			for(let xIndex = topLeftXIndex;xIndex <= bottomRightXIndex;xIndex++){
-				const inputJob = (toolBerState().inputJob == "remove")?"":toolBerState().inputJob;
+				const inputJob = (toolBerState().inputMode == "remove")?"":toolBerState().inputJob;
 				if(toolBerState().day == 0){
 					shifts.first[xIndex] = inputJob;
 				}else{
 					shifts.second[xIndex] = inputJob;
 				}
 			}
+			const studentsRef = doc(Firebase.db,"users",studentNumber.toString());
+			await updateDoc(studentsRef,{
+				shifts:shifts,
+			});
 		}
 
 		setPressedCellAddress(null);
@@ -130,7 +161,7 @@ function TimeTable(){
 								timeLineIndex : index,
 								studentName : student.name,
 								studentNumber : student.number,
-								displayShifts : (toolBerState().day)?student.shifts.first:student.shifts.second,
+								displayShifts : (toolBerState().day == 0)?student.shifts.first:student.shifts.second,
 							};
 							return <TimeLine {...timeLineProps}/>
 						})
