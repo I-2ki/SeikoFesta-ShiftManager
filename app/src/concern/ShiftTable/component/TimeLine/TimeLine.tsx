@@ -1,6 +1,6 @@
 import { For } from "solid-js";
-import { CellProps, Cell } from "../Atoms/Cell";
-import NameCard from "../Atoms/NameCard";
+import { CellProps, Cell } from "../Cell/Cell";
+import NameCard from "../NameCard/NameCard";
 
 export type TimeLineProps = {
 	timeLineIndex : number,

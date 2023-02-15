@@ -15,6 +15,8 @@
     "vite-plugin-solid": "^2.3.0"
   },
   "dependencies": {
+    "@solid-primitives/script-loader": "^2.0.0",
+    "@types/gapi": "^0.0.44",
     "firebase": "^9.9.3",
     "googleapis": "^110.0.0",
     "solid-devtools": "^0.24.0",

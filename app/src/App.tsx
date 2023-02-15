@@ -1,32 +1,17 @@
 import { Component, createSignal, Switch , Match, For, createEffect} from "solid-js";
-
-import { onAuthStateChanged } from "firebase/auth";
+import { loginState } from "./concern/Auth/init";
 
 import Loading from "./page/Loading";
-import Top from "./page/Top";
+import Top from "./page/Top/Top";
 import Editer from "./page/Editer";
 
-import Firebase from "./Firebase";
-
-type loginState = "loading" | "noLogin" | "logined";
-
 const App: Component = () => {
-	const [loginStatus , setLoginStatus] = createSignal<loginState>("loading");
-
-	onAuthStateChanged(Firebase.auth,(user) => {
-		if(user){
-			setLoginStatus("logined");
-		}else{
-			setLoginStatus("noLogin");
-		}
-	});
-
 	return(
 		<Switch fallback = {<Loading/>}>
-			<Match when = {loginStatus() == "noLogin"}>
+			<Match when = {loginState() == false}>
 				<Top/>
 			</Match>
-			<Match when = {loginStatus() == "logined"}>
+			<Match when = {loginState() == true}>
 				<Editer/>
 			</Match>
 		</Switch>

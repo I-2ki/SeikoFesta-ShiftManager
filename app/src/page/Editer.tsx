@@ -1,10 +1,10 @@
 import { css } from "solid-styled-components";
 import { signOut } from "firebase/auth";
 
-import ToolBer from "../components/Organisms/ToolBer";
-import TimeTable from "../components/Organisms/TimeTable";
+import ToolBer from "../concern/Tool/ToolBer";
+import TimeTable from "../concern/ShiftTable/component/TimeTable/TimeTable";
 
-import Firebase from "../Firebase";
+import Firebase from "../concern/ShiftTable/logic/Firebase";
 
 function Editer(){
 	const header = css`

@@ -1,5 +1,5 @@
 import { css } from "solid-styled-components";
-import LoadingAnimation from "../components/Atoms/LoadingAnimation";
+import LoadingAnimation from "../ui/LoadingAnimation/LoadingAnimation";
 
 function Loading(){
     const container = css`

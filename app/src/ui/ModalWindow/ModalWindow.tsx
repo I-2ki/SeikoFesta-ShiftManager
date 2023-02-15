@@ -1,7 +1,7 @@
 import { Accessor , children, ChildrenReturn, JSX, Setter, Show } from "solid-js";
 import { Portal } from "solid-js/web";
 import { css } from "solid-styled-components";
-import SVGImage from "./SVGImage";
+import SVGImage from "../SVGImage/SVGImage";
 
 import close from "../../assets/close.svg";
 

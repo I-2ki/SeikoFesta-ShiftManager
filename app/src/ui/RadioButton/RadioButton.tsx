@@ -1,6 +1,6 @@
 import { createSignal , children , createEffect, JSX, Setter} from "solid-js";
 import { css } from "solid-styled-components";
-import SVGImage from "./SVGImage";
+import SVGImage from "../SVGImage/SVGImage";
 
 export type RadioButtonContainerProps = {
     setValue : Setter<number>

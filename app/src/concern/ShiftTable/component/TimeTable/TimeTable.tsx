@@ -1,13 +1,13 @@
 import { createSignal } from "solid-js";
 import { css } from "solid-styled-components";
-import TimeLabel from "../Atoms/TimeLabel";
-import TimeLine, { TimeLineProps } from "../Molecules/TimeLine";
-import Firebase from "../../Firebase";
+import TimeLabel from "../TimeLabel/TimeLabel";
+import TimeLine, { TimeLineProps } from "../../component/TimeLine/TimeLine";
+import Firebase from "../../logic/Firebase";
 
 import { doc, updateDoc } from "firebase/firestore";
-import { Student } from "../../type";
+import { Student } from "../../type/type";
 
-import { toolBerState } from "./ToolBer";
+import { toolBerState } from "../../../Tool/ToolBer";
 import { onAuthStateChanged } from "firebase/auth";
 import { GoogleApis } from "googleapis";
 

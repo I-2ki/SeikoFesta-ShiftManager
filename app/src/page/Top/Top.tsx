@@ -1,5 +1,5 @@
 import { css } from "solid-styled-components";
-import Firebase from "../Firebase";
+import { getToken } from "../../concern/Auth/init";
 
 function Top(){
     const titleText = css`
@@ -31,6 +31,7 @@ function Top(){
         color : white;
     `;
 
+
     return (
         <div>
             <h1 class = {titleText}>
@@ -39,23 +40,7 @@ function Top(){
             <div class = {loginArea}>
                 <h2 class = {subTitleText}>ログイン</h2>
                 <p class = {text}>※聖光学院のアカウントのみ</p>
-            </div>
-            <div>
-                <div id="g_id_onload"
-                    data-client_id="568500639529-ascd05l9flrn233n4a50qadnh3s8ljmj.apps.googleusercontent.com"
-                    data-context="signin"
-                    data-ux_mode="redirect"
-                    data-login_uri="https://seiko-shift-tool.firebaseapp.com/__/auth/handler"
-                    data-auto_prompt="false">
-                </div>
-                <div class="g_id_signin"
-                    data-type="standard"
-                    data-shape="rectangular"
-                    data-theme="outline"
-                    data-text="signin_with"
-                    data-size="large"
-                    data-logo_alignment="left">
-                </div>
+                <button onClick={getToken}>ログイン</button>
             </div>
         </div>
     );
