@@ -1,5 +1,5 @@
 import { Component, createSignal, Switch , Match, For, createEffect} from "solid-js";
-import { loginState } from "./concern/Auth/init";
+import { loginState } from "./concern/Auth/auth";
 
 import Loading from "./page/Loading";
 import Top from "./page/Top/Top";

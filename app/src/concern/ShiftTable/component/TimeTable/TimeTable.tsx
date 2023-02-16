@@ -2,14 +2,11 @@ import { createSignal } from "solid-js";
 import { css } from "solid-styled-components";
 import TimeLabel from "../TimeLabel/TimeLabel";
 import TimeLine, { TimeLineProps } from "../../component/TimeLine/TimeLine";
-import Firebase from "../../logic/Firebase";
 
-import { doc, updateDoc } from "firebase/firestore";
 import { Student } from "../../type/type";
 
 import { toolBerState } from "../../../Tool/ToolBer";
-import { onAuthStateChanged } from "firebase/auth";
-import { GoogleApis } from "googleapis";
+import { fetchAllData, onLoadEnd } from "../../api/init";
 
 function isDuplicate(arr1 :unknown[], arr2:unknown[]) {
 	return [...arr1, ...arr2].filter(item => arr1.includes(item) && arr2.includes(item)).length > 0;
@@ -55,10 +52,6 @@ async function updateShift() {
 				shifts.second[xIndex] = inputJob;
 			}
 		}
-		const studentsRef = doc(Firebase.db,"users",studentNumber.toString());
-		await updateDoc(studentsRef,{
-			shifts:shifts,
-		});
 	}
 
 	setPressedCellAddress(null);

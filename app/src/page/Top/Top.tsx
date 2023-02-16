@@ -1,5 +1,5 @@
 import { css } from "solid-styled-components";
-import { getToken } from "../../concern/Auth/init";
+import { signIn } from "../../concern/Auth/auth";
 
 function Top(){
     const titleText = css`
@@ -40,7 +40,7 @@ function Top(){
             <div class = {loginArea}>
                 <h2 class = {subTitleText}>ログイン</h2>
                 <p class = {text}>※聖光学院のアカウントのみ</p>
-                <button onClick={getToken}>ログイン</button>
+                <button onClick={signIn}>ログイン</button>
             </div>
         </div>
     );
