@@ -1,9 +1,9 @@
 import { createSignal, onMount } from "solid-js";
 import { css } from "solid-styled-components";
-import { tableCSS } from "../../../../css/view_profile";
-import { themeColor } from "../../../../css/view_profile";
+import { tableCSS } from "../css/view_profile";
+import { themeColor } from "../css/view_profile";
 
-import { setPressedCellAddress , setReleasedCellAddress } from "../TimeTable/TimeTable";
+import { setPressedCellAddress , setReleasedCellAddress } from "./TimeTable";
 
 export type CellProps = {
     index : number,
@@ -12,7 +12,6 @@ export type CellProps = {
     isTableEnd : boolean,
     isShiftFirst : boolean,
     isShiftEnd : boolean,
-    studentNumber : number,
     jobName :string,
 }
 

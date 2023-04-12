@@ -1,16 +1,17 @@
-import add from "../../assets/add.svg";
-import remove from "../../assets/remove.svg";
-import edit from "../../assets/edit.svg"
-import print from "../../assets/print.svg";
-import help from "../../assets/help.svg";
+import add from "../assets/add.svg";
+import remove from "../assets/remove.svg";
+import edit from "../assets/edit.svg"
+import print from "../assets/print.svg";
+import help from "../assets/help.svg";
 
 import { createEffect, createSignal} from "solid-js";
 import { css } from "solid-styled-components";
 
-import IconButton from "../../ui/IconButton/IconButton";
-import ModalWindow from "../../ui/ModalWindow/ModalWindow";
-import Pulldown from "../../ui/Pulldown/Pulldown";
-import { RadioButtonContainer , RadioButton } from "../../ui/RadioButton/RadioButton";
+import IconButton from "../ui/IconButton";
+import ModalWindow from "../ui/ModalWindow";
+import Pulldown from "../ui/Pulldown";
+import { RadioButtonContainer , RadioButton } from "../ui/RadioButton";
+import { day } from "../type";
 
 type InputMode = "add" | "remove";
 type OperationMode = "view" | "edit";
@@ -19,7 +20,7 @@ export type ToolBerState = {
 	operationMode : OperationMode,
     inputMode :InputMode,
     groupIndex :number,
-    day :number,
+    day :day,
 	inputJob : string,
 }
 
@@ -27,7 +28,7 @@ export const [toolBerState,setToolBerState] = createSignal<ToolBerState>({
 	inputMode : "add",
 	operationMode : "view",
 	groupIndex : 0,
-	day : 0,
+	day : "first",
 	inputJob : "001",
 },{equals : false}); 
 
@@ -61,7 +62,7 @@ function ToolBer(){
 			inputMode : (getInputMode() == 0)?"add":"remove",
 			operationMode : (getOperationMode() == 0)?"view":"edit",
 			groupIndex : getExplaingGroup(),
-			day : getExplaingDay(),
+			day : (getExplaingDay() == 0)?"first":"second",
 			inputJob : "こちら葛飾区亀有公園まえ派出所",
 		});
 	});
@@ -91,7 +92,6 @@ function ToolBer(){
 					<RadioButton src = {add}/>
 					<RadioButton src = {remove}/>
 				</RadioButtonContainer>
-
 				<IconButton src = {edit} onClick = {openEditWindow}/>
 				<ModalWindow title = "仕事の編集" isOpen = {isOpenEditWindow} setIsOpen = {setIsOpenEditWindow}>
 					<span class = {textStyle}>入力する仕事：</span><Pulldown values = {["講堂楽器運び"]}/>
@@ -99,19 +99,12 @@ function ToolBer(){
 						
 					</div>
 				</ModalWindow>
-
 				<IconButton src = {print} onClick = {printShift}/>
-
 				<IconButton src = {help} onClick = {displayHelp}/>
-
 				<div class = {emptyStyle}></div>
-
 				<Pulldown setIndex = {setOperationMode} values = {operations}></Pulldown>
-
 				<Pulldown setIndex = {setExplaingGroup} values = {groups}></Pulldown>
-
 				<Pulldown setIndex = {setExplaingDay} values = {days}></Pulldown>
-				
 				<div class = {textStyle}>のシフト</div>
 			</div>
 		</>

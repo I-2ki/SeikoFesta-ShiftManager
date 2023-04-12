@@ -1,5 +1,5 @@
 import { css } from "solid-styled-components";
-import { tableCSS } from "../../../../css/view_profile";
+import { tableCSS } from "../css/view_profile";
 
 function NameCard(props :any){
     const cellStyle = css`

@@ -1,7 +1,12 @@
 import { css } from "solid-styled-components";
-import SVGImage from "../SVGImage/SVGImage";
+import SVGImage from "./SVGImage";
 
-function IconButton(props: any){
+type IconButtonProps = {
+	onClick : () => void,
+	src : string,
+}
+
+function IconButton(props: IconButtonProps){
 	const buttonStyle = css`
 		--size : clamp(50px,3vw,150px);
 		width: var(--size);

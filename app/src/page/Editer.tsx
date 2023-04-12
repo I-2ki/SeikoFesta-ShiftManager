@@ -1,9 +1,10 @@
 import { css } from "solid-styled-components";
 
-import ToolBer from "../concern/Tool/ToolBer";
-import TimeTable from "../concern/ShiftTable/component/TimeTable/TimeTable";
+import ToolBer from "../middle/ToolBer";
+import TimeTable from "../middle/TimeTable";
 
-import { signOut } from "../concern/Auth/auth";
+import { getUserId, logOut } from "../concern/auth";
+import { Show } from "solid-js";
 
 function Editer(){
 	const header = css`
@@ -41,10 +42,12 @@ function Editer(){
 		<>
 			<header class = {header}>
 				<h1 class = {title}>統一シフト</h1>
-				<button class = {logoutButton} onClick = {() => signOut()}>ログアウト</button>
+				<button class = {logoutButton} onClick = {() => logOut()}>ログアウト</button>
 			</header>
 			<ToolBer/>
-			<TimeTable/>
+			<Show when = {getUserId() !== null}>
+				<TimeTable/>
+			</Show>
 		</>
 	);
 }

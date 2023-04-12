@@ -1,9 +1,9 @@
 import { Accessor , children, ChildrenReturn, JSX, Setter, Show } from "solid-js";
 import { Portal } from "solid-js/web";
 import { css } from "solid-styled-components";
-import SVGImage from "../SVGImage/SVGImage";
+import SVGImage from "./SVGImage";
 
-import close from "../../assets/close.svg";
+import close from "../assets/close.svg";
 
 type ModalWindowProps = {
     isOpen : Accessor<boolean>,
@@ -71,7 +71,7 @@ function ModalWindow(props :ModalWindowProps){
                         <div class = {title}>{props.title}</div>
                         <div class = {emptyStyle}></div>
                         <div onClick = {() => {props.setIsOpen(false)}} class = {closeIconContainer}>
-                            <SVGImage src = {close}></SVGImage>
+                            <SVGImage src = {close}/>
                         </div>
                     </div>
                     <div class = {mainContent}>{props.children}</div>

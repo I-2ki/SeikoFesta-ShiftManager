@@ -1,22 +1,16 @@
 import { createSignal } from "solid-js";
 import { css } from "solid-styled-components";
-import TimeLabel from "../TimeLabel/TimeLabel";
-import TimeLine, { TimeLineProps } from "../../component/TimeLine/TimeLine";
+import TimeLabel from "./TimeLabel";
+import TimeLine from "./TimeLine";
 
-import { Student } from "../../type/type";
+import { toolBerState } from "./ToolBer";
+import { addJob, addUser, getUser } from "../concern/db";
+import NameCard from "./NameCard";
+import { child, get, getDatabase, onValue, ref } from "firebase/database";
+import { getUserId } from "../concern/auth";
 
-import { toolBerState } from "../../../Tool/ToolBer";
-import { fetchAllData, onLoadEnd } from "../../api/init";
-
-function isDuplicate(arr1 :unknown[], arr2:unknown[]) {
-	return [...arr1, ...arr2].filter(item => arr1.includes(item) && arr2.includes(item)).length > 0;
-}
-
-const [students,setStudents] = createSignal<Student[]>([],{equals: false});
-
-function getStudentNumberFromIndex(index :number) :number{
-	return students()[index].number;
-}
+const [displayShifts,setDisplayShift] = createSignal<string[][]>([]);
+//const [students,setStudents] = createSignal<Student[]>([],{equals: false});
 
 type cellAddress = {
 	index : number,
@@ -24,9 +18,9 @@ type cellAddress = {
 }
 
 
-
 export const [pressedCellAddress,setPressedCellAddress] = createSignal<cellAddress | null>(null);
 export const [releasedCellAddress,setReleasedCellAddress] = createSignal<cellAddress | null>(null);
+/*
 async function updateShift() {
 	if((pressedCellAddress() == null) || (releasedCellAddress() == null)){
 		setPressedCellAddress(null);
@@ -57,9 +51,23 @@ async function updateShift() {
 	setPressedCellAddress(null);
 	setReleasedCellAddress(null);
 }
+*/
 
 function TimeTable(){
-	addEventListener("mouseup",updateShift);
+	getUser(getUserId()!).then(() => {
+		console.log(user);
+	});
+    const dbRef = ref(getDatabase());
+    get(child(dbRef,`${toolBerState().day}Shifts/${62019}/shift`)).then((snapshot) => {
+        if (snapshot.exists()) {
+            setDisplayShift(snapshot.val());
+        } else {
+            console.log("No data available");
+        }
+    }).catch((error) => {
+        console.error(error);
+    });
+	//addEventListener("mouseup",updateShift);
 
 	const container = css`
 		margin : auto;
@@ -86,14 +94,13 @@ function TimeTable(){
 				</thead>
 				<tbody>
 					{
-						students().map((student,index) => {
-							const timeLineProps :TimeLineProps = {
-								timeLineIndex : index,
-								studentName : student.name,
-								studentNumber : student.number,
-								displayShifts : (toolBerState().day == 0)?student.shifts.first:student.shifts.second,
-							};
-							return <TimeLine {...timeLineProps}/>
+						displayShifts().map((jobId,index) => {
+							return (
+								<tr>
+									<NameCard number = {62019} name = {"伊藤 秀平"}/>
+									<TimeLine timeLineIndex = {index} shifts = {displayShifts()[index]}/>
+								</tr>
+							);
 						})
 					}
 				</tbody>

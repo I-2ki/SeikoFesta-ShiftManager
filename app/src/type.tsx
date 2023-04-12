@@ -10,9 +10,8 @@ export type Student = {
     number : number,
     name : string,
     groups : Array<string>,
-    shifts : Shifts,
     editableGroups : Array<string>,
-    role : StudentRole,
+    shifts : Shifts,
 }
 
 export type Job = {
@@ -21,9 +20,5 @@ export type Job = {
     explain :string,
 }
 
-export type Group = {
-    id : string,
-    name : string,
-    members : Array<number>,
-    jobs : Array<string>
-}
+//ツールバー
+export type day = "first" | "second";

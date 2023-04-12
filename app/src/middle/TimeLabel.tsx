@@ -1,6 +1,6 @@
 import { For } from "solid-js";
 import { css } from "solid-styled-components";
-import { tableCSS } from "../../../../css/view_profile";
+import { tableCSS } from "../css/view_profile";
 
 function TimeLabel(){
     function generateSerialNumber(firstNumber :number, endNumber :number):Array<number> {

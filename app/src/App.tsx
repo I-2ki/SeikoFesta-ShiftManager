@@ -1,8 +1,8 @@
-import { Component, createSignal, Switch , Match, For, createEffect} from "solid-js";
-import { loginState } from "./concern/Auth/auth";
+import { Component, Switch , Match } from "solid-js";
+import { loginState } from "./concern/auth";
 
 import Loading from "./page/Loading";
-import Top from "./page/Top/Top";
+import Top from "./page/Top";
 import Editer from "./page/Editer";
 
 const App: Component = () => {
