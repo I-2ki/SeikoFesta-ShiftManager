@@ -1,5 +1,5 @@
 import { css } from "solid-styled-components";
-import { logIn } from "../concern/auth";
+import { logIn } from "../firebase/auth";
 
 function Top(){
     const titleText = css`

@@ -1,7 +1,12 @@
 import { css } from "solid-styled-components";
 import { tableCSS } from "../css/view_profile";
 
-function NameCard(props :any){
+type NameCard = {
+    number: number,
+    name: string,
+}
+
+function NameCard(props: NameCard) {
     const cellStyle = css`
         position: sticky;
         left: 0;
@@ -34,11 +39,11 @@ function NameCard(props :any){
     `;
 
     return (
-        <td class = {cellStyle}>
-            <div class = {cardStyle}>
-                <div class = {textPosition}>
-                    <div class = {textStyle}>{props.number}</div>
-                    <div class = {textStyle}>{props.name}</div>
+        <td class={cellStyle}>
+            <div class={cardStyle}>
+                <div class={textPosition}>
+                    <div class={textStyle}>{props.number}</div>
+                    <div class={textStyle}>{props.name}</div>
                 </div>
             </div>
         </td>

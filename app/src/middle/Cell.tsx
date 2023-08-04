@@ -3,8 +3,6 @@ import { css } from "solid-styled-components";
 import { tableCSS } from "../css/view_profile";
 import { themeColor } from "../css/view_profile";
 
-import { setPressedCellAddress , setReleasedCellAddress } from "./TimeTable";
-
 export type CellProps = {
     index : number,
     timeLineIndex : number,
@@ -24,21 +22,6 @@ export function Cell(props :CellProps){
     }
 
     let cell:HTMLTableCellElement;
-
-    onMount(() => {
-        cell.addEventListener("mousedown",() => {
-            setPressedCellAddress({
-                index : props.index,
-                timeLineIndex : props.timeLineIndex,
-            });
-        });
-        cell.addEventListener("mouseup",() => {
-            setReleasedCellAddress({
-                index : props.index,
-                timeLineIndex : props.timeLineIndex,
-            });
-        });
-    });
 
     const baseCellstyle = css`
         min-width: ${tableCSS.cellWidth};

@@ -1,9 +1,9 @@
 import { css } from "solid-styled-components";
 
-import ToolBer from "../middle/ToolBer";
+import ToolBer from "../middle/ToolBer/ToolBer";
 import TimeTable from "../middle/TimeTable";
 
-import { getUserId, logOut } from "../concern/auth";
+import { getUserId, logOut } from "../firebase/auth";
 import { Show } from "solid-js";
 
 function Editer(){

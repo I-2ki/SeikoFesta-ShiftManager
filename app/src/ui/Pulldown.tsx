@@ -9,9 +9,8 @@ export type PulldownProps = {
 
 function Pulldown(props :PulldownProps){
     let select :HTMLSelectElement;
-    const values :string[] = props.values;
 
-    const [nowValue,setNowValue] = createSignal<string>(values[0]);
+    const [nowValue,setNowValue] = createSignal<string>(props.values[0]);
     const [nowIndex,setNowIndex] = createSignal<number>(0);
 
     const pulldownStyle = css`
@@ -46,9 +45,9 @@ function Pulldown(props :PulldownProps){
 
     return(
         <select ref = {select} class = {pulldownStyle}>
-            <For each = {values}>{(value :string) => {
+            {props.values.map((value,index) => {
                 return <option>{value}</option>
-            }}</For>
+            })}
         </select>
     );
 }

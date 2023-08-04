@@ -1,17 +1,10 @@
-//データ関係
-export type StudentRole = "reader" | "editor" | "admin";
-
-export type Shifts = {
-    first : string[],
-    second : string[],
-}
-
 export type Student = {
-    number : number,
+    id : number,
     name : string,
-    groups : Array<string>,
+    readableGroups : Array<string>,
     editableGroups : Array<string>,
-    shifts : Shifts,
+    firstShift : string[],
+    secondShift : string[],
 }
 
 export type Job = {
@@ -20,5 +13,14 @@ export type Job = {
     explain :string,
 }
 
-//ツールバー
-export type day = "first" | "second";
+export type OperationMode = "view" | "edit";
+export type InputMode = "add" | "remove";
+export type Day = "first" | "second";
+
+export type ToolBerState = {
+	operationMode: OperationMode,
+	inputMode: InputMode,
+	groupName: string,
+	day: Day,
+	inputJob: string,
+}
