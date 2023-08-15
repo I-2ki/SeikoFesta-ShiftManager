@@ -22,10 +22,10 @@ export async function deleteStudent(userId: number) {
 }
 
 //Job操作用汎用関数
-export async function addJob(name: string, explain: string, group: string) {
+export async function addJob(name: string, group: string, description: string) {
     setDoc(doc(db, "jobs/"), {
         name: name,
-        explain: explain,
         group: group,
+        description: description,
     });
 }
