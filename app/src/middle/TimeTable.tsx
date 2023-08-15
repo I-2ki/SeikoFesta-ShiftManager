@@ -5,6 +5,7 @@ import NameCard from "./NameCard";
 
 import { displayStudent } from "../firebase/db/displayStudent";
 import { explaingDay } from "./ToolBer/DaySelector";
+import { cellCount } from "../logic/timeZone";
 
 function TimeTable() {
 	const container = css`

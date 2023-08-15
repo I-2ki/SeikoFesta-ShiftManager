@@ -17,7 +17,6 @@ createEffect(() => {
         querySnapshot.forEach((doc) => {
             students.push(doc.data() as Student);
         });
-        console.log(students);
         setDisplayStudent(students);
     });
 });

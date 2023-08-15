@@ -1,4 +1,4 @@
-import { Accessor , children, ChildrenReturn, JSX, Setter, Show } from "solid-js";
+import { Accessor, JSX, Setter, Show } from "solid-js";
 import { Portal } from "solid-js/web";
 import { css } from "solid-styled-components";
 import SVGImage from "./SVGImage";
@@ -6,13 +6,13 @@ import SVGImage from "./SVGImage";
 import close from "../assets/close.svg";
 
 type ModalWindowProps = {
-    isOpen : Accessor<boolean>,
-    setIsOpen : Setter<boolean>,
-    title : string,
-    children :JSX.Element,
+    isOpen: Accessor<boolean>,
+    setIsOpen: Setter<boolean>,
+    title: string,
+    children: JSX.Element,
 }
 
-function ModalWindow(props :ModalWindowProps){
+function ModalWindow(props: ModalWindowProps) {
     const background = css`
         position: fixed;
         top : 0;
@@ -21,6 +21,7 @@ function ModalWindow(props :ModalWindowProps){
         height : 100%;
         opacity: 30%;
         background-color : black;
+        z-index: 999;
     `;
 
     const container = css`
@@ -32,6 +33,7 @@ function ModalWindow(props :ModalWindowProps){
         height : 90%;
         border : 1px black solid;
         background-color : white;
+        z-index: 1000;
     `;
 
     const top = css`
@@ -63,18 +65,18 @@ function ModalWindow(props :ModalWindowProps){
     `;
 
     return (
-        <Show when = {props.isOpen()}>
+        <Show when={props.isOpen()}>
             <Portal>
-                <div class = {background}></div>
-                <div class = {container}>
-                    <div class = {top}>
-                        <div class = {title}>{props.title}</div>
-                        <div class = {emptyStyle}></div>
-                        <div onClick = {() => {props.setIsOpen(false)}} class = {closeIconContainer}>
-                            <SVGImage src = {close}/>
+                <div class={background}></div>
+                <div class={container}>
+                    <div class={top}>
+                        <div class={title}>{props.title}</div>
+                        <div class={emptyStyle}></div>
+                        <div onClick={() => { props.setIsOpen(false) }} class={closeIconContainer}>
+                            <SVGImage src={close} />
                         </div>
                     </div>
-                    <div class = {mainContent}>{props.children}</div>
+                    <div class={mainContent}>{props.children}</div>
                 </div>
             </Portal>
         </Show>
