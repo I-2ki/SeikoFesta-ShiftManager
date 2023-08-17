@@ -39,6 +39,7 @@ function TimeLineLabel() {
 	return (
 		<tr class={labelLine}>
 			<th class={label}></th>
+
 			<For each = {labelTimes()}>{(label,index) => {
 				if(label.minute == 0){
 					return <Time time = {label.time}/>
