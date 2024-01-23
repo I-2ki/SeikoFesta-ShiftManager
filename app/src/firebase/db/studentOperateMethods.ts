@@ -3,7 +3,6 @@ import { app } from "../init";
 
 const db = getFirestore(app);
 
-//Student操作用汎用関数
 export async function addStudent(userId: number, name: string, readableGroups: string[], editableGroups: string[]) {
     const studentRef = collection(db,"students");
     setDoc(doc(studentRef, `${userId}`), {
@@ -19,13 +18,4 @@ export async function addStudent(userId: number, name: string, readableGroups: s
 export async function deleteStudent(userId: number) {
     const studentRef = collection(db,"collection");
     setDoc(doc(studentRef, `${userId}`), {});
-}
-
-//Job操作用汎用関数
-export async function addJob(name: string, group: string, description: string) {
-    setDoc(doc(db, "jobs/"), {
-        name: name,
-        group: group,
-        description: description,
-    });
 }

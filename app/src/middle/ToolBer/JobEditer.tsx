@@ -18,7 +18,7 @@ export default function JobEditer() {
             <ModalWindow title="仕事の編集" isOpen={isOpenEditWindow} setIsOpen={setIsOpenEditWindow}>
                 <span>入力する仕事：</span><Pulldown values={[""]} />
                 <div>
-
+                    
                 </div>
             </ModalWindow>
         </>
