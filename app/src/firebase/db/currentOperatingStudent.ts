@@ -2,7 +2,7 @@ import { createSignal, createEffect } from "solid-js";
 import { getFirestore, getDoc, doc } from "firebase/firestore";
 import { app } from "../init";
 import { getUserId } from "../auth";
-import { Student } from "../../type";
+import { Student } from "../../logic/type";
 
 //操作中のユーザーを取得
 

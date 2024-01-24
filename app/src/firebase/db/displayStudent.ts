@@ -2,7 +2,7 @@ import { createEffect, createSignal } from "solid-js";
 import { app } from "../init";
 import { getFirestore, query, doc, onSnapshot, collection, where } from "firebase/firestore";
 import { explaingGroupName } from "../../middle/ToolBer/GroupSelector";
-import { Student } from "../../type";
+import { Student } from "../../logic/type";
 
 //見る団体を指定して監視してdiplayStudentを更新
 const db = getFirestore(app);
