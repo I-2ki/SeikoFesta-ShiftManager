@@ -1,7 +1,7 @@
 import { css } from "solid-styled-components";
 
-import ToolBer from "../middle/ToolBer/ToolBer";
-import TimeTable from "../middle/TimeTable";
+import ToolBer from "../components/ToolBer/ToolBer";
+import TimeTable from "../components/TimeTable";
 
 import { getUserId, logOut } from "../firebase/auth";
 import { Show } from "solid-js";

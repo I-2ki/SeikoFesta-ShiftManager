@@ -1,7 +1,7 @@
 import { For } from "solid-js";
 import { css } from "solid-styled-components";
 import { tableCSS } from "../css/view_profile";
-import { isLabelEmphasize, labelTimes } from "../logic/time";
+import { isLabelEmphasize, labelTimes } from "../model/time";
 
 const label = css`
 	min-width : ${tableCSS.cellWidth};

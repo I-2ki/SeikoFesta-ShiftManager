@@ -1,6 +1,6 @@
 import { createSignal } from "solid-js";
 import Pulldown from "../../ui/Pulldown"
-import { Day } from "../../logic/type";
+import { Day } from "../../model/type";
 
 const [day, setDay] = createSignal<number>(0);
 export const explaingDay = () :Day => {

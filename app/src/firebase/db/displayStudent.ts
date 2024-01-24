@@ -1,8 +1,8 @@
 import { createEffect, createSignal } from "solid-js";
 import { app } from "../init";
 import { getFirestore, query, doc, onSnapshot, collection, where } from "firebase/firestore";
-import { explaingGroupName } from "../../middle/ToolBer/GroupSelector";
-import { Student } from "../../logic/type";
+import { explaingGroupName } from "../../components/ToolBer/GroupSelector";
+import { Student } from "../../model/type";
 
 //見る団体を指定して監視してdiplayStudentを更新
 const db = getFirestore(app);

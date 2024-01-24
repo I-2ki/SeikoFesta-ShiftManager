@@ -1,6 +1,6 @@
 import { createSignal } from "solid-js";
 import Pulldown from "../../ui/Pulldown";
-import { OperationMode } from "../../logic/type";
+import { OperationMode } from "../../model/type";
 
 const [mode, setMode] = createSignal<number>(0);
 export const operationMode = () :OperationMode => {

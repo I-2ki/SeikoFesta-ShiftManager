@@ -1,6 +1,6 @@
 import { collection, doc, getFirestore, setDoc } from "firebase/firestore";
 import { app } from "../init";
-import { numOfCells } from "../../logic/time";
+import { numOfCells } from "../../model/time";
 
 const db = getFirestore(app);
 
