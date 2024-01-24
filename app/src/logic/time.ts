@@ -1,44 +1,37 @@
-import { createResource } from "solid-js";
-import { fetchTimeSetting } from "../firebase/db/setting";
+const startTime = 9;
+const startMinute = 0;
+const endTime = 17;
+const endMinute = 0;
+const interval = 10;
+//ここを変更したときに実データをどう整形するかは未実装
 
-const [timeSettings] = createResource(fetchTimeSetting);
 
-type labelTime = {
+type TimeAndMinute = {
     time: number,
     minute: number,
 }
 
-export function labelTimes(): labelTime[] {
-    if (timeSettings.loading || timeSettings.error) {
-        return [];
-    }
-    //VSCodeで開くとエラーが出るが、VSCodeがポンコツなだけで上のバリデーション処理によりtimeSettings()はundefinedにならない
-    const interval = timeSettings().interval;
-
-    function convertIllegalTime(value: number) {
-        const int = Math.floor(value);
-        return int;
-    }
-
-    function convertIllegalMinute(value: number) {
-        const int = Math.floor(value);
-        return int - (int % interval);
-    }
-
-    const startTime = convertIllegalTime(timeSettings().start_time);
-    const startMinute = convertIllegalMinute(timeSettings().start_minute);
-    const endTime = convertIllegalTime(timeSettings().end_time);
-    const endMinute = convertIllegalMinute(timeSettings().end_minute);
-
+export function numOfCells(): number {
     const totalTime = (endTime - startTime) * 60 + (endMinute - startMinute);
-    const cellTimes = Math.floor(totalTime / interval) + 1;
+    const numOfCell = Math.floor(totalTime / interval) + 1;
 
-    const array: labelTime[] = [];
+    return numOfCell;
+}
 
-    for (let i = 0; i < cellTimes; i++) {
+export function labelTimes(): TimeAndMinute[] {
+    const array: TimeAndMinute[] = [];
+
+    for (let i = 0; i < numOfCells(); i++) {
         const displayTime = startTime + Math.floor((startMinute + i * interval) / 60);
         const displayMinute = (startMinute + i * interval) % 60;
         array.push({ time: displayTime, minute: displayMinute })
     }
     return array;
-};
+}
+
+export function isLabelEmphasize(time: TimeAndMinute): boolean {
+    if(time.minute == 0){
+        return true;
+    }
+    return false;
+}

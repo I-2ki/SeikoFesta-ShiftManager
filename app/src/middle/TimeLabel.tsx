@@ -1,7 +1,7 @@
 import { For } from "solid-js";
 import { css } from "solid-styled-components";
 import { tableCSS } from "../css/view_profile";
-import { labelTimes } from "../logic/time";
+import { isLabelEmphasize, labelTimes } from "../logic/time";
 
 const label = css`
 	min-width : ${tableCSS.cellWidth};
@@ -11,7 +11,7 @@ const label = css`
 	z-index: 1;
 `;
 
-function Minute(props: { minute: number }) {
+function MinuteLabel(props: { minute: number }) {
 	const style = css`
 		font-size: max(1.5vw,30px);
 		font-weight: 100;
@@ -19,7 +19,7 @@ function Minute(props: { minute: number }) {
 	return <th class={`${label} ${style}`}>{props.minute}</th>
 }
 
-function Time(props: { time: number }) {
+function TimeLabel(props: { time: number }) {
 	const style = css`
 		font-size: max(2vw,30px);
 		font-weight: 300;
@@ -41,10 +41,10 @@ function TimeLineLabel() {
 			<th class={label}></th>
 
 			<For each = {labelTimes()}>{(label,index) => {
-				if(label.minute == 0){
-					return <Time time = {label.time}/>
+				if(isLabelEmphasize(label)){
+					return <TimeLabel time = {label.time}/>
 				}else{
-					return <Minute minute = {label.minute}/>
+					return <MinuteLabel minute = {label.minute}/>
 				}
 			}}</For>
 		</tr>

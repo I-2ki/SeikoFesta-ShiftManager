@@ -1,5 +1,6 @@
 import { collection, doc, getFirestore, setDoc } from "firebase/firestore";
 import { app } from "../init";
+import { numOfCells } from "../../logic/time";
 
 const db = getFirestore(app);
 
@@ -10,8 +11,8 @@ export async function addStudent(userId: number, name: string, readableGroups: s
         name: name,
         readableGroups: readableGroups,
         editableGroups: editableGroups,
-        firstShift: new Array(53).fill(""),
-        secondShift: new Array(53).fill(""),
+        firstShift: new Array(numOfCells()).fill(""),
+        secondShift: new Array(numOfCells()).fill(""),
     });
 }
 
