@@ -10,6 +10,7 @@ export type Student = {
 export type Job = {
     id :string,
     name :string,
+    group :string,
     explain :string,
 }
 

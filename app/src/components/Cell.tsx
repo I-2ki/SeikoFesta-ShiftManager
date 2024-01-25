@@ -2,6 +2,7 @@ import { createSignal, createEffect, children, Match, Switch } from "solid-js";
 import { css } from "solid-styled-components";
 import { tableCSS } from "../css/view_profile";
 import { themeColor } from "../css/view_profile";
+import { job } from "../firebase/db/jobOperateMethods";
 
 export type CellProps = {
     index: number,
@@ -16,17 +17,6 @@ export type CellProps = {
 type cellType = "empty" | "owned" | "users";
 
 export function Cell(props: CellProps) {
-    let cell: HTMLTableCellElement;
-
-    createEffect(() => {
-        cell.addEventListener("mousedown", () => {
-            console.log(props.index);
-        })
-        cell.addEventListener("mouseup", () => {
-            console.log(props.index);
-        });
-    });
-
     const [explainText, setExplainText] = createSignal<string>();
     if (props.isShiftFirst) {
         setExplainText(props.jobName);
