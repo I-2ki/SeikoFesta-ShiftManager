@@ -4,8 +4,7 @@ import ToolBer from "../components/ToolBer/ToolBer";
 import TimeTable from "../components/TimeTable";
 
 import { getUserId, logOut } from "../firebase/auth";
-import { Show, createEffect } from "solid-js";
-import { job } from "../firebase/db/jobOperateMethods";
+import { Show } from "solid-js";
 
 function Editer(){
 	const header = css`

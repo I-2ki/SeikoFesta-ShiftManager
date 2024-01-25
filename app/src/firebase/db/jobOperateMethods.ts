@@ -1,4 +1,4 @@
-import { setDoc, doc, getFirestore, collection, query, where, onSnapshot } from "firebase/firestore";
+import { setDoc, doc, getFirestore, collection, query, onSnapshot } from "firebase/firestore";
 import { app } from "../init";
 import { createEffect, createSignal } from "solid-js";
 import { Job } from "../../model/type";
