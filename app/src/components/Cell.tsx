@@ -3,6 +3,7 @@ import { tableCSS } from "../css/view_profile";
 import { themeColor } from "../css/view_profile";
 import { jobs } from "../firebase/db/jobOperateMethods";
 import { currentOperatingStudent } from "../firebase/db/currentOperatingStudent";
+import { Show } from "solid-js";
 
 export type CellProps = {
     index: number,
@@ -20,7 +21,7 @@ export function Cell(props: CellProps) {
     const cellType = (): cellType => {
         const job = jobs().get(props.jobID);
         if (!job) return "empty";
-        const hasRelationWithGroup = () :boolean => {
+        const hasRelationWithGroup = (): boolean => {
             return currentOperatingStudent()?.readableGroups.includes(job.group) || currentOperatingStudent()?.editableGroups.includes(job.group) || false;
         }
         if (hasRelationWithGroup()) return "users";
@@ -64,16 +65,18 @@ export function Cell(props: CellProps) {
     const usersCellStyle = css`
         background-color: ${themeColor.mainColor};
     `;
-    const uniqueStyle = ():string => {
-        if(cellType() == "empty") return emptyCellStyle;
-        if(cellType() == "users") return usersCellStyle;
+    const uniqueStyle = (): string => {
+        if (cellType() == "empty") return emptyCellStyle;
+        if (cellType() == "users") return usersCellStyle;
         return ownedCellStyle;
     }
 
     return (
         <td class={`${baseCellstyle} ${actualFirstStyle} ${actualEndEdgeStyle} ${uniqueStyle()}`}>
-            <p class={textStyle}>{jobs().get(props.jobID)?.group}</p><br />
-            <p class={textStyle}>{jobs().get(props.jobID)?.name}</p>
+            <Show when = {props.isShiftFirst}>
+                <p class={textStyle}>{jobs().get(props.jobID)?.group}</p><br />
+                <p class={textStyle}>{jobs().get(props.jobID)?.name}</p>
+            </Show>
         </td>
     );
 }
