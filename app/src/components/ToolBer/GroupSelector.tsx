@@ -6,7 +6,7 @@ import { operationMode } from "./OperationModeSelector";
 const [groups,setGroups] = createSignal<string[]>([" "]);
 const [explaingGroupIndex, setExplaingGroupIndex] = createSignal<number>(0);
 
-export const explaingGroupName = () :string => {
+export const operatingGroupName = () :string => {
     return groups()[explaingGroupIndex()];
 }
 
