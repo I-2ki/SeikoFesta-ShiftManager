@@ -20,10 +20,10 @@ export function Cell(props: CellProps) {
     const cellType = (): cellType => {
         const job = jobs().get(props.jobID);
         if (!job) return "empty";
-        const hasRerationToGroup = () :boolean => {
+        const hasRelationWithGroup = () :boolean => {
             return currentOperatingStudent()?.readableGroups.includes(job.group) || currentOperatingStudent()?.editableGroups.includes(job.group) || false;
         }
-        if (hasRerationToGroup()) return "users";
+        if (hasRelationWithGroup()) return "users";
         return "owned";
     }
 
