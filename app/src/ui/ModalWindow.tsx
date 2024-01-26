@@ -34,6 +34,7 @@ function ModalWindow(props: ModalWindowProps) {
         border : 1px black solid;
         background-color : white;
         z-index: 1000;
+        overflow: scroll;
     `;
 
     const top = css`
@@ -43,7 +44,7 @@ function ModalWindow(props: ModalWindowProps) {
 
     const title = css`
         margin-left: 1vw;
-        font-size: max(1.5vw,50px);
+        font-size: 30px;
     `;
 
     const emptyStyle = css`
@@ -51,7 +52,7 @@ function ModalWindow(props: ModalWindowProps) {
     `;
 
     const closeIconContainer = css`
-        --size : max(3vw,100px);
+        --size : 50px;
         width : var(--size);
         height : var(--size);
         padding : 1vw;
@@ -61,7 +62,7 @@ function ModalWindow(props: ModalWindowProps) {
     `;
 
     const mainContent = css`
-        margin-left : 1vw;
+        margin : 40px;
     `;
 
     return (

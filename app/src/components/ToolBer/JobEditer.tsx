@@ -8,6 +8,7 @@ import ModalWindow from "../../ui/ModalWindow";
 import Pulldown from "../../ui/Pulldown";
 import { css } from "solid-styled-components";
 import { inputJobWithPrompt } from "../../model/job";
+import VerticalList from "../../ui/VerticalList";
 
 //後で仕事内容のsignal追加する
 
@@ -29,6 +30,10 @@ export default function JobEditer() {
     const editJob = css`
         display  : flex;
         flex-direction: column;
+        gap : 20px;
+        p {
+            font-size:20px;
+        }
     `;
 
     const emptyStyle = css`
@@ -36,10 +41,17 @@ export default function JobEditer() {
     `;
 
     const explain = css`
-        margin-right: 50px;
+        display: flex;
+        flex-direction: column;
+        gap :20px;
+        p {
+            font-size: 20px;
+        }
     `;
 
     const explainInput = css`
+        width: 50vw;
+        height: 49.5vh;
         resize: none;
     `;
 
@@ -51,8 +63,8 @@ export default function JobEditer() {
                     <div><span>入力する仕事：</span><Pulldown values={[""]} /></div>
                     <div class={container2}>
                         <div class={editJob}>
-                            仕事を編集
-                            <div></div>
+                            <p>仕事を編集</p>
+                            <VerticalList items={["メケ", "メケ", "メケ", "メケ", "メケ", "メケ", "メケ", "メケ", "メケ", "メケ", "メケ", "メケ", "メケ", "メケ", "メケ", "メケ", "メケ", "メケ", "メケ", "メケ", "メケ", "メケ", "メケ"]} />
                             <div>
                                 <IconButton src={add} onClick={inputJobWithPrompt} />
                                 <IconButton src={remove} onClick={() => console.log("お前を・・・殺す！（デデッ！")} />
@@ -60,7 +72,7 @@ export default function JobEditer() {
                         </div>
                         <span class={emptyStyle}></span>
                         <div class={explain}>
-                            「仕事内容」の説明
+                            <p>「仕事内容」の説明</p>
                             <div>
                                 <textarea class={explainInput} />
                             </div>

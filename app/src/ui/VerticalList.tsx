@@ -1,13 +1,21 @@
-import { createSignal , For } from 'solid-js';
+import { createSignal, For } from 'solid-js';
 import { css } from 'solid-styled-components';
 
 export type VerticalListProps = {
     items: string[];
 }
 
+const listContainerStyle = css`
+    width: max(15vw,200px);
+    height: 50vh;
+    border: 1px solid #000;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+`;
+
 const listItemStyle = css`
-    height: 20%;
-    width: 50%;
+    display: flex;
 
     input[type="radio"] {
         display: none;
@@ -15,10 +23,10 @@ const listItemStyle = css`
 
     label {
         flex-grow: 1;
-        height: 100%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
+        font-size: max(1vw,20px);
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
     }
 
     input[type="radio"]:checked + label {
@@ -27,23 +35,15 @@ const listItemStyle = css`
     }
 `;
 
-const listContainerStyle = css`
-    border: 1px solid #000;
-    display: flex;
-    flex-direction: column;
-    max-height: 40%;
-    overflow-y: auto;
-`;
-
 export default function VerticalList(props: VerticalListProps) {
     const { items } = props;
-    const [selected, setSelected] = createSignal('');
+    const [selected, setSelected] = createSignal<number>(0);
 
     return (
         <div class={listContainerStyle}>
-            <For each={items} children={item => (
-                <div class={listItemStyle} onClick={() => { setSelected(item); }}>
-                    <input type="radio" name="verticalList" checked={selected() === item} />
+            <For each={items} children={(item,index) => (
+                <div class={listItemStyle} onClick={() => { setSelected(index()); }}>
+                    <input type="radio" checked={selected() === index()} />
                     <label>{item}</label>
                 </div>
             )} />
