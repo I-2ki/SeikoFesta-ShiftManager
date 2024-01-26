@@ -5,23 +5,18 @@ import { Job } from "../../model/type";
 
 const db = getFirestore(app);
 
-export const [job, setJob] = createSignal<Job[]>();
+export const [jobs, setJobs] = createSignal<Map<string,Job>>(new Map());
 const jobRef = collection(db, "jobs");
 createEffect(() => {
     const groupQuery = query(jobRef);
     onSnapshot(groupQuery, (querySnapshot) => {
-        const jobs: Job[] = [];
+        const jobs: Map<string,Job> = new Map();
         querySnapshot.forEach((doc) => {
-            const id = doc.id;
-            const data = doc.data();
-            jobs.push({
-                id: id,
-                name: data.name,
-                group: data.group,
-                explain: data.explain,
-            } as Job);
+            const id = doc.id as string;
+            const job = doc.data() as Job;
+            jobs.set(id,job);
         });
-        setJob(jobs);
+        setJobs(jobs);
     });
 });
 

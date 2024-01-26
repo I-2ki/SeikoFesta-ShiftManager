@@ -1,7 +1,8 @@
-import { createSignal, createEffect, children, Match, Switch } from "solid-js";
 import { css } from "solid-styled-components";
 import { tableCSS } from "../css/view_profile";
 import { themeColor } from "../css/view_profile";
+import { jobs } from "../firebase/db/jobOperateMethods";
+import { currentOperatingStudent } from "../firebase/db/currentOperatingStudent";
 
 export type CellProps = {
     index: number,
@@ -10,24 +11,40 @@ export type CellProps = {
     isTableEnd: boolean,
     isShiftFirst: boolean,
     isShiftEnd: boolean,
-    jobName: string,
+    jobID: string,
 }
 
 type cellType = "empty" | "owned" | "users";
 
 export function Cell(props: CellProps) {
-    const [explainText, setExplainText] = createSignal<string>();
-    if (props.isShiftFirst) {
-        setExplainText(props.jobName);
-    } else {
-        setExplainText("");
-    }
-
     const cellType = (): cellType => {
-        if (props.jobName === "") return "empty";
-        if (props.jobName === "自分の団体の名前") return "users";
+        const job = jobs().get(props.jobID);
+        if (!job) return "empty";
+        const hasRerationToGroup = () :boolean => {
+            return currentOperatingStudent()?.readableGroups.includes(job.group) || currentOperatingStudent()?.editableGroups.includes(job.group) || false;
+        }
+        if (hasRerationToGroup()) return "users";
         return "owned";
     }
+
+    const baseCellstyle = css`
+        min-width: ${tableCSS.cellWidth};
+        max-width: 0;
+        height: ${tableCSS.cellHeight};
+        white-space: nowrap;
+        &:hover{
+            cursor: pointer;
+        }
+    `;
+
+    const textStyle = css`
+        color: white;
+        font-size : max(1vw,20px);
+        margin-left: max(1vw,5px);
+        user-select: none;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    `;
 
     const firstStyle = css`
         border-left: ${(props.isTableFirst) ? 2 : 1}px black solid;
@@ -35,81 +52,28 @@ export function Cell(props: CellProps) {
     const endStyle = css`
         border-right: ${(props.isTableEnd) ? 2 : 1}px black solid;  
     `;
-    const firstEdgeStyle = (props.isShiftFirst || cellType() == "empty") ? firstStyle : "";
-    const endEdgeStyle = (props.isShiftEnd || cellType() == "empty") ? endStyle : "";
+    const actualFirstStyle = (props.isShiftFirst || cellType() == "empty") ? firstStyle : "";
+    const actualEndEdgeStyle = (props.isShiftEnd || cellType() == "empty") ? endStyle : "";
 
-    const childProps :ChildCellsProps = {
-        firstEdgeStyle : firstEdgeStyle,
-        endEdgeStyle : endEdgeStyle,
-    }
-
-    return (
-        <Switch fallback={<EmptyCell {...childProps}/>}>
-            <Match when={cellType() == "owned"}>
-                <OwnedCell {...childProps}/>
-            </Match>
-            <Match when={cellType() == "users"}>
-                <UsersCell {...childProps}/>
-            </Match>
-        </Switch>
-    );
-}
-
-type ChildCellsProps = {
-    firstEdgeStyle: string,
-    endEdgeStyle: string,
-
-}
-
-const baseCellstyle = css`
-    min-width: ${tableCSS.cellWidth};
-    max-width: 0;
-    height: ${tableCSS.cellHeight};
-    white-space: nowrap;
-    &:hover{
-        cursor: pointer;
-    }
-`;
-
-const textStyle = css`
-    color: white;
-    font-size : max(1vw,20px);
-    margin-left: max(1vw,5px);
-    user-select: none;
-    overflow: hidden;
-    text-overflow: ellipsis;
-`;
-
-function EmptyCell(props: ChildCellsProps) {
-    const uniqueStyle = css`
-        background-color: #D1D1D1;
-    `;
-
-    return <td class={`${baseCellstyle} ${props.firstEdgeStyle} ${props.endEdgeStyle} ${uniqueStyle}`} />;
-}
-
-function UsersCell(props: ChildCellsProps) {
-    const uniqueStyle = css`
-        background-color: ${themeColor.mainColor};
-    `;
-
-    return (
-        <td class={`${baseCellstyle} ${props.firstEdgeStyle} ${props.endEdgeStyle} ${uniqueStyle}`}>
-            <p class={textStyle}>部門名</p><br />
-            <p class={textStyle}>仕事名</p>
-        </td>
-    );
-}
-
-function OwnedCell(props: ChildCellsProps) {
-    const uniqueStyle = css`
+    const ownedCellStyle = css`
         background-color: black;
     `;
+    const emptyCellStyle = css`
+        background-color: #D1D1D1;
+    `;
+    const usersCellStyle = css`
+        background-color: ${themeColor.mainColor};
+    `;
+    const uniqueStyle = ():string => {
+        if(cellType() == "empty") return emptyCellStyle;
+        if(cellType() == "users") return usersCellStyle;
+        return ownedCellStyle;
+    }
 
     return (
-        <td class={`${baseCellstyle} ${props.firstEdgeStyle} ${props.endEdgeStyle} ${uniqueStyle}`}>
-            <p class={textStyle}>部門名</p><br />
-            <p class={textStyle}>仕事名</p>
+        <td class={`${baseCellstyle} ${actualFirstStyle} ${actualEndEdgeStyle} ${uniqueStyle()}`}>
+            <p class={textStyle}>{jobs().get(props.jobID)?.group}</p><br />
+            <p class={textStyle}>{jobs().get(props.jobID)?.name}</p>
         </td>
     );
 }

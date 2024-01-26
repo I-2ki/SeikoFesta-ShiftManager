@@ -13,7 +13,7 @@ function TimeLine(props: TimeLineProps){
 			const isTableEnd :boolean = (index() == props.shifts.length - 1);
 			const isShiftFirst :boolean = (props.shifts[index() - 1] != shift);
 			const isShiftEnd :boolean = (props.shifts[index() + 1] != shift);
-			const jobName :string = props.shifts[index()];
+			const jobID :string = props.shifts[index()];
 
 			const cellProps :CellProps = {
 				index : index(),
@@ -22,7 +22,7 @@ function TimeLine(props: TimeLineProps){
 				isTableEnd : isTableEnd,
 				isShiftFirst : isShiftFirst,
 				isShiftEnd : isShiftEnd,
-				jobName : jobName,
+				jobID : jobID,
 			}
 
 			return <Cell {...cellProps}/>
