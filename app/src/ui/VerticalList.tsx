@@ -3,15 +3,11 @@ import { css } from 'solid-styled-components';
 
 export type VerticalListProps = {
     items: string[];
-    onClicked: (item: string) => void;
 }
 
 const listItemStyle = css`
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
-    height: 70px;
-    width: 150px;
+    height: 20%;
+    width: 50%;
 
     input[type="radio"] {
         display: none;
@@ -20,7 +16,9 @@ const listItemStyle = css`
     label {
         flex-grow: 1;
         height: 100%;
-        padding-left: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
 
     input[type="radio"]:checked + label {
@@ -31,16 +29,20 @@ const listItemStyle = css`
 
 const listContainerStyle = css`
     border: 1px solid #000;
+    display: flex;
+    flex-direction: column;
+    max-height: 40%;
+    overflow-y: auto;
 `;
 
 export default function VerticalList(props: VerticalListProps) {
-    const { items, onClicked } = props;
+    const { items } = props;
     const [selected, setSelected] = createSignal('');
 
     return (
         <div class={listContainerStyle}>
             <For each={items} children={item => (
-                <div class={listItemStyle} onClick={() => { setSelected(item); onClicked(item); }}>
+                <div class={listItemStyle} onClick={() => { setSelected(item); }}>
                     <input type="radio" name="verticalList" checked={selected() === item} />
                     <label>{item}</label>
                 </div>
