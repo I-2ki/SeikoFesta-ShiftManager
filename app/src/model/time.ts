@@ -13,7 +13,7 @@ type TimeAndMinute = {
 
 export function numOfCells(): number {
     const totalTime = (endTime - startTime) * 60 + (endMinute - startMinute);
-    const numOfCell = Math.floor(totalTime / interval) + 1;
+    const numOfCell = Math.floor(totalTime / interval);
 
     return numOfCell;
 }
@@ -21,7 +21,7 @@ export function numOfCells(): number {
 export function labelTimes(): TimeAndMinute[] {
     const array: TimeAndMinute[] = [];
 
-    for (let i = 0; i < numOfCells(); i++) {
+    for (let i = 0; i < numOfCells() + 1; i++) {
         const displayTime = startTime + Math.floor((startMinute + i * interval) / 60);
         const displayMinute = (startMinute + i * interval) % 60;
         array.push({ time: displayTime, minute: displayMinute })

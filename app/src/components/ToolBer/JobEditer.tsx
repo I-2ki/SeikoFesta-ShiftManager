@@ -2,14 +2,18 @@ import add from "../../assets/add.svg";
 import remove from "../../assets/remove.svg";
 import edit from "../../assets/edit.svg"
 
-import { createEffect, createSignal } from "solid-js";
+import { createSignal } from "solid-js";
+import { css } from "solid-styled-components";
+
 import IconButton from "../../ui/IconButton";
 import ModalWindow from "../../ui/ModalWindow";
 import Pulldown from "../../ui/Pulldown";
-import { css } from "solid-styled-components";
-import { deleteJobSafety, inputJobWithPrompt, operatingGroupJobNames, serachJobFromGroups} from "../../model/job";
 import VerticalList from "../../ui/VerticalList";
-import { operatingGroupName } from "./GroupSelector";
+
+import CurrentGroup from "./OperatedGroup";
+import JobDBOperation from "../../firebase/db/JobDBOperation";
+import AllJobs from "../../firebase/db/AllJobs";
+import Job from "../../model/Job";
 
 export default function JobEditer() {
     const [isOpenEditWindow, setIsOpenEditWindow] = createSignal<boolean>(false);
@@ -17,10 +21,19 @@ export default function JobEditer() {
         setIsOpenEditWindow(true);
     }
 
-    const [selectingJobIndex,setSelectingJobIndex] = createSignal<number>(0);
-    createEffect(() => {
-        console.log(selectingJobIndex());
-    });
+    const [selectingJobIndex, setSelectingJobIndex] = createSignal<number>(0);
+
+    async function inputJobWithPrompt() {
+        const name = window.prompt("追加したい仕事の名前を入れてください。");
+        if (name === null) return;
+        await JobDBOperation.add(name, CurrentGroup.name(), "");
+    }
+
+    function deleteJobSafety(deletedJob: Job.type) {
+        alert(`仕事：${deletedJob.name}を削除します。\nよろしいですか？`);
+        //仕事が消えたときにシフト上の仕事も全部消す処理
+        JobDBOperation.remove(deletedJob.id);
+    }
 
     const container1 = css`
         display: flex;
@@ -64,15 +77,16 @@ export default function JobEditer() {
             <IconButton src={edit} onClick={openEditWindow} />
             <ModalWindow title="仕事の編集" isOpen={isOpenEditWindow} setIsOpen={setIsOpenEditWindow}>
                 <div class={container1}>
-                    <div><span>入力する仕事：</span><Pulldown values={operatingGroupJobNames()} /></div>
+                    <div><span>入力する仕事：</span><Pulldown values={AllJobs.operatingGroupJobNames()} /></div>
                     <div class={container2}>
                         <div class={editJob}>
                             <p>仕事を編集</p>
-                            <VerticalList items={operatingGroupJobNames()} setValue={setSelectingJobIndex}/>
+                            <VerticalList items={AllJobs.operatingGroupJobNames()} setValue={setSelectingJobIndex} />
                             <div>
                                 <IconButton src={add} onClick={inputJobWithPrompt} />
                                 <IconButton src={remove} onClick={() => {
-                                    const deletedJob = serachJobFromGroups(operatingGroupName())[selectingJobIndex()];
+                                    const jobs = AllJobs.serachBy(CurrentGroup.name())
+                                    const deletedJob = jobs[selectingJobIndex()];
                                     deleteJobSafety(deletedJob);
                                 }} />
                             </div>

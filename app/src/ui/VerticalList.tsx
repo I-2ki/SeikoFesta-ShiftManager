@@ -1,7 +1,7 @@
 import { createSignal, For, Setter } from 'solid-js';
 import { css } from 'solid-styled-components';
 
-export type VerticalListProps = {
+type VerticalListProps = {
     items: string[],
     setValue : Setter<number>,
 }

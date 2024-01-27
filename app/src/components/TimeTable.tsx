@@ -3,8 +3,9 @@ import TimeLabel from "./TimeLabel";
 import TimeLine from "./TimeLine";
 import NameCard from "./NameCard";
 
-import { displayStudent } from "../firebase/db/displayStudent";
-import { explaingDay } from "./ToolBer/DaySelector";
+import DisplayUsers from "../firebase/db/DisplayUsers";
+import OperatedDay from "./ToolBer/OperatedDay";
+import User from "../model/User";
 
 function TimeTable() {
 	const container = css`
@@ -32,11 +33,11 @@ function TimeTable() {
 				</thead>
 				<tbody>
 					{
-						displayStudent().map((student, index) => {
-							const shift = (explaingDay() == "first") ? student.firstShift : student.secondShift;
+						DisplayUsers.data().map((user, index) => {
+							const shift = User.getShiftIn(OperatedDay.value(), user);
 							return (
 								<tr>
-									<NameCard number={student.id} name={student.name} />
+									<NameCard id={user.id} name={user.name} />
 									<TimeLine timeLineIndex={index} shifts={shift} />
 								</tr>
 							);

@@ -4,11 +4,11 @@ import help from "../../assets/help.svg";
 import { css } from "solid-styled-components";
 
 import IconButton from "../../ui/IconButton";
-import InputModeSelector from "./InputModeSelector";
 import JobEditer from "./JobEditer";
-import OperationModeSelector from "./OperationModeSelector";
-import GroupSelector from "./GroupSelector";
-import DaySelector from "./DaySelector";
+import OperationMode from "./OperationMode";
+import CurrentGroup from "./OperatedGroup";
+import OperatedDay from "./OperatedDay";
+import InputMode from "./InputMode";
 
 function ToolBer() {
 	const container = css`
@@ -33,14 +33,14 @@ function ToolBer() {
 
 	return (
 		<div class={container}>
-			<InputModeSelector />
+			<InputMode.Selector />
 			<JobEditer />
 			<IconButton src={print} onClick={() => window.print()} />
 			<IconButton src={help} onClick={() => console.log("ヘルプ画面を表示")} />
 			<div class={emptyStyle}></div>
-			<OperationModeSelector />
-			<GroupSelector />
-			<DaySelector />
+			<OperationMode.Selector/>
+			<CurrentGroup.Selector/>
+			<OperatedDay.Selector />
 			<div class={textStyle}>のシフト</div>
 		</div>
 	);

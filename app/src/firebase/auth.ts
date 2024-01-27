@@ -1,7 +1,8 @@
-import { app } from "./init";
 import { GoogleAuthProvider } from "firebase/auth";
 import { getAuth, signInWithRedirect, signOut, onAuthStateChanged } from "firebase/auth";
 import { createSignal } from "solid-js";
+
+import { app } from "./init";
 
 const provider = new GoogleAuthProvider();
 const auth = getAuth(app);

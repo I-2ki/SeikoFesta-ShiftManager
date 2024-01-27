@@ -1,9 +1,9 @@
+import { Show } from "solid-js";
 import { css } from "solid-styled-components";
 import { tableCSS } from "../css/view_profile";
 import { themeColor } from "../css/view_profile";
-import { currentOperatingStudent } from "../firebase/db/currentOperatingStudent";
-import { Show } from "solid-js";
-import { serachJobFromID } from "../model/job";
+import NowUser from "../firebase/db/NowUser";
+import AllJobs from "../firebase/db/AllJobs";
 
 export type CellProps = {
     index: number,
@@ -19,10 +19,10 @@ type cellType = "empty" | "owned" | "users";
 
 export function Cell(props: CellProps) {
     const cellType = (): cellType => {
-        const job = serachJobFromID(props.jobID);
+        const job = AllJobs.serachOf(props.jobID);
         if (job.id == "") return "empty";
         const hasRelationWithGroup = (): boolean => {
-            return currentOperatingStudent()?.readableGroups.includes(job.group) || currentOperatingStudent()?.editableGroups.includes(job.group) || false;
+            return NowUser.get().readableGroups.includes(job.group) || NowUser.get().editableGroups.includes(job.group) || false;
         }
         if (hasRelationWithGroup()) return "users";
         return "owned";
@@ -73,9 +73,9 @@ export function Cell(props: CellProps) {
 
     return (
         <td class={`${baseCellstyle} ${actualFirstStyle} ${actualEndEdgeStyle} ${uniqueStyle()}`}>
-            <Show when = {props.isShiftFirst}>
-                <p class={textStyle}>{serachJobFromID(props.jobID)?.group}</p><br />
-                <p class={textStyle}>{serachJobFromID(props.jobID)?.name}</p>
+            <Show when={props.isShiftFirst}>
+                <p class={textStyle}>{AllJobs.serachOf(props.jobID).group}</p><br />
+                <p class={textStyle}>{AllJobs.serachOf(props.jobID).name}</p>
             </Show>
         </td>
     );
