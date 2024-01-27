@@ -2,21 +2,25 @@ import add from "../../assets/add.svg";
 import remove from "../../assets/remove.svg";
 import edit from "../../assets/edit.svg"
 
-import { createSignal } from "solid-js";
+import { createEffect, createSignal } from "solid-js";
 import IconButton from "../../ui/IconButton";
 import ModalWindow from "../../ui/ModalWindow";
 import Pulldown from "../../ui/Pulldown";
 import { css } from "solid-styled-components";
-import { inputJobWithPrompt } from "../../model/job";
+import { deleteJobSafety, inputJobWithPrompt, operatingGroupJobNames, serachJobFromGroups} from "../../model/job";
 import VerticalList from "../../ui/VerticalList";
-
-//後で仕事内容のsignal追加する
+import { operatingGroupName } from "./GroupSelector";
 
 export default function JobEditer() {
     const [isOpenEditWindow, setIsOpenEditWindow] = createSignal<boolean>(false);
     const openEditWindow = () => {
         setIsOpenEditWindow(true);
     }
+
+    const [selectingJobIndex,setSelectingJobIndex] = createSignal<number>(0);
+    createEffect(() => {
+        console.log(selectingJobIndex());
+    });
 
     const container1 = css`
         display: flex;
@@ -60,14 +64,17 @@ export default function JobEditer() {
             <IconButton src={edit} onClick={openEditWindow} />
             <ModalWindow title="仕事の編集" isOpen={isOpenEditWindow} setIsOpen={setIsOpenEditWindow}>
                 <div class={container1}>
-                    <div><span>入力する仕事：</span><Pulldown values={[""]} /></div>
+                    <div><span>入力する仕事：</span><Pulldown values={operatingGroupJobNames()} /></div>
                     <div class={container2}>
                         <div class={editJob}>
                             <p>仕事を編集</p>
-                            <VerticalList items={["メケ", "メケ", "メケ", "メケ", "メケ", "メケ", "メケ", "メケ", "メケ", "メケ", "メケ", "メケ", "メケ", "メケ", "メケ", "メケ", "メケ", "メケ", "メケ", "メケ", "メケ", "メケ", "メケ"]} />
+                            <VerticalList items={operatingGroupJobNames()} setValue={setSelectingJobIndex}/>
                             <div>
                                 <IconButton src={add} onClick={inputJobWithPrompt} />
-                                <IconButton src={remove} onClick={() => console.log("お前を・・・殺す！（デデッ！")} />
+                                <IconButton src={remove} onClick={() => {
+                                    const deletedJob = serachJobFromGroups(operatingGroupName())[selectingJobIndex()];
+                                    deleteJobSafety(deletedJob);
+                                }} />
                             </div>
                         </div>
                         <span class={emptyStyle}></span>

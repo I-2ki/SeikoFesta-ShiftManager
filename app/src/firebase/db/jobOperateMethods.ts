@@ -1,20 +1,24 @@
-import { setDoc, doc, getFirestore, collection, query, onSnapshot } from "firebase/firestore";
+import { setDoc, doc, getFirestore, collection, query, onSnapshot, deleteDoc } from "firebase/firestore";
 import { app } from "../init";
 import { createEffect, createSignal } from "solid-js";
 import { Job } from "../../model/type";
 
 const db = getFirestore(app);
 
-export const [jobs, setJobs] = createSignal<Map<string,Job>>(new Map());
+export const [jobs, setJobs] = createSignal<Job[]>([]);
+
 const jobRef = collection(db, "jobs");
 createEffect(() => {
     const groupQuery = query(jobRef);
     onSnapshot(groupQuery, (querySnapshot) => {
-        const jobs: Map<string,Job> = new Map();
+        const jobs: Job[] = [];
         querySnapshot.forEach((doc) => {
-            const id = doc.id as string;
-            const job = doc.data() as Job;
-            jobs.set(id,job);
+            jobs.push({
+                id: doc.id,
+                name: doc.data().name,
+                group: doc.data().group,
+                explain: doc.data().explain,
+            });
         });
         setJobs(jobs);
     });
@@ -26,4 +30,8 @@ export async function addJob(name: string, group: string, explain: string) {
         group: group,
         explain: explain,
     });
+}
+
+export async function deleteJob(id: string) {
+    deleteDoc((doc(jobRef,id)));
 }

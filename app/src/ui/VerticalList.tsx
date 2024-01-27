@@ -1,8 +1,9 @@
-import { createSignal, For } from 'solid-js';
+import { createSignal, For, Setter } from 'solid-js';
 import { css } from 'solid-styled-components';
 
 export type VerticalListProps = {
-    items: string[];
+    items: string[],
+    setValue : Setter<number>,
 }
 
 const listContainerStyle = css`
@@ -36,17 +37,23 @@ const listItemStyle = css`
 `;
 
 export default function VerticalList(props: VerticalListProps) {
-    const { items } = props;
     const [selected, setSelected] = createSignal<number>(0);
 
     return (
         <div class={listContainerStyle}>
-            <For each={items} children={(item,index) => (
-                <div class={listItemStyle} onClick={() => { setSelected(index()); }}>
-                    <input type="radio" checked={selected() === index()} />
-                    <label>{item}</label>
-                </div>
-            )} />
+            {
+                props.items.map((item,index) => {
+                    return (
+                        <div class={listItemStyle} onClick={() => {
+                            setSelected(index); 
+                            props.setValue(index);
+                        }}>
+                            <input type="radio" checked={selected() === index} />
+                            <label>{item}</label>
+                        </div>
+                    );
+                })
+            }
         </div>
     );
 }
