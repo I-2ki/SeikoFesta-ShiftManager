@@ -2,8 +2,9 @@ import { Show, createEffect, createSignal } from "solid-js";
 import { css } from "solid-styled-components";
 import { tableCSS } from "../css/view_profile";
 import { themeColor } from "../css/view_profile";
-import NowUser from "../firebase/db/NowUser";
 import AllJobs from "../firebase/db/AllJobs";
+import OperatedGroup from "./ToolBer/OperatedGroup";
+import DisplayUsers from "../firebase/db/DisplayUsers";
 
 export type CellProps = {
     index: number,
@@ -38,6 +39,10 @@ export function Cell(props: CellProps) {
             vertical: props.timeLineIndex,
             horizontal: props.index,
         });
+        setPointer({
+            vertical: props.timeLineIndex,
+            horizontal: props.index,
+        });
     }
 
     const onMouseEnter = () => {
@@ -52,6 +57,16 @@ export function Cell(props: CellProps) {
             vertical: props.timeLineIndex,
             horizontal: props.index,
         })
+
+        const verticalMin = Math.min(first()!.vertical,end()!.vertical);
+        const verticalMax = Math.max(first()!.vertical,end()!.vertical)
+        const horizontalMin = Math.min(first()!.horizontal,end()!.horizontal);
+        const horizontalMax = Math.max(first()!.horizontal,end()!.horizontal);
+        for(let i = verticalMin;i < verticalMax;i++){
+            for(let j = horizontalMin;j < horizontalMax;j++){
+                
+            }
+        }
         //処理
         setFirst(null);
         setPointer(null);
@@ -72,10 +87,7 @@ export function Cell(props: CellProps) {
     const cellType = (): cellType => {
         const job = AllJobs.serachOf(props.jobID);
         if (job.id == "") return "empty";
-        const hasRelationWithGroup = (): boolean => {
-            return NowUser.get().readableGroups.includes(job.group) || NowUser.get().editableGroups.includes(job.group) || false;
-        }
-        if (hasRelationWithGroup()) return "users";
+        if (job.group == OperatedGroup.name()) return "users";
         return "owned";
     }
 
@@ -117,15 +129,15 @@ export function Cell(props: CellProps) {
         background-color: ${themeColor.mainColor};
     `;
     const uniqueStyle = (): string => {
+        if (cellType() == "owned") return ownedCellStyle;
         if (cellType() == "users" || willFilled()) return usersCellStyle;
-        if (cellType() == "empty") return emptyCellStyle;
-        return ownedCellStyle;
+        return emptyCellStyle;
     }
 
     return (
         <td onmousedown={onMouseDown} onmouseup={onMouseUp} onmouseenter={onMouseEnter} class={`${baseCellstyle} ${actualFirstStyle} ${actualEndEdgeStyle} ${uniqueStyle()}`}>
             <Show when={props.isShiftFirst}>
-                <p class={textStyle}>{AllJobs.serachOf(props.jobID).group}</p><br />
+                <p class={textStyle}>{AllJobs.serachOf(props.jobID).group}</p>
                 <p class={textStyle}>{AllJobs.serachOf(props.jobID).name}</p>
             </Show>
         </td>

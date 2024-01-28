@@ -4,5 +4,5 @@ export const themeColor = {
 
 export const tableCSS = {
     cellWidth : "max(10vw,80px)",
-    cellHeight : "20vh",
+    cellHeight : "10vh",
 };

@@ -21,7 +21,7 @@ function TimeTable() {
 		left: 100px;
 		min-width: 100%;
 		table-layout: fixed;
-		border-spacing: 0px 50px;
+		border-spacing: 0px 20px;
 		-webkit-overflow-scrolling: touch;	
 	`;
 
