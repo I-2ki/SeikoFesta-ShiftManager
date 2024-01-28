@@ -1,5 +1,5 @@
 import { css } from "solid-styled-components";
-import { logIn } from "../firebase/auth";
+import Auth from "../firebase/auth";
 
 function Top(){
     const titleText = css`
@@ -40,7 +40,7 @@ function Top(){
             <div class = {loginArea}>
                 <h2 class = {subTitleText}>ログイン</h2>
                 <p class = {text}>※聖光学院のアカウントのみ</p>
-                <button onClick={logIn}>ログイン</button>
+                <button onClick={Auth.logIn}>ログイン</button>
             </div>
         </div>
     );

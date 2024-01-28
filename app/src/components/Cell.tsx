@@ -1,4 +1,4 @@
-import { Show } from "solid-js";
+import { Show, createEffect } from "solid-js";
 import { css } from "solid-styled-components";
 import { tableCSS } from "../css/view_profile";
 import { themeColor } from "../css/view_profile";
@@ -17,7 +17,16 @@ export type CellProps = {
 
 type cellType = "empty" | "owned" | "users";
 
+
+
 export function Cell(props: CellProps) {
+    let cell :HTMLTableCellElement;
+    createEffect(() => {
+        cell.addEventListener("mouseup",()=> {
+
+        });
+    });
+
     const cellType = (): cellType => {
         const job = AllJobs.serachOf(props.jobID);
         if (job.id == "") return "empty";
@@ -72,7 +81,7 @@ export function Cell(props: CellProps) {
     }
 
     return (
-        <td class={`${baseCellstyle} ${actualFirstStyle} ${actualEndEdgeStyle} ${uniqueStyle()}`}>
+        <td ref = {cell} class={`${baseCellstyle} ${actualFirstStyle} ${actualEndEdgeStyle} ${uniqueStyle()}`}>
             <Show when={props.isShiftFirst}>
                 <p class={textStyle}>{AllJobs.serachOf(props.jobID).group}</p><br />
                 <p class={textStyle}>{AllJobs.serachOf(props.jobID).name}</p>

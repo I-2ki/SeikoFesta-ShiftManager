@@ -3,7 +3,7 @@ import { css } from "solid-styled-components";
 import ToolBer from "../components/ToolBer/ToolBer";
 import TimeTable from "../components/TimeTable";
 
-import { getUserId, logOut } from "../firebase/auth";
+import Auth from "../firebase/auth";
 import { Show } from "solid-js";
 
 function Editer(){
@@ -42,10 +42,10 @@ function Editer(){
 		<>
 			<header class = {header}>
 				<h1 class = {title}>統一シフト</h1>
-				<button class = {logoutButton} onClick = {() => logOut()}>ログアウト</button>
+				<button class = {logoutButton} onClick = {Auth.logOut}>ログアウト</button>
 			</header>
 			<ToolBer/>
-			<Show when = {getUserId() !== null}>
+			<Show when = {Auth.userId !== null}>
 				<TimeTable/>
 			</Show>
 		</>

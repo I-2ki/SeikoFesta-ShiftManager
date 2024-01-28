@@ -37,7 +37,7 @@ function TimeTable() {
 							const shift = User.getShiftIn(OperatedDay.value(), user);
 							return (
 								<tr>
-									<NameCard id={user.id} name={user.name} />
+									<NameCard number={user.number} name={user.name} />
 									<TimeLine timeLineIndex={index} shifts={shift} />
 								</tr>
 							);

@@ -7,19 +7,12 @@ import { app } from "./init";
 const provider = new GoogleAuthProvider();
 const auth = getAuth(app);
 
-export const [loginState, setLoginState] = createSignal<boolean | null>(null);
-export const [getUserId, setUserId] = createSignal<number | null>(null);
-
-export function logIn() {
-    signInWithRedirect(auth, provider);
-}
-
-export function logOut() {
-    signOut(auth);
-}
+const [loginState, setLoginState] = createSignal<boolean | null>(null);
+const [getUserId, setUserId] = createSignal<number | null>(null);
 
 onAuthStateChanged(auth, (user) => {
     if (user) {
+        setLoginState(true);
         setLoginState(true);
         const id: string = user.email!.slice(0, 5);
         if (!!Number(id)) {
@@ -29,3 +22,16 @@ onAuthStateChanged(auth, (user) => {
         setLoginState(false);
     }
 });
+
+namespace Auth{
+    export const logIn = () => {
+        signInWithRedirect(auth, provider);
+    }
+    export const logOut = () => {
+        signOut(auth);
+    }
+    export const isLogin = loginState;
+    export const userId = getUserId;
+}
+
+export default Auth;

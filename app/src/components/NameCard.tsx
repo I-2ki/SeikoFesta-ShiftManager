@@ -2,7 +2,7 @@ import { css } from "solid-styled-components";
 import { tableCSS } from "../css/view_profile";
 
 type NameCard = {
-    id: string,
+    number: number | null,
     name: string,
 }
 
@@ -41,7 +41,7 @@ function NameCard(props: NameCard) {
         <td class={cellStyle}>
             <div class={cardStyle}>
                 <div class={textPosition}>
-                    <div class={textStyle}>{props.id}</div>
+                    <div class={textStyle}>{(props.number === null)?"":props.number}</div>
                     <div class={textStyle}>{props.name}</div>
                 </div>
             </div>

@@ -1,6 +1,6 @@
 import { createEffect, createSignal } from "solid-js";
 import { app } from "../init";
-import { getFirestore, query, doc, onSnapshot, collection, where } from "firebase/firestore";
+import { getFirestore, query, onSnapshot, collection, where } from "firebase/firestore";
 import OperatedGroup from "../../components/ToolBer/OperatedGroup";
 import User from "../../model/User";
 
