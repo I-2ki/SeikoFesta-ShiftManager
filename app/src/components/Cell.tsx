@@ -1,4 +1,4 @@
-import { Show, createEffect } from "solid-js";
+import { Show, createEffect, createSignal } from "solid-js";
 import { css } from "solid-styled-components";
 import { tableCSS } from "../css/view_profile";
 import { themeColor } from "../css/view_profile";
@@ -17,15 +17,57 @@ export type CellProps = {
 
 type cellType = "empty" | "owned" | "users";
 
+type indexPair = {
+    vertical: number,
+    horizontal: number,
+}
 
+const [first, setFirst] = createSignal<indexPair | null>(null);
+const [pointer, setPointer] = createSignal<indexPair | null>(null);
+const [end, setEnd] = createSignal<indexPair | null>(null);
+
+addEventListener("mouseup", () => {
+    setFirst(null);
+    setPointer(null);
+    setEnd(null);
+})
 
 export function Cell(props: CellProps) {
-    let cell :HTMLTableCellElement;
-    createEffect(() => {
-        cell.addEventListener("mouseup",()=> {
-
+    const onMouseDown = () => {
+        setFirst({
+            vertical: props.timeLineIndex,
+            horizontal: props.index,
         });
-    });
+    }
+
+    const onMouseEnter = () => {
+        setPointer({
+            vertical: props.timeLineIndex,
+            horizontal: props.index,
+        });
+    }
+
+    const onMouseUp = () => {
+        setEnd({
+            vertical: props.timeLineIndex,
+            horizontal: props.index,
+        })
+        //処理
+        setFirst(null);
+        setPointer(null);
+        setEnd(null);
+    }
+
+    const willFilled = (): boolean => {
+        //pointerとfirstに挟まれているかどうかを判定する
+        if (first() == null) return false;
+        if (pointer() == null) return false;
+        if ((first()!.horizontal < props.index) && (pointer()!.horizontal < props.index)) return false;
+        if ((props.index < first()!.horizontal) && (props.index < pointer()!.horizontal)) return false;
+        if ((first()!.vertical < props.timeLineIndex) && (pointer()!.vertical < props.timeLineIndex)) return false;
+        if ((props.timeLineIndex < first()!.vertical) && (props.timeLineIndex < pointer()!.vertical)) return false;
+        return true;
+    }
 
     const cellType = (): cellType => {
         const job = AllJobs.serachOf(props.jobID);
@@ -75,13 +117,13 @@ export function Cell(props: CellProps) {
         background-color: ${themeColor.mainColor};
     `;
     const uniqueStyle = (): string => {
+        if (cellType() == "users" || willFilled()) return usersCellStyle;
         if (cellType() == "empty") return emptyCellStyle;
-        if (cellType() == "users") return usersCellStyle;
         return ownedCellStyle;
     }
 
     return (
-        <td ref = {cell} class={`${baseCellstyle} ${actualFirstStyle} ${actualEndEdgeStyle} ${uniqueStyle()}`}>
+        <td onmousedown={onMouseDown} onmouseup={onMouseUp} onmouseenter={onMouseEnter} class={`${baseCellstyle} ${actualFirstStyle} ${actualEndEdgeStyle} ${uniqueStyle()}`}>
             <Show when={props.isShiftFirst}>
                 <p class={textStyle}>{AllJobs.serachOf(props.jobID).group}</p><br />
                 <p class={textStyle}>{AllJobs.serachOf(props.jobID).name}</p>
