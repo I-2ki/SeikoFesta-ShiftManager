@@ -29,10 +29,11 @@ createEffect(() => {
 namespace AllJobs {
     export const data = jobs;
     export const serachOf = (id: string): Job.type => {
+        let output = Job.empty;
         data().forEach((job: Job.type) => {
-            if (job.id == id) return job;
+            if (job.id == id) output = job;
         });
-        return Job.empty;
+        return output;
     }
     export const serachBy = (group: string): Job.type[] => {
         const jobs: Job.type[] = [];
